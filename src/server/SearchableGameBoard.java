@@ -11,19 +11,19 @@ public class SearchableGameBoard implements Searchable {
 	@Override
 	public State getInitialState() {
 		// TODO Auto-generated method stub
-		return null;
+		return gameBoard.getInitialState();
 	}
 
 	@Override
 	public boolean isGoalState(State state) {
 		// TODO Auto-generated method stub
-		return false;
+		return gameBoard.isGoalState(state);
 	}
 
 	@Override
 	public List<State> getAllPossibleStates(State state) {
 		// TODO Auto-generated method stub
-		return null;
+		return gameBoard.getAllPossibleStates(state);
 	}
 
 }

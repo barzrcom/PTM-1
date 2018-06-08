@@ -11,7 +11,7 @@ public class MyClientHandler implements ClientHandler {
 
 	MyClientHandler(){
 		cacheManager = new MyCacheManager();
-		solver = new MySolver();
+//		solver = new MySolver();
 	}
 
     @Override
@@ -26,23 +26,23 @@ public class MyClientHandler implements ClientHandler {
             	allLines.append(line);
             }
             
-            // build State from message.
-			State clientState = new State(allLines.toString());
-            
-			// Check if state-solve exists in cache manager
-            State solutionState;
-            if (this.cacheManager.isSolutionExist(clientState)) {
-            	// load solution from cache manager
-            	solutionState = (State)this.cacheManager.load(clientState);
-            } else {
-            	// send it to solver and save it in cache manager
-            	solutionState = this.solver.solve(clientState);
-            	this.cacheManager.save(clientState, solutionState);
-            }
-            
-            // return solve to the client
-            outTC.write(solutionState.getState().toString());
-            outTC.flush();
+//            // build State from message.
+//			State clientState = new State(allLines.toString());
+//            
+//			// Check if state-solve exists in cache manager
+//            State solutionState;
+//            if (this.cacheManager.isSolutionExist(clientState)) {
+//            	// load solution from cache manager
+//            	solutionState = (State)this.cacheManager.load(clientState);
+//            } else {
+//            	// send it to solver and save it in cache manager
+//            	solutionState = this.solver.solve(clientState);
+//            	this.cacheManager.save(clientState, solutionState);
+//            }
+//            
+//            // return solve to the client
+//            outTC.write(solutionState.getState().toString());
+//            outTC.flush();
 
             // close the connection
             inFClient.close();

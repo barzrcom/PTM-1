@@ -2,13 +2,14 @@ package server;
 
 import java.util.Arrays;
 
-public class State {
+public class State implements Comparable<State>{
 	private char[][] state;
 	private double cost;
 	private char[][] cameFrom;
 	
-	public State(char[][] state) {
+	State(char[][] state) {
 		this.state = state;
+		this.cost = 0;
 	}
 
 	public boolean equals(State s) {
@@ -46,5 +47,11 @@ public class State {
 		}
 
 		return s.hashCode();
+	}
+
+	@Override
+	public int compareTo(State o) {
+		// TODO Auto-generated method stub
+		return Double.compare(this.cost, o.cost);
 	}
 }

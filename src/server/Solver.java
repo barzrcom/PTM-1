@@ -1,5 +1,6 @@
 package server;
 
 public interface Solver {
-	public State solve(State problem);
+
+	public Solution solve(GameBoard problem);
 }

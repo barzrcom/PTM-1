@@ -1,11 +1,15 @@
 package server;
 
 public class MySolver implements Solver {
+	private Searcher searcher;
 
-	@Override
-	public State solve(State problem) {
-		// TODO Auto-generated method stub
-		return null;
+	MySolver(Searcher searcher) {
+		this.searcher = searcher;
 	}
 
+	@Override
+	public Solution solve(GameBoard problem) {
+		SearchableGameBoard sGB = new SearchableGameBoard(problem);
+		return searcher.search(sGB);
+	}
 }
