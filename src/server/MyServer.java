@@ -30,7 +30,7 @@ public class MyServer implements Server {
 
                 aClient.close();
             } catch (SocketTimeoutException e) {
-//                System.out.println("Client did not connect...");
+                System.out.println("Client did not connect...");
             }
         }
         serverSocket.close();
