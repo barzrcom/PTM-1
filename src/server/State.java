@@ -11,9 +11,9 @@ public class State implements Comparable<State>{
 		this.state = state;
 		this.cost = 0;
 	}
-
-	public boolean equals(State s) {
-		return Arrays.equals(this.state, s.state);
+	@Override
+	public boolean equals(Object s) {
+		return (this.hashCode() == s.hashCode());
 	}
 
 	public char[][] getCameFrom() {
@@ -34,6 +34,12 @@ public class State implements Comparable<State>{
 	
 	public char[][] getState() {
 		return state;
+	}
+	
+	public void printState() {
+		for (int i=0; i < this.state.length; i++) {
+			System.out.println(this.state[i]);
+		}
 	}
 	
 	@Override
