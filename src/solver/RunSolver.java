@@ -8,7 +8,7 @@ import board.Solution;
 import searcher.BFSSearcher;
 import searcher.BestFirstSearchSearcher;
 import searcher.DFSSearcher;
-import searcher.AstarSearcher;
+import searcher.AStarSearcher;
 
 public class RunSolver {
     public static void main(String[] args) throws Exception {
@@ -54,7 +54,7 @@ public class RunSolver {
         //Solver solver = new PipeSolver(new BestFirstSearchSearcher());
         //Solver solver = new PipeSolver(new BFSSearcher());
         //Solver solver = new PipeSolver(new DFSSearcher());
-        Solver solver = new PipeSolver(new AstarSearcher());
+        Solver solver = new PipeSolver(new AStarSearcher());
         Solution solution = solver.solve(gB);
         if(solution == null) {
         	System.out.println("no route could be found");
