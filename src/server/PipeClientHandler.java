@@ -2,15 +2,19 @@ package server;
 
 import java.io.*;
 
+import cacheManager.CacheManager;
+import cacheManager.FileCacheManager;
+import solver.Solver;
+
 /**
  * has the responsibility of closing the streams
  */
-public class MyClientHandler implements ClientHandler {
+public class PipeClientHandler implements ClientHandler {
 	private CacheManager cacheManager;
 	private Solver solver; 
 
-	MyClientHandler(){
-		cacheManager = new MyCacheManager();
+	PipeClientHandler(){
+		cacheManager = new FileCacheManager();
 //		solver = new MySolver();
 	}
 

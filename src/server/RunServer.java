@@ -6,7 +6,7 @@ public class RunServer {
 
 //        Server s = new MyServer(Integer.parseInt(args[0]));//Take the port from the args
         Server s = new MyServer(6400);//Take the port from the args
-        s.start(new MyClientHandler());
+        s.start(new PipeClientHandler());
         System.in.read();
         s.stop();
         System.out.println("Closed server");

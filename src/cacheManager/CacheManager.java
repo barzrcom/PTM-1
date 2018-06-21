@@ -1,4 +1,6 @@
-package server;
+package cacheManager;
+
+import board.State;
 
 public interface CacheManager {
 	public boolean isSolutionExist(State problem);

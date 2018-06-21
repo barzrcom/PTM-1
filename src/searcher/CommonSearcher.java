@@ -1,6 +1,7 @@
-package server;
-
+package searcher;
 import java.util.PriorityQueue;
+import board.State;
+import board.Solution;
 
 public abstract class CommonSearcher implements Searcher {
 

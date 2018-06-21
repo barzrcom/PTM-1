@@ -1,6 +1,8 @@
-package server;
+package searcher;
 
 import java.util.List;
+
+import board.State;
 
 public interface Searchable {
 	State getInitialState();

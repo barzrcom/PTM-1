@@ -1,8 +1,11 @@
-package server;
+package searcher;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import board.Solution;
+import board.State;
 
 public class BestFirstSearchSearcher extends CommonSearcher {
 
@@ -16,22 +19,19 @@ public class BestFirstSearchSearcher extends CommonSearcher {
 			closedSet.add(n);
 			
 			if (s.isGoalState(n)) {
+				n.printState();
 				return backTrace(n, s.getInitialState());
 			}
 
 			List<State> neighbors = s.getAllPossibleStates(n);
 
 			for (State neighbor : neighbors) {
-				System.out.println(closedSet.contains(neighbor));
-				System.out.println(openListContains(neighbor));
 				if (!closedSet.contains(neighbor) && ! openListContains(neighbor)) {
-					neighbor.printState();
-					System.out.println(neighbor.hashCode());
-					neighbor.setCameFrom(n.getState());
+					neighbor.setCameFrom(n);
 					neighbor.setCost(n.getCost() + 1); // update cost
 					addToOpenList(neighbor);
 				} else {
-					System.out.println("already exist");
+					
 				}
 			}
 		}

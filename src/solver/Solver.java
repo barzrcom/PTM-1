@@ -1,4 +1,7 @@
-package server;
+package solver;
+
+import board.GameBoard;
+import board.Solution;
 
 public interface Solver {
 

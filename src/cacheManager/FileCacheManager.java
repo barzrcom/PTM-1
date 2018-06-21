@@ -1,6 +1,8 @@
-package server;
+package cacheManager;
 
-public class MyCacheManager implements CacheManager{
+import board.State;
+
+public class FileCacheManager implements CacheManager{
 
 	@Override
 	public boolean isSolutionExist(State problem) {

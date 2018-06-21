@@ -1,11 +1,13 @@
-package server;
+package board;
 
 import java.util.List;
+
+import searcher.Searchable;
 
 public class SearchableGameBoard implements Searchable {	
 	private GameBoard gameBoard;
 
-	SearchableGameBoard(GameBoard gameBoard){
+	public SearchableGameBoard(GameBoard gameBoard){
 		this.gameBoard = gameBoard;
 	}
 	@Override

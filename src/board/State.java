@@ -1,13 +1,13 @@
-package server;
+package board;
 
 import java.util.Arrays;
 
 public class State implements Comparable<State>{
 	private char[][] state;
 	private double cost;
-	private char[][] cameFrom;
+	private State cameFrom;
 	
-	State(char[][] state) {
+	public State(char[][] state) {
 		this.state = state;
 		this.cost = 0;
 	}
@@ -16,11 +16,11 @@ public class State implements Comparable<State>{
 		return (this.hashCode() == s.hashCode());
 	}
 
-	public char[][] getCameFrom() {
+	public State getCameFrom() {
 		return cameFrom;
 	}
 
-	public void setCameFrom(char[][] cameFrom) {
+	public void setCameFrom(State cameFrom) {
 		this.cameFrom = cameFrom;
 	}
 

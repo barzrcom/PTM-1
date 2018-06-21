@@ -1,9 +1,14 @@
-package server;
+package solver;
 
-public class MySolver implements Solver {
+import board.GameBoard;
+import board.SearchableGameBoard;
+import board.Solution;
+import searcher.Searcher;
+
+public class PipeSolver implements Solver {
 	private Searcher searcher;
 
-	MySolver(Searcher searcher) {
+	public PipeSolver(Searcher searcher) {
 		this.searcher = searcher;
 	}
 
