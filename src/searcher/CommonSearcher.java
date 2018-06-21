@@ -1,16 +1,17 @@
 package searcher;
 import java.awt.Point;
-import java.util.PriorityQueue;
+import java.util.Queue;
+
 import board.State;
 import board.Solution;
 
 public abstract class CommonSearcher implements Searcher {
 
-	protected PriorityQueue<State> openList;
+	protected Queue<State> openList;
 	private int evaluatedNodes;
 	
-	public CommonSearcher() {
-		this.openList = new PriorityQueue<State>();
+	public CommonSearcher(Queue<State> queue) {
+		this.openList = queue;
 		this.evaluatedNodes=0;
 	}
 	
@@ -19,12 +20,11 @@ public abstract class CommonSearcher implements Searcher {
 	@Override
 	public Solution search(Searchable s) {
 		long startTime = System.currentTimeMillis();
-		System.out.println("algoSearch start time: " + startTime);
+		System.out.println("algoSearch started");
 		
 		Solution solution = algoSearch(s);
 		
 		long stopTime = System.currentTimeMillis();
-		System.out.println("algoSearch finished time: " + stopTime);
 		double elapsedTime = stopTime - startTime;
 		System.out.println("algoSearch total seconds: " + elapsedTime/1000);
 		System.out.println("algoSearch total evaluated nodes: " + evaluatedNodes);
@@ -35,8 +35,12 @@ public abstract class CommonSearcher implements Searcher {
 		this.openList.add(state);
 	}
 	
-	protected State popOpenList() {
+	public void incEvaluatedNodes() {
 		this.evaluatedNodes++;
+	}
+	
+	protected State popOpenList() {
+		incEvaluatedNodes();
 		return openList.poll();
 	}
 	
@@ -54,9 +58,7 @@ public abstract class CommonSearcher implements Searcher {
 		while(currentState.getCameFrom() != null) {
 			// add step
 			Point posClicked = currentState.getPosClicked();
-			solution.addStep(posClicked.x + "," + 
-							posClicked.y + "," +
-							1);
+			solution.addStep(posClicked.x + "," + posClicked.y + "," + 1);
 			currentState = currentState.getCameFrom();
 		}
 		solution.reverse();

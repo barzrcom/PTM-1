@@ -3,7 +3,9 @@ package solver;
 import board.GameBoard;
 import board.PipeGameBoard;
 import board.Solution;
+import searcher.BFSSearcher;
 import searcher.BestFirstSearchSearcher;
+import searcher.DFSSearcher;
 
 public class RunSolver {
     public static void main(String[] args) throws Exception {
@@ -22,14 +24,16 @@ public class RunSolver {
         		{' ', ' ', ' ', '7', '7'},
         		{' ', ' ', ' ', ' ', '-'},
         		{' ', ' ', ' ', ' ', '-'},
-        		{' ', ' ', ' ', ' ', '-'},
-        		{' ', ' ', ' ', ' ', '-'},
-        		{' ', ' ', ' ', ' ', '-'},
-        		{' ', ' ', ' ', 'g', '7'}
+        		{' ', 'g', '-', '-', '7'},
+        		{' ', ' ', ' ', ' ', ' '},
+        		{' ', ' ', ' ', ' ', ' '},
+        		{' ', ' ', ' ', ' ', ' '}
         };
         GameBoard gB = new PipeGameBoard(board);
         
-        Solver solver = new PipeSolver(new BestFirstSearchSearcher());
+        //Solver solver = new PipeSolver(new BestFirstSearchSearcher());
+        //Solver solver = new PipeSolver(new BFSSearcher());
+        Solver solver = new PipeSolver(new DFSSearcher());
         Solution solution = solver.solve(gB);
         if(solution == null) {
         	System.out.println("no route could be found");

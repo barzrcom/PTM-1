@@ -2,12 +2,19 @@ package searcher;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.PriorityQueue;
+import java.util.Queue;
 import java.util.Set;
 
 import board.Solution;
 import board.State;
 
 public class BestFirstSearchSearcher extends CommonSearcher {
+
+	public BestFirstSearchSearcher() {
+		super(new PriorityQueue<State>());
+		// TODO Auto-generated constructor stub
+	}
 
 	@Override
 	public Solution algoSearch(Searchable s) {
