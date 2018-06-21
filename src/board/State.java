@@ -51,15 +51,7 @@ public class State implements Comparable<State>{
 	
 	@Override
 	public int hashCode() {
-		String s = "";
-
-		for (int i=0; i < this.state.length; i++) {
-			for (int j=0; j < this.state[i].length; j++) {
-				s += this.state[i][j];
-			}
-		}
-
-		return s.hashCode();
+		return java.util.Arrays.deepHashCode( this.state );
 	}
 
 	@Override

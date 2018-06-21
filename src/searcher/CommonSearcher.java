@@ -14,6 +14,23 @@ public abstract class CommonSearcher implements Searcher {
 		this.evaluatedNodes=0;
 	}
 	
+	public abstract Solution algoSearch(Searchable s);
+	
+	@Override
+	public Solution search(Searchable s) {
+		long startTime = System.currentTimeMillis();
+		System.out.println("algoSearch start time: " + startTime);
+		
+		Solution solution = algoSearch(s);
+		
+		long stopTime = System.currentTimeMillis();
+		System.out.println("algoSearch finished time: " + stopTime);
+		double elapsedTime = stopTime - startTime;
+		System.out.println("algoSearch total seconds: " + elapsedTime/1000);
+		System.out.println("algoSearch total evaluated nodes: " + evaluatedNodes);
+		return solution;
+	}
+	
 	protected void addToOpenList(State state) {
 		this.openList.add(state);
 	}
@@ -45,5 +62,7 @@ public abstract class CommonSearcher implements Searcher {
 		solution.reverse();
 		return solution;
 	}
+	
+	
 
 }

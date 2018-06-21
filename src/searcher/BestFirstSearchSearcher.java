@@ -10,7 +10,7 @@ import board.State;
 public class BestFirstSearchSearcher extends CommonSearcher {
 
 	@Override
-	public Solution search(Searchable s) {
+	public Solution algoSearch(Searchable s) {
 		addToOpenList(s.getInitialState());
 		Set<State> closedSet = new HashSet<State>();
 		
@@ -37,4 +37,6 @@ public class BestFirstSearchSearcher extends CommonSearcher {
 		}
 		return null;
 	}
+
+
 }
