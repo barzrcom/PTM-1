@@ -19,6 +19,7 @@ public class PipeGameBoard implements GameBoard {
 		boardY = board.length;
 		boardX = board[0].length;
 		initialState = new State(board);
+		// get start and end points
 		for (int i=0; i < board.length; i++) {
 			for (int j=0; j < board[i].length; j++) {
 				if (board[i][j] == 's'){

@@ -2,18 +2,22 @@ package board;
 import java.awt.Point;
 
 public class State implements Comparable<State>{
-	private char[][] state;
+	final private char[][] state;
 	private double cost;
 	private State cameFrom;
 	private Point posClicked;
+	private int hash;
 	
 	public State(char[][] state) {
 		this.state = state;
+		hash = java.util.Arrays.deepToString( this.state ).hashCode();
 		this.cost = 0;
 		posClicked = null;
 	}
 	public State(char[][] state, Point posClicked) {
 		this.state = state;
+		hash = java.util.Arrays.deepToString( this.state ).hashCode();
+		
 		this.cost = 0;
 		this.posClicked = posClicked;
 	}
@@ -51,7 +55,7 @@ public class State implements Comparable<State>{
 	
 	@Override
 	public int hashCode() {
-		return java.util.Arrays.deepHashCode( this.state );
+		return hash;
 	}
 
 	@Override
