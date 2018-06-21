@@ -26,12 +26,12 @@ public class BestFirstSearchSearcher extends CommonSearcher {
 			List<State> neighbors = s.getAllPossibleStates(n);
 
 			for (State neighbor : neighbors) {
-				if (!closedSet.contains(neighbor) && ! openListContains(neighbor)) {
+				if (!closedSet.contains(neighbor) && !openListContains(neighbor)) {
 					neighbor.setCameFrom(n);
 					neighbor.setCost(n.getCost() + 1); // update cost
 					addToOpenList(neighbor);
 				} else {
-					
+					// all edges are 1, no need to update the cost
 				}
 			}
 		}

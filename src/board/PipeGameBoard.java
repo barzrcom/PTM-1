@@ -149,7 +149,7 @@ public class PipeGameBoard implements GameBoard {
 				}
 				
 				newPossible[i][j] = changePipe(state2D[i][j]);
-				arrList.add(new State(newPossible));
+				arrList.add(new State(newPossible, new Point(i,j)));
 			}
 		}
 		

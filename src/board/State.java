@@ -1,16 +1,23 @@
 package board;
-
-import java.util.Arrays;
+import java.awt.Point;
 
 public class State implements Comparable<State>{
 	private char[][] state;
 	private double cost;
 	private State cameFrom;
+	private Point posClicked;
 	
 	public State(char[][] state) {
 		this.state = state;
 		this.cost = 0;
+		posClicked = null;
 	}
+	public State(char[][] state, Point posClicked) {
+		this.state = state;
+		this.cost = 0;
+		this.posClicked = posClicked;
+	}
+	
 	@Override
 	public boolean equals(Object s) {
 		return (this.hashCode() == s.hashCode());
@@ -59,5 +66,11 @@ public class State implements Comparable<State>{
 	public int compareTo(State o) {
 		// TODO Auto-generated method stub
 		return Double.compare(this.cost, o.cost);
+	}
+	public Point getPosClicked() {
+		return posClicked;
+	}
+	public void setPosClicked(Point posClicked) {
+		this.posClicked = posClicked;
 	}
 }

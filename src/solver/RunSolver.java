@@ -30,11 +30,14 @@ public class RunSolver {
         GameBoard gB = new PipeGameBoard(board);
         
         Solver solver = new PipeSolver(new BestFirstSearchSearcher());
-        Solution sol = solver.solve(gB);
-        if(sol == null) {
+        Solution solution = solver.solve(gB);
+        if(solution == null) {
         	System.out.println("no route could be found");
         } else {
-        	// print sol by steps and clicks
+        	System.out.println("Steps:");
+        	for (String step : solution.getStepsList()) {
+        		System.out.println(step);
+        	}
         }
     }
 }

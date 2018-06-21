@@ -1,4 +1,5 @@
 package searcher;
+import java.awt.Point;
 import java.util.PriorityQueue;
 import board.State;
 import board.Solution;
@@ -31,8 +32,18 @@ public abstract class CommonSearcher implements Searcher {
 	}
 	
 	public Solution backTrace(State goalState, State initialState) {
-		// Solution
-		return null;
+		Solution solution = new Solution();
+		State currentState = goalState;
+		while(currentState.getCameFrom() != null) {
+			// add step
+			Point posClicked = currentState.getPosClicked();
+			solution.addStep(posClicked.x + "," + 
+							posClicked.y + "," +
+							1);
+			currentState = currentState.getCameFrom();
+		}
+		solution.reverse();
+		return solution;
 	}
 
 }
