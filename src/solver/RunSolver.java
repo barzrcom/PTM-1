@@ -8,6 +8,7 @@ import board.Solution;
 import searcher.BFSSearcher;
 import searcher.BestFirstSearchSearcher;
 import searcher.DFSSearcher;
+import searcher.HillClimbingSearcher;
 import searcher.AStarSearcher;
 
 public class RunSolver {
@@ -43,18 +44,19 @@ public class RunSolver {
         		{'L','-','-','|','-','-','-','g'}
     	};
         char[][] board4 = {
-        		{'s','-','-','|','-','-','-','L'},
-        		{'L','-','|','-','-','|','-','L'},
+        		{'s','-','J','|','-','-','-','L'},
+        		{'L','-','F','-','-','|','-','L'},
         		{'L','-','-','-','7','-','-','L'},
         		{'L','-','-','|','7','-','-','g'}
     	};
 
-        GameBoard gB = new PipeGameBoard(board2);
+        GameBoard gB = new PipeGameBoard(board4);
         
         //Solver solver = new PipeSolver(new BestFirstSearchSearcher());
         //Solver solver = new PipeSolver(new BFSSearcher());
         //Solver solver = new PipeSolver(new DFSSearcher());
         Solver solver = new PipeSolver(new AStarSearcher());
+        //Solver solver = new PipeSolver(new HillClimbingSearcher());
         Solution solution = solver.solve(gB);
         if(solution == null) {
         	System.out.println("no route could be found");

@@ -29,7 +29,7 @@ public class AStarSearcher extends CommonSearcher {
 			
 			if (s.isGoalState(n)) {
 				n.printState();
-				return backTrace(n, s.getInitialState());
+				return backTrace(n);
 			}
 
 			List<State> neighbors = s.getAllPossibleStates(n);

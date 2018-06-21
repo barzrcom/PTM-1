@@ -52,7 +52,7 @@ public abstract class CommonSearcher implements Searcher {
 		return openList.contains(state);
 	}
 	
-	public Solution backTrace(State goalState, State initialState) {
+	public Solution backTrace(State goalState) {
 		Solution solution = new Solution();
 		State currentState = goalState;
 		while(currentState.getCameFrom() != null) {

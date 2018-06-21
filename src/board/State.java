@@ -6,7 +6,7 @@ public class State implements Comparable<State>{
 	private double cost;
 	private State cameFrom;
 	private Point posClicked;
-	private int hash;
+	final private int hash;
 	
 	public State(char[][] state) {
 		this.state = state;

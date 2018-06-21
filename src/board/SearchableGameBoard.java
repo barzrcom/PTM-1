@@ -29,7 +29,7 @@ public class SearchableGameBoard implements Searchable {
 	}
 	@Override
 	public int grade(State state) {
-		return gameBoard.maxStepsOfState(state);
+		return gameBoard.heuristicGrade(state);
 	}
 
 }
