@@ -1,12 +1,14 @@
 package solver;
 
+import java.util.List;
+
 import board.GameBoard;
 import board.PipeGameBoard;
 import board.Solution;
 import searcher.BFSSearcher;
 import searcher.BestFirstSearchSearcher;
 import searcher.DFSSearcher;
-import searcher.HillClimbingSearcher;
+import searcher.AstarSearcher;
 
 public class RunSolver {
     public static void main(String[] args) throws Exception {
@@ -22,10 +24,10 @@ public class RunSolver {
         		{' ', ' ', ' ', ' ', 'g', '-', 'L'}
         };
         char[][] board2 = {	
-        		{'s', '|', '|', '7', ' '},
+        		{'s', '|', '|', '7', '|'},
         		{' ', ' ', ' ', '-', ' '},
         		{' ', ' ', ' ', '-', ' '},
-        		{' ', '|', '|', '7', '7'},
+        		{'|', '-', '-', 'J', 'L'},
         		{' ', ' ', ' ', ' ', '-'},
         		{' ', ' ', ' ', ' ', '-'},
         		{' ', ' ', ' ', ' ', 'g'},
@@ -43,21 +45,22 @@ public class RunSolver {
         char[][] board4 = {
         		{'s','-','-','|','-','-','-','L'},
         		{'L','-','|','-','-','|','-','L'},
-        		{'L','-','-','-','J','-','-','L'},
+        		{'L','-','-','-','7','-','-','L'},
         		{'L','-','-','|','7','-','-','g'}
     	};
 
-        GameBoard gB = new PipeGameBoard(board4);
+        GameBoard gB = new PipeGameBoard(board2);
         
         //Solver solver = new PipeSolver(new BestFirstSearchSearcher());
         //Solver solver = new PipeSolver(new BFSSearcher());
         //Solver solver = new PipeSolver(new DFSSearcher());
-        Solver solver = new PipeSolver(new HillClimbingSearcher());
+        Solver solver = new PipeSolver(new AstarSearcher());
         Solution solution = solver.solve(gB);
         if(solution == null) {
         	System.out.println("no route could be found");
         } else {
-        	System.out.println("Steps:");
+        	List<String> stepsList = solution.getStepsList();
+        	System.out.println(stepsList.size() + " Steps:");
         	for (String step : solution.getStepsList()) {
         		System.out.println(step);
         	}

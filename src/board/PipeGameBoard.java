@@ -233,7 +233,7 @@ public class PipeGameBoard implements GameBoard {
 	
 	@Override
 	public int maxStepsOfState(State state) {
-		return boardGradeLogic(state.getState(), startIndex.x, startIndex.y, directions.start);
+		return (boardX*boardY*10)-boardGradeLogic(state.getState(), startIndex.x, startIndex.y, directions.start);
 	}
 	
 }
