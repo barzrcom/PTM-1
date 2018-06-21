@@ -27,5 +27,9 @@ public class SearchableGameBoard implements Searchable {
 		// TODO Auto-generated method stub
 		return gameBoard.getAllPossibleStates(state);
 	}
+	@Override
+	public int grade(State state) {
+		return gameBoard.maxStepsOfState(state);
+	}
 
 }

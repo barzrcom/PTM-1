@@ -3,6 +3,7 @@ package board;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import javafx.util.Pair;
 
@@ -15,7 +16,6 @@ public class PipeGameBoard implements GameBoard {
 	private int boardY;
 	public enum directions {start, goal, right, left, up, down}
 	public PipeGameBoard(char[][] board) {
-		// TODO: parse pipeBoard into State object and save it
 		boardY = board.length;
 		boardX = board[0].length;
 		initialState = new State(board);
@@ -29,7 +29,7 @@ public class PipeGameBoard implements GameBoard {
 					goalIndex = new Point(i,j);
 				} 
 			}
-		}	
+		}
 	}
 	public static char changePipe(char currentPipe) {
 		switch (currentPipe) {
@@ -156,6 +156,84 @@ public class PipeGameBoard implements GameBoard {
 		
 		
 		return arrList;
+	}
+	
+	public static int max(Integer... vals) {
+	    return Collections.max(Arrays.asList(vals)); 
+	}
+	
+	private int boardGradeLogic(char[][] stateBoard, int posX, int posY, directions from) {	
+		//check bounds
+		if (posX < 0 || posX >= boardX)
+			return 0;
+		if (posY < 0 || posY >= boardY)
+			return 0;
+		// check if goal
+		if(stateBoard[posY][posX] == 'g') return 1;
+		// start
+		if (from == directions.start) {
+			return max(boardGradeLogic(stateBoard, posX+1, posY, directions.left), 
+					boardGradeLogic(stateBoard, posX-1, posY, directions.right),
+					boardGradeLogic(stateBoard, posX, posY+1, directions.up),
+					boardGradeLogic(stateBoard, posX, posY-1, directions.down));
+		}
+		if (stateBoard[posY][posX] == '-') {
+			if(from == directions.left)
+				return 1 + boardGradeLogic(stateBoard, posX+1, posY, directions.left);
+			else if(from == directions.right)
+				return 1 + boardGradeLogic(stateBoard, posX-1, posY, directions.right);
+			else return 0;
+		}
+		if (stateBoard[posY][posX] == '|') {
+			if(from == directions.up)
+				return 1 + boardGradeLogic(stateBoard, posX, posY+1, directions.up);
+			else if(from == directions.down)
+				return 1 + boardGradeLogic(stateBoard, posX, posY-1, directions.down);
+			else return 0;
+		}
+		if (stateBoard[posY][posX] == '|') {
+			if(from == directions.up)
+				return 1 + boardGradeLogic(stateBoard, posX, posY+1, directions.up);
+			else if(from == directions.down)
+				return 1 + boardGradeLogic(stateBoard, posX, posY-1, directions.down);
+			else return 0;
+		}
+		if (stateBoard[posY][posX] == 'L') {
+			if(from == directions.up)
+				return 1 + boardGradeLogic(stateBoard, posX+1, posY, directions.left);
+			else if(from == directions.right)
+				return 1 + boardGradeLogic(stateBoard, posX, posY-1, directions.down);
+			else return 0;
+		}
+		if (stateBoard[posY][posX] == 'F') {
+			if(from == directions.right)
+				return 1 + boardGradeLogic(stateBoard, posX, posY+1, directions.up);
+			else if(from == directions.down)
+				return 1 + boardGradeLogic(stateBoard, posX+1, posY, directions.left);
+			else return 0;
+		}
+		if (stateBoard[posY][posX] == '7') {
+			if(from == directions.left)
+				return 1 + boardGradeLogic(stateBoard, posX, posY+1, directions.up);
+			else if(from == directions.down)
+				return 1 + boardGradeLogic(stateBoard, posX-1, posY, directions.right);
+			else return 0;
+		}
+		if (stateBoard[posY][posX] == 'J') {
+			if(from == directions.up)
+				return 1 + boardGradeLogic(stateBoard, posX-1, posY, directions.right);
+			else if(from == directions.left)
+				return 1 + boardGradeLogic(stateBoard, posX, posY-1, directions.down);
+			else return 0;
+		}
+		
+		return 0;
+	}
+
+	
+	@Override
+	public int maxStepsOfState(State state) {
+		return boardGradeLogic(state.getState(), startIndex.x, startIndex.y, directions.start);
 	}
 	
 }
