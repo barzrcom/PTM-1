@@ -6,16 +6,17 @@ public class State implements Comparable<State>{
 	private double cost = 0;
 	private State cameFrom;
 	private Point posClicked;
-	final private int hash;
+	private int hash;
+	int grade = Integer.MAX_VALUE;
 	
 	public State(char[][] state) {
-		this.state = state;
 		hash = java.util.Arrays.deepHashCode(state);
+		this.state = state;
 	}
 
 	public State(char[][] state, Point posClicked) {
+		hash = java.util.Arrays.deepHashCode(state);
 		this.state = state;
-		this.hash = java.util.Arrays.deepHashCode(state);
 		this.posClicked = posClicked;
 	}
 	
@@ -65,5 +66,12 @@ public class State implements Comparable<State>{
 	}
 	public void setPosClicked(Point posClicked) {
 		this.posClicked = posClicked;
+	}
+	
+	public int getGrade() {
+		return grade;
+	}
+	public void setGrade(int grade) {
+		this.grade = grade;
 	}
 }

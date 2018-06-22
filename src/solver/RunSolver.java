@@ -41,30 +41,32 @@ public class RunSolver {
         		{'s','-','-','-','-','-','-','L'},
         		{'L','-','|','-','-','|','-','L'},
         		{'L','-','-','-','-','-','-','L'},
+        		{'L','-','|','-','-','|','-','L'},
+        		{'L','-','|','-','-','|','-','L'},
         		{'L','-','-','|','-','-','-','g'}
     	};
         char[][] board4 = {
         		{'s','-','J','|','-','-','-','L'},
         		{'L','-','F','-','-','|','-','L'},
         		{'L','-','-','-','7','-','-','L'},
-        		{'L','-','-','|','7','-','-','g'}
+        		{'L','-','-','|','J','-','-','g'}
     	};
 
-        GameBoard gB = new PipeGameBoard(board4);
+        GameBoard gameBoard = new PipeGameBoard(board3);
         
         //Solver solver = new PipeSolver(new BestFirstSearchSearcher());
         //Solver solver = new PipeSolver(new BFSSearcher());
         //Solver solver = new PipeSolver(new DFSSearcher());
         Solver solver = new PipeSolver(new AStarSearcher());
         //Solver solver = new PipeSolver(new HillClimbingSearcher());
-        Solution solution = solver.solve(gB);
+        Solution solution = solver.solve(gameBoard);
         if(solution == null) {
         	System.out.println("no route could be found");
         } else {
         	List<String> stepsList = solution.getStepsList();
-        	System.out.println(stepsList.size() + " Steps:");
+        	System.out.println(stepsList.size() + " Steps");
         	for (String step : solution.getStepsList()) {
-        		System.out.println(step);
+        		//System.out.println(step);
         	}
         }
     }

@@ -22,6 +22,7 @@ public class AStarSearcher extends CommonSearcher {
 		
 		while (!openList.isEmpty()) {
 			State n = popOpenList(); 
+			n.setGrade(s.grade(n));
 			closedSet.add(n);
 			
 			if (s.isGoalState(n)) {
@@ -34,13 +35,16 @@ public class AStarSearcher extends CommonSearcher {
 			for (State neighbor : neighbors) {
 				if (!closedSet.contains(neighbor)) {
 					neighbor.setCameFrom(n);
+					neighbor.setGrade(s.grade(neighbor));
 					// remove old heuristic grade & add 1 step & add new heuristic
-					neighbor.setCost(n.getCost() - s.grade(n) + 1 + s.grade(neighbor)); 
+					neighbor.setCost(n.getCost() - n.getGrade() + 1 + neighbor.getGrade()); 
 					if (!openListContains(neighbor)) {
 						addToOpenList(neighbor);
-					} else if (openList.removeIf(e -> e.equals(neighbor) && e.getCost() > neighbor.getCost())) {
-						addToOpenList(neighbor);
-					}
+					} 
+					// TODO: relax is slow as hell
+//					else if (openList.removeIf(e -> e.equals(neighbor) && e.getCost() > neighbor.getCost())) {
+//						addToOpenList(neighbor);
+//					}
 				}
 			}
 		}

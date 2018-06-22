@@ -146,6 +146,9 @@ public class PipeGameBoard implements GameBoard {
 				// copy our state
 				char[][] newPossible = new char[state2D.length][state2D[i].length];
 				for (int k=0; k < state2D.length; k++) {
+//					for (int m=0; m < state2D[k].length; m++) {
+//						newPossible[k][m] = state2D[k][m];
+//					}
 					System.arraycopy(state2D[k], 0, newPossible[k], 0, state2D[k].length);
 				}
 				
