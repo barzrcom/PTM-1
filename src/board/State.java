@@ -3,22 +3,19 @@ import java.awt.Point;
 
 public class State implements Comparable<State>{
 	final private char[][] state;
-	private double cost;
+	private double cost = 0;
 	private State cameFrom;
 	private Point posClicked;
 	final private int hash;
 	
 	public State(char[][] state) {
 		this.state = state;
-		hash = java.util.Arrays.deepToString( this.state ).hashCode();
-		this.cost = 0;
-		posClicked = null;
+		hash = java.util.Arrays.deepHashCode(state);
 	}
+
 	public State(char[][] state, Point posClicked) {
 		this.state = state;
-		hash = java.util.Arrays.deepToString( this.state ).hashCode();
-		
-		this.cost = 0;
+		this.hash = java.util.Arrays.deepHashCode(state);
 		this.posClicked = posClicked;
 	}
 	
