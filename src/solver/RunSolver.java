@@ -5,6 +5,7 @@ import java.util.List;
 import board.GameBoard;
 import board.PipeGameBoard;
 import board.Solution;
+import board.Step;
 import searcher.BFSSearcher;
 import searcher.BestFirstSearchSearcher;
 import searcher.DFSSearcher;
@@ -62,10 +63,10 @@ public class RunSolver {
         if(solution == null) {
         	System.out.println("no route could be found");
         } else {
-        	List<String> stepsList = solution.getStepsList();
-        	System.out.println(stepsList.size() + " Steps");
-        	for (String step : solution.getStepsList()) {
-        		//System.out.println(step);
+        	List<Step> stepList = solution.getStepList();
+        	System.out.println(stepList.size() + " Steps");
+        	for (Step step : stepList) {
+        		System.out.println(step.toString());
         	}
         }
     }

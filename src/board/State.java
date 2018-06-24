@@ -4,25 +4,37 @@ import java.awt.Point;
 public class State implements Comparable<State>{
 	final private char[][] state;
 	private double cost = 0;
+	private int grade = Integer.MAX_VALUE;
 	private State cameFrom;
-	private Point posClicked;
+	private Step step;
 	private int hash;
-	int grade = Integer.MAX_VALUE;
+	
 	
 	public State(char[][] state) {
 		hash = java.util.Arrays.deepHashCode(state);
 		this.state = state;
 	}
 
-	public State(char[][] state, Point posClicked) {
+	public State(char[][] state, Step step) {
 		hash = java.util.Arrays.deepHashCode(state);
 		this.state = state;
-		this.posClicked = posClicked;
+		this.step = step;
 	}
 	
 	@Override
 	public boolean equals(Object s) {
 		return (this.hashCode() == s.hashCode());
+	}
+	
+	@Override
+	public int hashCode() {
+		return hash;
+	}
+
+	@Override
+	public int compareTo(State o) {
+		// TODO Auto-generated method stub
+		return Double.compare(this.cost, o.cost);
 	}
 
 	public State getCameFrom() {
@@ -51,21 +63,11 @@ public class State implements Comparable<State>{
 		}
 	}
 	
-	@Override
-	public int hashCode() {
-		return hash;
+	public Step getStep() {
+		return step;
 	}
-
-	@Override
-	public int compareTo(State o) {
-		// TODO Auto-generated method stub
-		return Double.compare(this.cost, o.cost);
-	}
-	public Point getPosClicked() {
-		return posClicked;
-	}
-	public void setPosClicked(Point posClicked) {
-		this.posClicked = posClicked;
+	public void setStep(Step step) {
+		this.step = step;
 	}
 	
 	public int getGrade() {

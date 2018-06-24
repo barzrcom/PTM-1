@@ -3,6 +3,7 @@ import java.awt.Point;
 import java.util.Queue;
 
 import board.State;
+import board.Step;
 import board.Solution;
 
 public abstract class CommonSearcher implements Searcher {
@@ -51,20 +52,6 @@ public abstract class CommonSearcher implements Searcher {
 	public boolean openListContains(State state) {
 		return openList.contains(state);
 	}
-	
-	public Solution backTrace(State goalState) {
-		Solution solution = new Solution();
-		State currentState = goalState;
-		while(currentState.getCameFrom() != null) {
-			// add step
-			Point posClicked = currentState.getPosClicked();
-			solution.addStep(posClicked.x + "," + posClicked.y + "," + 1);
-			currentState = currentState.getCameFrom();
-		}
-		solution.reverse();
-		return solution;
-	}
-	
-	
+
 
 }

@@ -28,7 +28,7 @@ public class BFSSearcher extends CommonSearcher {
 			
 			if (s.isGoalState(n)) {
 				n.printState();
-				return backTrace(n);
+				return new Solution(s.getInitialState(), n);
 			}
 
 			List<State> neighbors = s.getAllPossibleStates(n);

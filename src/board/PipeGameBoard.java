@@ -123,7 +123,7 @@ public class PipeGameBoard implements GameBoard {
 		return isGoalStateLogic(state.getState(), startIndex.x, startIndex.y, directions.start);
 	}
 	
-	public void getAllPossibleStatesLogic(char[][] stateBoard, int posX, int posY, directions from, List<Point> pointList) {
+	public void getAllPossibleStatesLogic(char[][] stateBoard, int posX, int posY, directions from, List<PipeStep> stepList) {
 		//check bounds
 		if (posX < 0 || posX >= boardX)
 			return;
@@ -131,57 +131,57 @@ public class PipeGameBoard implements GameBoard {
 			return;
 		// start
 		if (from == directions.start) {
-			getAllPossibleStatesLogic(stateBoard, posX+1, posY, directions.left, pointList);
-			getAllPossibleStatesLogic(stateBoard, posX-1, posY, directions.right, pointList);
-			getAllPossibleStatesLogic(stateBoard, posX, posY+1, directions.up, pointList);
-			getAllPossibleStatesLogic(stateBoard, posX, posY-1, directions.down, pointList);
+			getAllPossibleStatesLogic(stateBoard, posX+1, posY, directions.left, stepList);
+			getAllPossibleStatesLogic(stateBoard, posX-1, posY, directions.right, stepList);
+			getAllPossibleStatesLogic(stateBoard, posX, posY+1, directions.up, stepList);
+			getAllPossibleStatesLogic(stateBoard, posX, posY-1, directions.down, stepList);
 			return;
 		}
 		switch (stateBoard[posY][posX]) {
 		case 'g':
-			pointList.add(new Point(posX,posY));
+			stepList.add(new PipeStep(posX,posY));
 			return;
 		case '-':
-			pointList.add(new Point(posX,posY));
+			stepList.add(new PipeStep(posX,posY));
 			if(from == directions.left)
-				getAllPossibleStatesLogic(stateBoard, posX+1, posY, directions.left, pointList);
+				getAllPossibleStatesLogic(stateBoard, posX+1, posY, directions.left, stepList);
 			else if(from == directions.right)
-				getAllPossibleStatesLogic(stateBoard, posX-1, posY, directions.right, pointList);
+				getAllPossibleStatesLogic(stateBoard, posX-1, posY, directions.right, stepList);
 			else return;
 		case '|':
-			pointList.add(new Point(posX,posY));
+			stepList.add(new PipeStep(posX,posY));
 			if(from == directions.up)
-				 getAllPossibleStatesLogic(stateBoard, posX, posY+1, directions.up, pointList);
+				 getAllPossibleStatesLogic(stateBoard, posX, posY+1, directions.up, stepList);
 			else if(from == directions.down)
-				 getAllPossibleStatesLogic(stateBoard, posX, posY-1, directions.down, pointList);
+				 getAllPossibleStatesLogic(stateBoard, posX, posY-1, directions.down, stepList);
 			else return;
 		case 'L':
-			pointList.add(new Point(posX,posY));
+			stepList.add(new PipeStep(posX,posY));
 			if(from == directions.up)
-				getAllPossibleStatesLogic(stateBoard, posX+1, posY, directions.left, pointList);
+				getAllPossibleStatesLogic(stateBoard, posX+1, posY, directions.left, stepList);
 			else if(from == directions.right)
-				getAllPossibleStatesLogic(stateBoard, posX, posY-1, directions.down, pointList);
+				getAllPossibleStatesLogic(stateBoard, posX, posY-1, directions.down, stepList);
 			else return;
 		case 'F':
-			pointList.add(new Point(posX,posY));
+			stepList.add(new PipeStep(posX,posY));
 			if(from == directions.right)
-				getAllPossibleStatesLogic(stateBoard, posX, posY+1, directions.up, pointList);
+				getAllPossibleStatesLogic(stateBoard, posX, posY+1, directions.up, stepList);
 			else if(from == directions.down)
-				getAllPossibleStatesLogic(stateBoard, posX+1, posY, directions.left, pointList);
+				getAllPossibleStatesLogic(stateBoard, posX+1, posY, directions.left, stepList);
 			else return;
 		case '7':
-			pointList.add(new Point(posX,posY));
+			stepList.add(new PipeStep(posX,posY));
 			if(from == directions.left)
-				getAllPossibleStatesLogic(stateBoard, posX, posY+1, directions.up, pointList);
+				getAllPossibleStatesLogic(stateBoard, posX, posY+1, directions.up, stepList);
 			else if(from == directions.down)
-				getAllPossibleStatesLogic(stateBoard, posX-1, posY, directions.right, pointList);
+				getAllPossibleStatesLogic(stateBoard, posX-1, posY, directions.right, stepList);
 			else return;
 		case 'J':
-			pointList.add(new Point(posX,posY));
+			stepList.add(new PipeStep(posX,posY));
 			if(from == directions.up)
-				getAllPossibleStatesLogic(stateBoard, posX-1, posY, directions.right, pointList);
+				getAllPossibleStatesLogic(stateBoard, posX-1, posY, directions.right, stepList);
 			else if(from == directions.left)
-				getAllPossibleStatesLogic(stateBoard, posX, posY-1, directions.down, pointList);
+				getAllPossibleStatesLogic(stateBoard, posX, posY-1, directions.down, stepList);
 			else return;
 		}
 		
@@ -193,18 +193,18 @@ public class PipeGameBoard implements GameBoard {
 	@Override
 	public List<State> getAllPossibleStates(State state) {
 		// TODO Auto-generated method stub
-		List<Point> pointList = new ArrayList<Point>();
-		getAllPossibleStatesLogic(state.getState(), startIndex.x, startIndex.y, directions.start, pointList);
+		List<PipeStep> stepList = new ArrayList<PipeStep>();
+		getAllPossibleStatesLogic(state.getState(), startIndex.x, startIndex.y, directions.start, stepList);
 		List<State> stateList = new ArrayList<State>();
 
 		char[][] state2D = state.getState();
-		for (Point point : pointList) {
+		for (PipeStep step : stepList) {
 			char[][] newPossible = new char[state2D.length][state2D[0].length];
 			for (int k=0; k < state2D.length; k++) {
 				System.arraycopy(state2D[k], 0, newPossible[k], 0, state2D[k].length);
 			}
-			newPossible[point.y][point.x] = changePipe(state2D[point.y][point.x]);
-			stateList.add(new State(newPossible, point));
+			newPossible[step.y][step.x] = changePipe(state2D[step.y][step.x]);
+			stateList.add(new State(newPossible, step));
 		}	
 		
 		return stateList;
