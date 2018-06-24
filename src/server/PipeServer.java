@@ -11,7 +11,7 @@ public class PipeServer implements Server {
     private int port;
     private boolean stop = false;
 
-    PipeServer(int port) {
+    public PipeServer(int port) {
         this.port = port;
     }
 

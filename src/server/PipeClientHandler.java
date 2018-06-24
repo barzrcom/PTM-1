@@ -25,9 +25,10 @@ public class PipeClientHandler implements ClientHandler {
 
     @Override
     public void handleClient(InputStream inFromClient, OutputStream outToClient) {
-        PrintWriter outTC = new PrintWriter(outToClient);
-        BufferedReader inFClient = new BufferedReader(new InputStreamReader(inFromClient));
+        
         try {
+        	PrintWriter outTC = new PrintWriter(outToClient);
+            BufferedReader inFClient = new BufferedReader(new InputStreamReader(inFromClient));
         	List<char[]> inputFromClient = new ArrayList<char[]>();
             String line;
             while (!(line = inFClient.readLine()).equals("done")) {
@@ -55,6 +56,7 @@ public class PipeClientHandler implements ClientHandler {
         		outTC.println(step.toString());
         		System.out.println(step.toString());
         	}
+        	outTC.println("done");
         	outTC.flush();
 
             // close the connection
