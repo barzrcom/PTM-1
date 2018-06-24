@@ -6,14 +6,14 @@ import java.util.List;
 
 public class Solution {
 	List<Step> stepList = new LinkedList<Step>();
-	State initialState;
-	State goalState;
+	State<?> initialState;
+	State<?> goalState;
 	
-	public Solution(State initialState, State goalState) {
+	public Solution(State<?> initialState, State<?> goalState) {
 		this.initialState = initialState;
 		this.goalState = goalState;
 		
-		State currentState = goalState;
+		State<?> currentState = goalState;
 		while(currentState.getCameFrom() != null) {
 			// add step
 			stepList.add(currentState.getStep());
@@ -26,5 +26,9 @@ public class Solution {
 	}
 	public List<Step> getStepList() {
 		return stepList;
+	}
+	
+	public State<?> getGoalState() {
+		return goalState;
 	}
 }

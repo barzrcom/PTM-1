@@ -24,7 +24,6 @@ public class BestFirstSearchSearcher extends CommonSearcher {
 		while (!openList.isEmpty()) {
 			State<T> n = popOpenList(); 
 			closedSet.add(n);
-			System.out.println(n.getState().toString());
 			
 			if (s.isGoalState(n)) {
 				n.printState();
