@@ -10,18 +10,12 @@ public class State<T> implements Comparable<State<T>>{
 	
 	
 	public State(T state) {
-		if(state instanceof char[][])
-			hash = java.util.Arrays.deepHashCode((char[][])state);
-		else 
-			hash = state.hashCode();
+		hash = state.hashCode();
 		this.state = state;
 	}
 
 	public State(T state, Step step) {
-		if(state instanceof char[][])
-			hash = java.util.Arrays.deepHashCode((char[][])state);
-		else 
-			hash = state.hashCode();
+		hash = state.hashCode();
 		this.state = state;
 		this.step = step;
 	}

@@ -6,6 +6,7 @@ import java.util.List;
 
 
 import board.PipeGameBoard;
+import board.Board;
 import board.Solution;
 import board.Step;
 import cacheManager.CacheManager;
@@ -37,7 +38,7 @@ public class PipeClientHandler implements ClientHandler {
             
             // build State from message.
             char[][] charArray = inputFromClient.toArray(new char[inputFromClient.size()][]);
-			PipeGameBoard gameBoard = new PipeGameBoard(charArray);
+			PipeGameBoard gameBoard = new PipeGameBoard(new Board(charArray));
 			System.out.println("problem received:");
 			gameBoard.getInitialState().printState();
 			// Check if state-solve exists in cache manager

@@ -3,6 +3,7 @@ package solver;
 import java.util.List;
 
 import board.PipeGameBoard;
+import board.Board;
 import board.Solution;
 import board.Step;
 import searcher.BFSSearcher;
@@ -42,6 +43,8 @@ public class RunSolver {
         		{'L','-','|','-','-','|','-','L'},
         		{'L','-','-','-','-','-','-','L'},
         		{'L','-','|','-','-','|','-','L'},
+        		{'L','-','-','-','-','-','-','L'},
+        		{'L','-','|','-','-','|','-','L'},
         		{'L','-','-','|','-','-','-','g'}
     	};
         char[][] board4 = {
@@ -51,7 +54,7 @@ public class RunSolver {
         		{'L','-','-','|','J','-','-','g'}
     	};
 
-        PipeGameBoard gameBoard = new PipeGameBoard(board3);
+        PipeGameBoard gameBoard = new PipeGameBoard(new Board(board3));
         
         //Solver solver = new PipeSolver(new BestFirstSearchSearcher());
         //Solver solver = new PipeSolver(new BFSSearcher());
