@@ -22,13 +22,14 @@ public class AStarSearcher extends CommonSearcher {
 		
 		while (!openList.isEmpty()) {
 			State n = popOpenList(); 
-			n.setGrade(s.grade(n));
-			closedSet.add(n);
-			
+
 			if (s.isGoalState(n)) {
 				n.printState();
 				return new Solution(s.getInitialState(), n);
 			}
+			
+			n.setGrade(s.grade(n));
+			closedSet.add(n);
 
 			List<State> neighbors = s.getAllPossibleStates(n);
 

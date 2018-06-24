@@ -9,17 +9,17 @@ import board.Solution;
 public abstract class CommonSearcher implements Searcher {
 
 	protected Queue<State> openList;
-	private int evaluatedNodes;
+	protected int evaluatedNodes = 0;
 	
 	public CommonSearcher(Queue<State> queue) {
 		this.openList = queue;
-		this.evaluatedNodes=0;
 	}
 	
 	public abstract Solution algoSearch(Searchable s);
 	
 	@Override
 	public Solution search(Searchable s) {
+		this.evaluatedNodes=0;
 		long startTime = System.currentTimeMillis();
 		System.out.println("algoSearch started");
 		

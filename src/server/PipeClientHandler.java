@@ -1,52 +1,61 @@
 package server;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
+import board.GameBoard;
+import board.PipeGameBoard;
+import board.Solution;
+import board.Step;
 import cacheManager.CacheManager;
 import cacheManager.FileCacheManager;
+import searcher.AStarSearcher;
+import solver.PipeSolver;
 import solver.Solver;
 
 /**
  * has the responsibility of closing the streams
  */
 public class PipeClientHandler implements ClientHandler {
-	private CacheManager cacheManager;
-	private Solver solver; 
+	
+	private CacheManager cacheManager = new FileCacheManager();
+	private Solver solver = new PipeSolver(new AStarSearcher());
 
-	PipeClientHandler(){
-		cacheManager = new FileCacheManager();
-//		solver = new MySolver();
-	}
 
     @Override
     public void handleClient(InputStream inFromClient, OutputStream outToClient) {
         PrintWriter outTC = new PrintWriter(outToClient);
         BufferedReader inFClient = new BufferedReader(new InputStreamReader(inFromClient));
         try {
-        	// TODO: read message from client
-        	StringBuilder allLines = new StringBuilder();
+        	List<char[]> inputFromClient = new ArrayList<char[]>();
             String line;
             while (!(line = inFClient.readLine()).equals("done")) {
-            	allLines.append(line);
+            	inputFromClient.add(line.toCharArray());
             }
             
-//            // build State from message.
-//			State clientState = new State(allLines.toString());
-//            
-//			// Check if state-solve exists in cache manager
-//            State solutionState;
-//            if (this.cacheManager.isSolutionExist(clientState)) {
-//            	// load solution from cache manager
-//            	solutionState = (State)this.cacheManager.load(clientState);
-//            } else {
-//            	// send it to solver and save it in cache manager
-//            	solutionState = this.solver.solve(clientState);
-//            	this.cacheManager.save(clientState, solutionState);
-//            }
-//            
-//            // return solve to the client
-//            outTC.write(solutionState.getState().toString());
-//            outTC.flush();
+            // build State from message.
+            char[][] charArray = inputFromClient.toArray(new char[inputFromClient.size()][]);
+			GameBoard gameBoard = new PipeGameBoard(charArray);
+			System.out.println("problem received:");
+			gameBoard.getInitialState().printState();
+			// Check if state-solve exists in cache manager
+			Solution solution;
+            if (cacheManager.isSolutionExist(gameBoard.getInitialState())) {
+            	// load solution from cache manager
+            	solution = this.cacheManager.load(gameBoard.getInitialState());
+            } else {
+            	// send it to solver and save it in cache manager
+            	solution = solver.solve(gameBoard);
+            	cacheManager.save(gameBoard.getInitialState(), solution);
+            }
+            
+            // return solution to the client
+        	for (Step step : solution.getStepList()) {
+        		outTC.println(step.toString());
+        		System.out.println(step.toString());
+        	}
+        	outTC.flush();
 
             // close the connection
             inFClient.close();

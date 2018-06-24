@@ -6,31 +6,29 @@ import java.net.Socket;
 import java.net.SocketTimeoutException;
 import java.util.concurrent.TimeoutException;
 
-public class MyServer implements Server {
+public class PipeServer implements Server {
     private ServerSocket serverSocket;
     private int port;
     private boolean stop = false;
 
-    MyServer(int port) {
+    PipeServer(int port) {
         this.port = port;
     }
 
     private void startServer(ClientHandler clientHandler) throws IOException {
         serverSocket = new ServerSocket(port);
-        serverSocket.setSoTimeout(1000);
+        serverSocket.setSoTimeout(5000);
         System.out.println("Server connected - waiting");
 
         while (!stop) {
             try {
                 Socket aClient = serverSocket.accept();
                 System.out.println("client connected");
-
                 clientHandler.handleClient(aClient.getInputStream(), aClient.getOutputStream());
-                //the ch is responsible for closing the streams
-
                 aClient.close();
+                System.out.println("client disconnected");
             } catch (SocketTimeoutException e) {
-                System.out.println("Client did not connect...");
+                
             }
         }
         serverSocket.close();

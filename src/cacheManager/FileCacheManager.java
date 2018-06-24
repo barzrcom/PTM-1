@@ -1,26 +1,24 @@
 package cacheManager;
 
+import board.Solution;
 import board.State;
 
 public class FileCacheManager implements CacheManager{
 
 	@Override
 	public boolean isSolutionExist(State problem) {
-		// TODO Auto-generated method stub
-		// Check if solve exists for given state
 		return false;
 	}
 
 	@Override
-	public void save(State problem, State solution) {
-		// TODO Auto-generated method stub
+	public void save(State problem, Solution solution) {
 		
 	}
 
 	@Override
-	public State load(State problem) {
-		// TODO Auto-generated method stub
+	public Solution load(State problem) {
 		return null;
 	}
+
 	
 }
