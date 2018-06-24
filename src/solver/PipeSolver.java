@@ -1,7 +1,7 @@
 package solver;
 
-import board.GameBoard;
-import board.SearchableGameBoard;
+import board.PipeGameBoard;
+import board.SearchablePipeGameBoard;
 import board.Solution;
 import searcher.Searcher;
 
@@ -13,8 +13,8 @@ public class PipeSolver implements Solver {
 	}
 
 	@Override
-	public Solution solve(GameBoard problem) {
-		SearchableGameBoard sGB = new SearchableGameBoard(problem);
+	public Solution solve(PipeGameBoard problem) {
+		SearchablePipeGameBoard sGB = new SearchablePipeGameBoard(problem);
 		return searcher.search(sGB);
 	}
 }

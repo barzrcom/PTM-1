@@ -1,22 +1,27 @@
 package board;
-import java.awt.Point;
 
-public class State implements Comparable<State>{
-	final private char[][] state;
+public class State<T> implements Comparable<State<T>>{
+	final private T state;
 	private double cost = 0;
 	private int grade = Integer.MAX_VALUE;
-	private State cameFrom;
+	private State<?> cameFrom;
 	private Step step;
 	private int hash;
 	
 	
-	public State(char[][] state) {
-		hash = java.util.Arrays.deepHashCode(state);
+	public State(T state) {
+		if(state instanceof char[][])
+			hash = java.util.Arrays.deepHashCode((char[][])state);
+		else 
+			hash = state.hashCode();
 		this.state = state;
 	}
 
-	public State(char[][] state, Step step) {
-		hash = java.util.Arrays.deepHashCode(state);
+	public State(T state, Step step) {
+		if(state instanceof char[][])
+			hash = java.util.Arrays.deepHashCode((char[][])state);
+		else 
+			hash = state.hashCode();
 		this.state = state;
 		this.step = step;
 	}
@@ -32,16 +37,16 @@ public class State implements Comparable<State>{
 	}
 
 	@Override
-	public int compareTo(State o) {
+	public int compareTo(State<T> o) {
 		// TODO Auto-generated method stub
 		return Double.compare(this.cost, o.cost);
 	}
 
-	public State getCameFrom() {
+	public State<?> getCameFrom() {
 		return cameFrom;
 	}
 
-	public void setCameFrom(State cameFrom) {
+	public void setCameFrom(State<?> cameFrom) {
 		this.cameFrom = cameFrom;
 	}
 
@@ -53,14 +58,14 @@ public class State implements Comparable<State>{
 		this.cost = cost;
 	}
 	
-	public char[][] getState() {
+	public T getState() {
 		return state;
 	}
 	
 	public void printState() {
-		for (int i=0; i < this.state.length; i++) {
-			System.out.println(this.state[i]);
-		}
+//		for (int i=0; i < this.state.length; i++) {
+//			System.out.println(this.state[i]);
+//		}
 	}
 	
 	public Step getStep() {

@@ -2,7 +2,6 @@ package solver;
 
 import java.util.List;
 
-import board.GameBoard;
 import board.PipeGameBoard;
 import board.Solution;
 import board.Step;
@@ -52,7 +51,7 @@ public class RunSolver {
         		{'L','-','-','|','J','-','-','g'}
     	};
 
-        GameBoard gameBoard = new PipeGameBoard(board3);
+        PipeGameBoard gameBoard = new PipeGameBoard(board3);
         
         //Solver solver = new PipeSolver(new BestFirstSearchSearcher());
         //Solver solver = new PipeSolver(new BFSSearcher());

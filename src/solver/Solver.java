@@ -1,9 +1,9 @@
 package solver;
 
-import board.GameBoard;
+import board.PipeGameBoard;
 import board.Solution;
 
 public interface Solver {
 
-	public Solution solve(GameBoard problem);
+	public Solution solve(PipeGameBoard problem);
 }

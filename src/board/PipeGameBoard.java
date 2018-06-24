@@ -7,9 +7,9 @@ import java.util.Collections;
 import java.util.List;
 import javafx.util.Pair;
 
-public class PipeGameBoard implements GameBoard {
+public class PipeGameBoard {
 	// TODO: move to abstract class
-	private State initialState;
+	private State<char[][]> initialState;
 	private Point startIndex;
 	private Point goalIndex;
 	private int boardX;
@@ -18,7 +18,7 @@ public class PipeGameBoard implements GameBoard {
 	public PipeGameBoard(char[][] board) {
 		boardY = board.length;
 		boardX = board[0].length;
-		initialState = new State(board);
+		initialState = new State<char[][]>(board);
 		// get start and end points
 		for (int i=0; i < board.length; i++) {
 			for (int j=0; j < board[i].length; j++) {
@@ -55,8 +55,8 @@ public class PipeGameBoard implements GameBoard {
 			return ' ';
 		}
 	}
-	@Override
-	public State getInitialState() {
+
+	public State<char[][]> getInitialState() {
 		// TODO Auto-generated method stub
 		return initialState;
 	}
@@ -117,8 +117,7 @@ public class PipeGameBoard implements GameBoard {
 		return false;
 	}
 	
-	@Override
-	public boolean isGoalState(State state) {
+	public boolean isGoalState(State<char[][]> state) {
 		// TODO: check if board state is correct (at least one flow between s to g)
 		return isGoalStateLogic(state.getState(), startIndex.x, startIndex.y, directions.start);
 	}
@@ -190,12 +189,11 @@ public class PipeGameBoard implements GameBoard {
 	}
 	
 	
-	@Override
-	public List<State> getAllPossibleStates(State state) {
+	public List<State<char[][]>> getAllPossibleStates(State<char[][]> state) {
 		// TODO Auto-generated method stub
 		List<PipeStep> stepList = new ArrayList<PipeStep>();
 		getAllPossibleStatesLogic(state.getState(), startIndex.x, startIndex.y, directions.start, stepList);
-		List<State> stateList = new ArrayList<State>();
+		List<State<char[][]>> stateList = new ArrayList<State<char[][]>>();
 
 		char[][] state2D = state.getState();
 		for (PipeStep step : stepList) {
@@ -204,7 +202,7 @@ public class PipeGameBoard implements GameBoard {
 				System.arraycopy(state2D[k], 0, newPossible[k], 0, state2D[k].length);
 			}
 			newPossible[step.y][step.x] = changePipe(state2D[step.y][step.x]);
-			stateList.add(new State(newPossible, step));
+			stateList.add(new State<char[][]>(newPossible, step));
 		}	
 		
 		return stateList;
@@ -282,9 +280,8 @@ public class PipeGameBoard implements GameBoard {
 		return 0;
 	}
 
-	
-	@Override
-	public int heuristicGrade(State state) {
+
+	public int heuristicGrade(State<char[][]> state) {
 		return (boardX*boardY)-boardGradeLogic(state.getState(), startIndex.x, startIndex.y, directions.start);
 	}
 	

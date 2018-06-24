@@ -1,24 +1,23 @@
 package searcher;
-import java.awt.Point;
+
 import java.util.Queue;
 
-import board.State;
-import board.Step;
 import board.Solution;
+import board.State;
 
 public abstract class CommonSearcher implements Searcher {
 
-	protected Queue<State> openList;
+	protected Queue<State<?>> openList;
 	protected int evaluatedNodes = 0;
 	
-	public CommonSearcher(Queue<State> queue) {
+	public <T> CommonSearcher(Queue<State<?>> queue) {
 		this.openList = queue;
 	}
 	
-	public abstract Solution algoSearch(Searchable s);
+	public abstract <T> Solution algoSearch(Searchable<T> s);
 	
 	@Override
-	public Solution search(Searchable s) {
+	public Solution search(Searchable<?> s) {
 		this.evaluatedNodes=0;
 		long startTime = System.currentTimeMillis();
 		System.out.println("algoSearch started");
@@ -32,7 +31,7 @@ public abstract class CommonSearcher implements Searcher {
 		return solution;
 	}
 	
-	protected void addToOpenList(State state) {
+	protected void addToOpenList(State<?> state) {
 		this.openList.add(state);
 	}
 	
@@ -40,16 +39,17 @@ public abstract class CommonSearcher implements Searcher {
 		this.evaluatedNodes++;
 	}
 	
-	protected State popOpenList() {
+	@SuppressWarnings("unchecked")
+	protected <T> State<T> popOpenList() {
 		incEvaluatedNodes();
-		return openList.poll();
+		return (State<T>) openList.poll();
 	}
 	
 	public int getNumberOfNodesEvaluated() {
 		return this.evaluatedNodes;
 	}
 	
-	public boolean openListContains(State state) {
+	public boolean openListContains(State<?> state) {
 		return openList.contains(state);
 	}
 

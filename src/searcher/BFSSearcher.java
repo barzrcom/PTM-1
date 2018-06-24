@@ -14,16 +14,16 @@ public class BFSSearcher extends CommonSearcher {
 
 	public BFSSearcher() {
 		// we need a fast queue
-		super(new ArrayDeque<State>());
+		super(new ArrayDeque<State<?>>());
 	}
 
 	@Override
-	public Solution algoSearch(Searchable s) {
+	public <T> Solution algoSearch(Searchable<T> s) {
 		addToOpenList(s.getInitialState());
-		Set<State> closedSet = new HashSet<State>();
+		Set<State<?>> closedSet = new HashSet<State<?>>();
 
 		while (!openList.isEmpty()) {
-			State n = popOpenList(); 
+			State<T> n = popOpenList(); 
 			closedSet.add(n);
 			
 			if (s.isGoalState(n)) {
@@ -31,9 +31,9 @@ public class BFSSearcher extends CommonSearcher {
 				return new Solution(s.getInitialState(), n);
 			}
 
-			List<State> neighbors = s.getAllPossibleStates(n);
+			List<State<T>> neighbors = s.getAllPossibleStates(n);
 
-			for (State neighbor : neighbors) {
+			for (State<T> neighbor : neighbors) {
 				if (!closedSet.contains(neighbor) && !openListContains(neighbor)) {
 					neighbor.setCameFrom(n);
 					neighbor.setCost(n.getCost() + 1); // update cost
