@@ -40,7 +40,6 @@ public class HillClimbingSearcher extends CommonSearcher {
 					bestNeighborState = currentState;
 				
 				if (s.isGoalState(bestNeighborState)) {
-					bestNeighborState.printState();
 					return new Solution(s.getInitialState(), bestNeighborState);
 				}
 				

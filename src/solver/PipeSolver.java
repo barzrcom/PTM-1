@@ -15,6 +15,9 @@ public class PipeSolver implements Solver {
 	@Override
 	public Solution solve(PipeGameBoard problem) {
 		SearchablePipeGameBoard sGB = new SearchablePipeGameBoard(problem);
-		return searcher.search(sGB);
+		Solution solution = searcher.search(sGB);
+		// reset the searcher to initial state
+		searcher.reset();
+		return solution;
 	}
 }

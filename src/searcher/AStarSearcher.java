@@ -24,7 +24,6 @@ public class AStarSearcher extends CommonSearcher {
 			State<T> n = popOpenList(); 
 
 			if (s.isGoalState(n)) {
-				n.printState();
 				return new Solution(s.getInitialState(), n);
 			}
 			

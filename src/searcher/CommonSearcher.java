@@ -18,7 +18,6 @@ public abstract class CommonSearcher implements Searcher {
 	
 	@Override
 	public Solution search(Searchable<?> s) {
-		this.evaluatedNodes=0;
 		long startTime = System.currentTimeMillis();
 		System.out.println("algoSearch started");
 		
@@ -51,6 +50,11 @@ public abstract class CommonSearcher implements Searcher {
 	
 	public boolean openListContains(State<?> state) {
 		return openList.contains(state);
+	}
+	
+	public void reset() {
+		openList.clear();
+		evaluatedNodes = 0;
 	}
 
 

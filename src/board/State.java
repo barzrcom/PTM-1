@@ -56,12 +56,6 @@ public class State<T> implements Comparable<State<T>>{
 		return state;
 	}
 	
-	public void printState() {
-//		for (int i=0; i < this.state.length; i++) {
-//			System.out.println(this.state[i]);
-//		}
-	}
-	
 	public Step getStep() {
 		return step;
 	}

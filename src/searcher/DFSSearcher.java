@@ -31,7 +31,6 @@ public class DFSSearcher extends CommonSearcher {
 			closedSet.add(n);
 			
 			if (s.isGoalState(n)) {
-				n.printState();
 				return new Solution(s.getInitialState(), n);
 			}
 
