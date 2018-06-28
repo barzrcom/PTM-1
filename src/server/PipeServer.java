@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
-import java.util.concurrent.TimeoutException;
 
 public class PipeServer implements Server {
     private ServerSocket serverSocket;

@@ -2,7 +2,6 @@ package searcher;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.Stack;
 
 import board.Solution;
 import board.State;
@@ -15,20 +14,20 @@ public class HillClimbingSearcher extends CommonSearcher {
 	}
 
 	@Override
-	public Solution algoSearch(Searchable s) {
+	public <T> Solution algoSearch(Searchable<T> s) {
 		// System.out.println("Using HillClimbing Searcher: ");
-		State currentState = s.getInitialState();
-		State bestNeighborState = null;
+		State<T> currentState = s.getInitialState();
+		State<T> bestNeighborState = null;
 
 		while (true) {
 
-			List<State> neighbors = new ArrayList<State>(s.getAllPossibleStates(currentState));
-			for(State neighbor : neighbors) {
+			List<State<T>> neighbors = new ArrayList<State<T>>(s.getAllPossibleStates(currentState));
+			for(State<T> neighbor : neighbors) {
 				neighbor.setCameFrom(currentState);
 			}
 			int grade = 10000;
 			if (Math.random() < 0.7) {
-				for(State neighbor : neighbors) {
+				for(State<T> neighbor : neighbors) {
 					incEvaluatedNodes();
 					int g = s.grade(neighbor);
 					if (g < grade) {

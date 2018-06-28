@@ -6,10 +6,6 @@ import board.PipeGameBoard;
 import board.Board;
 import board.Solution;
 import board.Step;
-import searcher.BFSSearcher;
-import searcher.BestFirstSearchSearcher;
-import searcher.DFSSearcher;
-import searcher.HillClimbingSearcher;
 import searcher.AStarSearcher;
 
 public class RunSolver {

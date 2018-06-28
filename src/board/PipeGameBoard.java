@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import javafx.util.Pair;
 
 public class PipeGameBoard {
 	// TODO: move to abstract class

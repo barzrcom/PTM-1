@@ -10,7 +10,7 @@ import board.State;
 
 public class DFSSearcher extends CommonSearcher {
 
-	Stack<State> stack = new Stack<State>();
+	
 	
 	public DFSSearcher() {
 		// we need a fast queue
@@ -18,12 +18,14 @@ public class DFSSearcher extends CommonSearcher {
 	}
 	
 	@Override
-	public Solution algoSearch(Searchable s) {
+	public <T> Solution algoSearch(Searchable<T> s) {
+		Stack<State<T>> stack = new Stack<State<T>>();
+		
 		stack.add(s.getInitialState());
-		Set<State> closedSet = new HashSet<State>();
+		Set<State<T>> closedSet = new HashSet<State<T>>();
 
 		while (!stack.isEmpty()) {
-			State n = stack.pop(); 
+			State<T> n = stack.pop(); 
 			// manually count nodes
 			incEvaluatedNodes();
 			closedSet.add(n);
@@ -33,9 +35,9 @@ public class DFSSearcher extends CommonSearcher {
 				return new Solution(s.getInitialState(), n);
 			}
 
-			List<State> neighbors = s.getAllPossibleStates(n);
+			List<State<T>> neighbors = s.getAllPossibleStates(n);
 
-			for (State neighbor : neighbors) {
+			for (State<T> neighbor : neighbors) {
 				if (!closedSet.contains(neighbor) && !stack.contains(neighbor)) {
 					neighbor.setCameFrom(n);
 					neighbor.setCost(n.getCost() + 1); // update cost
