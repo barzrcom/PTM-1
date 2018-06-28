@@ -39,9 +39,8 @@ public class PipeClientHandler implements ClientHandler {
             // build State from message.
             char[][] charArray = inputFromClient.toArray(new char[inputFromClient.size()][]);
             Board board = new Board(charArray);
-            board.printState();
 			PipeGameBoard gameBoard = new PipeGameBoard(board);
-			System.out.println("problem received:");
+
 
 			// Check if state-solve exists in cache manager
 			Solution solution;
@@ -53,12 +52,15 @@ public class PipeClientHandler implements ClientHandler {
             	solution = solver.solve(gameBoard);
             	cacheManager.save(gameBoard.getInitialState(), solution);
             }
-            ((Board) solution.getGoalState().getState()).printState();
-            // return solution to the client
-        	for (Step step : solution.getStepList()) {
-        		outTC.println(step.toString());
-        		System.out.println(step.toString());
-        	}
+            if(solution == null) {
+            	System.out.println("no route could be found");
+            } else {
+
+            	for (Step step : solution.getStepList()) {
+            		outTC.println(step.toString());
+            	}
+            }
+
         	outTC.println("done");
         	outTC.flush();
 

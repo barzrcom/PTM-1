@@ -50,7 +50,13 @@ public class RunSolver {
         		{'L','-','-','|','J','-','-','g'}
     	};
 
-        PipeGameBoard gameBoard = new PipeGameBoard(new Board(board3));
+        char[][] board5 = {
+        		{'s','-','L'},
+        		{' ',' ','|'},
+        		{'L',' ','g'}
+    	};
+
+        PipeGameBoard gameBoard = new PipeGameBoard(new Board(board5));
         
         //Solver solver = new PipeSolver(new BestFirstSearchSearcher());
         //Solver solver = new PipeSolver(new BFSSearcher());
@@ -58,14 +64,6 @@ public class RunSolver {
         Solver solver = new PipeSolver(new AStarSearcher());
         //Solver solver = new PipeSolver(new HillClimbingSearcher());
         Solution solution = solver.solve(gameBoard);
-        if(solution == null) {
-        	System.out.println("no route could be found");
-        } else {
-        	List<Step> stepList = solution.getStepList();
-        	System.out.println(stepList.size() + " Steps");
-        	for (Step step : stepList) {
-        		System.out.println(step.toString());
-        	}
-        }
+
     }
 }
