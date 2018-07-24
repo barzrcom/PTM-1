@@ -1,10 +1,19 @@
 package board;
 
-public class Board {
+import java.io.Serializable;
+
+public class Board implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 40L;
 	final char[][] board;
 	
 	public Board(char[][] grid){
 		this.board = grid;
+	}
+	public char[][] getBoard() {
+		return board;
 	}
 	@Override
 	public int hashCode() {
@@ -14,8 +23,5 @@ public class Board {
 		for (int i=0; i < this.board.length; i++) {
 			System.out.println(this.board[i]);
 		}
-	}
-	public char[][] getBoard() {
-		return board;
 	}
 }

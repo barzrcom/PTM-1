@@ -1,10 +1,8 @@
 package solver;
 
-import board.Board;
 import board.PipeGameBoard;
 import board.SearchablePipeGameBoard;
 import board.Solution;
-import board.Step;
 import searcher.Searcher;
 
 public class PipeSolver implements Solver {

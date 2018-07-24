@@ -1,11 +1,8 @@
 package solver;
 
-import java.util.List;
-
-import board.PipeGameBoard;
 import board.Board;
+import board.PipeGameBoard;
 import board.Solution;
-import board.Step;
 import searcher.AStarSearcher;
 
 public class RunSolver {
