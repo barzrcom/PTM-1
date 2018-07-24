@@ -17,7 +17,7 @@ public class PipeServer implements Server {
     private void startServer(ClientHandler clientHandler) throws IOException {
         serverSocket = new ServerSocket(port);
         serverSocket.setSoTimeout(5000);
-        System.out.println("Server connected - waiting");
+        System.out.println("Server started - waiting");
 
         while (!stop) {
             try {

@@ -1,12 +1,16 @@
 package server;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
-
-import board.PipeGameBoard;
 import board.Board;
+import board.PipeGameBoard;
 import board.Solution;
 import board.Step;
 import cacheManager.CacheManager;
@@ -35,7 +39,7 @@ public class PipeClientHandler implements ClientHandler {
             while (!(line = inFClient.readLine()).equals("done")) {
             	inputFromClient.add(line.toCharArray());
             }
-            
+ 
             // build State from message.
             char[][] charArray = inputFromClient.toArray(new char[inputFromClient.size()][]);
             Board board = new Board(charArray);
@@ -63,6 +67,7 @@ public class PipeClientHandler implements ClientHandler {
 
         	outTC.println("done");
         	outTC.flush();
+        	System.out.println("problem solved");
 
             // close the connection
             inFClient.close();
