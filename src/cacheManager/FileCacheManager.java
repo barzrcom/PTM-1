@@ -24,7 +24,7 @@ public class FileCacheManager implements CacheManager {
 
 		if (!f.exists()) {
 			// Create a new directory only if is it not exists yet
-			System.out.println("solutions folder have been created, location: " + f);
+			//System.out.println("solutions folder have been created, location: " + f);
 			f.mkdir();
 		}
 		this.isInitialised = true;  // mark that initialization already happened 

@@ -125,7 +125,7 @@ public class TestSetter {
 			
 			
 			Searcher searcher = new BestFirstSearchSearcher();
-	        //Solver solver = new PipeSolver(new HillClimbingSearcher());
+
 			Solution solution = searcher.search(searchable);
 
 			// add final grid manually to the states

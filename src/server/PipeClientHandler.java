@@ -67,7 +67,7 @@ public class PipeClientHandler implements ClientHandler {
 
         	outTC.println("done");
         	outTC.flush();
-        	System.out.println("problem solved");
+        	//System.out.println("problem solved");
 
             // close the connection
             inFClient.close();
