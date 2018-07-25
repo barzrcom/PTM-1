@@ -15,16 +15,6 @@ public class Maze {
 		this.data=data;
 	}
 	
-	// helper
-	private Grid getpos(byte n){
-		for(int i=0;i<data.length;i++)
-			for(int j=0;j<data[i].length;j++){
-				if(data[i][j]==n)
-					return new Grid(i,j);
-			}
-		return null;
-	}
-	
 	// returns the grid position of the entrance - 2 in the data 
 	public Grid getEntrance(){
 		return getpos((byte)2);
@@ -36,8 +26,13 @@ public class Maze {
 	}
 	
 	// helper
-	private boolean isFree(int i, int j){
-		return(i>=0 && i<data.length && j>=0 && j<data[i].length && data[i][j]==(byte)0);
+	private Grid getpos(byte n){
+		for(int i=0;i<data.length;i++)
+			for(int j=0;j<data[i].length;j++){
+				if(data[i][j]==n)
+					return new Grid(i,j);
+			}
+		return null;
 	}
 	
 	// returns a list of possible grid positions given a grid position in the maze
@@ -56,6 +51,11 @@ public class Maze {
 			return list;
 		}
 		return null;
+	}
+	
+	// helper
+	private boolean isFree(int i, int j){
+		return(i>=0 && i<data.length && j>=0 && j<data[i].length && data[i][j]==(byte)0);
 	}
 
 }

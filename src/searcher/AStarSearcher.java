@@ -8,6 +8,7 @@ import java.util.Set;
 import board.Solution;
 import board.State;
 
+
 public class AStarSearcher extends CommonSearcher {
 
 	public AStarSearcher() {

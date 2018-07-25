@@ -5,26 +5,32 @@ import java.awt.Point;
 import java.util.ArrayList;
 import java.util.List;
 
-
-// edit these imports according to your project
-import searcher.BestFirstSearchSearcher;
 import board.SearchablePipeGameBoard;
 import board.Solution;
 import board.State;
 import board.Step;
-import searcher.Searchable;
-import searcher.Searcher;
 import cacheManager.CacheManager;
 import cacheManager.FileCacheManager;
+// edit these imports according to your project
+import searcher.BestFirstSearchSearcher;
+import searcher.Searchable;
+import searcher.Searcher;
 import server.ClientHandler;
-import solver.PipeSolver;
 import server.PipeClientHandler;
 import server.PipeServer;
 import server.Server;
+import solver.PipeSolver;
 import solver.Solver;
 
 public class TestSetter {
 	
+	// run your server here
+	static Server s;
+	
+	public static void runServer(int port){
+		s=new PipeServer(port);
+		s.start(new PipeClientHandler());
+	}
 	public static void setClasses(DesignTest dt){
 		
 		// set the server's Interface, e.g., "Server.class"
@@ -54,18 +60,6 @@ public class TestSetter {
 		// your Best First Search implementation
 		dt.setBestFSClass(BestFirstSearchSearcher.class);
 	}
-	
-	// run your server here
-	static Server s;
-	public static void runServer(int port){
-		s=new PipeServer(port);
-		s.start(new PipeClientHandler());
-	}
-	// stop your server here
-	public static void stopServer(){
-		s.stop();
-	}
-	
 	/* ------------- Best First Search Test --------------
 	 * You are given a Maze
 	 * Create a new Searchable from the Maze
@@ -77,16 +71,6 @@ public class TestSetter {
 
 		
 		Searchable<Grid> searchable=new Searchable<Grid>() {
-			@Override
-			public State<Grid> getInitialState() {
-				return new State<Grid>(m.getEntrance());
-			}
-			@Override
-			public boolean isGoalState(State<Grid> s) {
-				double distance = Point.distance(s.getState().col, s.getState().row, m.getExit().col, m.getExit().row);
-				// when distance from the goal is 1 direct or sqrt(2) for diagonal
-				return distance == 1.0 || distance == Math.sqrt(2);
-			}
 			@Override
 			public List<State<Grid>> getAllPossibleStates(State<Grid> s) {
 				List<State<Grid>> stateList = new ArrayList<State<Grid>>();
@@ -117,9 +101,19 @@ public class TestSetter {
 				return stateList;
 			}
 			@Override
-			public int grade(State<Grid> state) {
+			public State<Grid> getInitialState() {
+				return new State<Grid>(m.getEntrance());
+			}
+			@Override
+			public double grade(State<Grid> state) {
 				// TODO Auto-generated method stub
 				return 0;
+			}
+			@Override
+			public boolean isGoalState(State<Grid> s) {
+				double distance = Point.distance(s.getState().col, s.getState().row, m.getExit().col, m.getExit().row);
+				// when distance from the goal is 1 direct or sqrt(2) for diagonal
+				return distance == 1.0 || distance == Math.sqrt(2);
 			}
 			};
 			
@@ -155,6 +149,11 @@ public class TestSetter {
 			
 			return actionList;
 			
+	}
+	
+	// stop your server here
+	public static void stopServer(){
+		s.stop();
 	}
 
 }

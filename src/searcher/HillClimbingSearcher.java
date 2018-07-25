@@ -25,11 +25,11 @@ public class HillClimbingSearcher extends CommonSearcher {
 			for(State<T> neighbor : neighbors) {
 				neighbor.setCameFrom(currentState);
 			}
-			int grade = 10000;
+			double grade = Double.MAX_VALUE;
 			if (Math.random() < 0.7) {
 				for(State<T> neighbor : neighbors) {
 					incEvaluatedNodes();
-					int g = s.grade(neighbor);
+					double g = s.grade(neighbor);
 					if (g < grade) {
 						bestNeighborState = neighbor;
 						grade = g;

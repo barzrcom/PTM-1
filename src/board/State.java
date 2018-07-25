@@ -1,6 +1,8 @@
 package board;
 
+import java.awt.Point;
 import java.io.Serializable;
+import java.util.LinkedHashSet;
 
 public class State<T> implements Comparable<State<T>>, Serializable {
 	/**
@@ -9,8 +11,9 @@ public class State<T> implements Comparable<State<T>>, Serializable {
 	private static final long serialVersionUID = 42L;
 	private State<?> cameFrom;
 	private double cost = 0;
-	private int grade = Integer.MAX_VALUE;
+	private double grade = Double.MAX_VALUE;
 	private int hash;
+	public LinkedHashSet<Point> neighborsPointList = new LinkedHashSet<Point>();
 	final private T state;
 	private Step step;
 	
@@ -45,7 +48,7 @@ public class State<T> implements Comparable<State<T>>, Serializable {
 		return cost;
 	}
 
-	public int getGrade() {
+	public double getGrade() {
 		return grade;
 	}
 
@@ -69,7 +72,7 @@ public class State<T> implements Comparable<State<T>>, Serializable {
 		this.cost = cost;
 	}
 	
-	public void setGrade(int grade) {
+	public void setGrade(double grade) {
 		this.grade = grade;
 	}
 	public void setStep(Step step) {

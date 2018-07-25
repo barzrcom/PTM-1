@@ -6,12 +6,23 @@ import java.net.Socket;
 import java.net.SocketTimeoutException;
 
 public class PipeServer implements Server {
-    private ServerSocket serverSocket;
     private int port;
+    private ServerSocket serverSocket;
     private boolean stop = false;
 
     public PipeServer(int port) {
         this.port = port;
+    }
+
+    @Override
+    public void start(ClientHandler clientHandler) {
+        new Thread(() -> {
+            try {
+                startServer(clientHandler);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }).start();
     }
 
     private void startServer(ClientHandler clientHandler) throws IOException {
@@ -31,17 +42,6 @@ public class PipeServer implements Server {
             }
         }
         serverSocket.close();
-    }
-
-    @Override
-    public void start(ClientHandler clientHandler) {
-        new Thread(() -> {
-            try {
-                startServer(clientHandler);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }).start();
     }
 
     @Override

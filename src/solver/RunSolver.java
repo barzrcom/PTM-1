@@ -3,6 +3,7 @@ package solver;
 import board.Board;
 import board.PipeGameBoard;
 import board.Solution;
+import board.State;
 import searcher.AStarSearcher;
 
 public class RunSolver {
@@ -44,6 +45,13 @@ public class RunSolver {
         		{'s','-','J','|','-','-','-','L'},
         		{'L','-','F','-','-','|','-','L'},
         		{'L','-','-','-','7','-','-','L'},
+        		{'L','-','F','-','-','|','-','L'},
+        		{'L','-','F','-','-','|','-','L'},
+        		{'L','-','-','-','7','-','-','L'},
+        		{'L','-','F','-','-','|','-','L'},
+        		{'L','-','F','-','-','|','-','L'},
+        		{'L','-','-','-','7','-','-','L'},
+        		{'L','-','F','-','-','|','-','L'},
         		{'L','-','-','|','J','-','-','g'}
     	};
 
@@ -52,15 +60,32 @@ public class RunSolver {
         		{' ',' ','|'},
         		{'L',' ','g'}
     	};
+        
+        char[][] board7 = {
+        		{'s','7','7','7','7','7','7','7','7','7'},
+        		{'7','7','7','7','7','7','7','7','7','7'},
+        		{'7','7','7','7','7','7','7','7','7','7'},
+        		{'7','7','7','7','7','7','7','7','7','7'},
+        		{'7','7','7','7','7','7','7','7','7','7'},
+        		{'7','7','7','7','7','7','7','7','7','7'},
+        		{'7','7','7','7','7','7','7','7','7','7'},
+        		{'7','7','7','7','7','7','7','7','7','7'},
+        		{'7','7','7','7','7','7','7','7','7','7'},
+        		{'7','7','7','7','7','7','7','7','7','7'},
+        		{'7','7','7','7','7','7','7','7','7','g'}
+    	};
 
-        PipeGameBoard gameBoard = new PipeGameBoard(new Board(board5));
+
+        PipeGameBoard gameBoard = new PipeGameBoard(new Board(board7));
         
         //Solver solver = new PipeSolver(new BestFirstSearchSearcher());
-        //Solver solver = new PipeSolver(new BFSSearcher());
+//        Solver solver = new PipeSolver(new BFSSearcher());
         //Solver solver = new PipeSolver(new DFSSearcher());
         Solver solver = new PipeSolver(new AStarSearcher());
         //Solver solver = new PipeSolver(new HillClimbingSearcher());
         Solution solution = solver.solve(gameBoard);
+        State<Board> myState =  (State<Board>) solution.getGoalState();
+        myState.getState().printState();
 
     }
 }

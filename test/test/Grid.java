@@ -2,8 +2,8 @@ package test;
 
 // a position class for row, col
 public class Grid{
-	public int row;
 	public int col;
+	public int row;
 	
 	public Grid(int row, int col){
 		this.row=row;
