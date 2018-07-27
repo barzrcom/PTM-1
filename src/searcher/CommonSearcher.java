@@ -1,5 +1,6 @@
 package searcher;
 
+import java.util.HashSet;
 import java.util.Queue;
 
 import board.Solution;
@@ -9,6 +10,7 @@ public abstract class CommonSearcher implements Searcher {
 
 	protected int evaluatedNodes = 0;
 	protected Queue<State<?>> openList;
+	private HashSet<State<?>> openSet = new HashSet<State<?>>();
 	
 	public <T> CommonSearcher(Queue<State<?>> queue) {
 		this.openList = queue;
@@ -16,6 +18,7 @@ public abstract class CommonSearcher implements Searcher {
 	
 	protected void addToOpenList(State<?> state) {
 		this.openList.add(state);
+		this.openSet.add(state);
 	}
 	
 	public abstract <T> Solution algoSearch(Searchable<T> s);
@@ -29,19 +32,24 @@ public abstract class CommonSearcher implements Searcher {
 	}
 	
 	public boolean openListContains(State<?> state) {
-		return openList.contains(state);
+		if (openSet.contains(state)) {
+			return true;
+		} else return false;
 	}
 	
 	@SuppressWarnings("unchecked")
 	protected <T> State<T> popOpenList() {
 		incEvaluatedNodes();
-		return (State<T>) openList.poll();
+		State <T> item = (State<T>) openList.poll();
+		openSet.remove(item);
+		return item;
 	}
 	
 	public void reset() {
 		if (openList != null) {
 			System.out.println(openList.size());
 			openList.clear();
+			openSet.clear();
 		}
 		evaluatedNodes = 0;
 	}
