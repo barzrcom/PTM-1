@@ -63,75 +63,74 @@ public class PipeGameBoard {
 			}
 		}
 	}
-	
 	private double boardGradeLogic(char[][] stateBoard, int posX, int posY, directions from) {	
 		//check bounds
 		if (posX < 0 || posX >= boardX)
-			return 0;
+			return Double.MAX_VALUE;
 		if (posY < 0 || posY >= boardY)
-			return 0;
+			return Double.MAX_VALUE;
 		// check if goal
 		if(stateBoard[posY][posX] == 'g') return 0;
 		// start
 		if (from == directions.start) {
-			return max(boardGradeLogic(stateBoard, posX+1, posY, directions.left), 
+			return min(boardGradeLogic(stateBoard, posX+1, posY, directions.left), 
 					boardGradeLogic(stateBoard, posX-1, posY, directions.right),
 					boardGradeLogic(stateBoard, posX, posY+1, directions.up),
 					boardGradeLogic(stateBoard, posX, posY-1, directions.down));
 		}
 		if (stateBoard[posY][posX] == '-') {
 			if(from == directions.left)
-				return 1 + boardGradeLogic(stateBoard, posX+1, posY, directions.left);
+				return boardGradeLogic(stateBoard, posX+1, posY, directions.left);
 			else if(from == directions.right)
-				return 1 + boardGradeLogic(stateBoard, posX-1, posY, directions.right);
-			else return 0;
+				return boardGradeLogic(stateBoard, posX-1, posY, directions.right);
+			else Math.abs(Point.distance(posX, posY, goalIndex.x, goalIndex.y));
 		}
 		if (stateBoard[posY][posX] == '|') {
 			if(from == directions.up)
-				return 1 + boardGradeLogic(stateBoard, posX, posY+1, directions.up);
+				return boardGradeLogic(stateBoard, posX, posY+1, directions.up);
 			else if(from == directions.down)
-				return 1 + boardGradeLogic(stateBoard, posX, posY-1, directions.down);
-			else return 0;
+				return boardGradeLogic(stateBoard, posX, posY-1, directions.down);
+			else Math.abs(Point.distance(posX, posY, goalIndex.x, goalIndex.y));
 		}
 		if (stateBoard[posY][posX] == '|') {
 			if(from == directions.up)
-				return 1 + boardGradeLogic(stateBoard, posX, posY+1, directions.up);
+				return boardGradeLogic(stateBoard, posX, posY+1, directions.up);
 			else if(from == directions.down)
-				return 1 + boardGradeLogic(stateBoard, posX, posY-1, directions.down);
-			else return 0;
+				return boardGradeLogic(stateBoard, posX, posY-1, directions.down);
+			else Math.abs(Point.distance(posX, posY, goalIndex.x, goalIndex.y));
 		}
 		if (stateBoard[posY][posX] == 'L') {
 			if(from == directions.up)
-				return 1 + boardGradeLogic(stateBoard, posX+1, posY, directions.left);
+				return boardGradeLogic(stateBoard, posX+1, posY, directions.left);
 			else if(from == directions.right)
-				return 1 + boardGradeLogic(stateBoard, posX, posY-1, directions.down);
-			else return 0;
+				return boardGradeLogic(stateBoard, posX, posY-1, directions.down);
+			else Math.abs(Point.distance(posX, posY, goalIndex.x, goalIndex.y));
 		}
 		if (stateBoard[posY][posX] == 'F') {
 			if(from == directions.right)
-				return 1 + boardGradeLogic(stateBoard, posX, posY+1, directions.up);
+				return boardGradeLogic(stateBoard, posX, posY+1, directions.up);
 			else if(from == directions.down)
-				return 1 + boardGradeLogic(stateBoard, posX+1, posY, directions.left);
-			else return 0;
+				return boardGradeLogic(stateBoard, posX+1, posY, directions.left);
+			else Math.abs(Point.distance(posX, posY, goalIndex.x, goalIndex.y));
 		}
 		if (stateBoard[posY][posX] == '7') {
 			if(from == directions.left)
-				return 1 + boardGradeLogic(stateBoard, posX, posY+1, directions.up);
+				return boardGradeLogic(stateBoard, posX, posY+1, directions.up);
 			else if(from == directions.down)
-				return 1 + boardGradeLogic(stateBoard, posX-1, posY, directions.right);
-			else return 0;
+				return boardGradeLogic(stateBoard, posX-1, posY, directions.right);
+			else Math.abs(Point.distance(posX, posY, goalIndex.x, goalIndex.y));
 		}
 		if (stateBoard[posY][posX] == 'J') {
 			if(from == directions.up)
-				return 1 + boardGradeLogic(stateBoard, posX-1, posY, directions.right);
+				return boardGradeLogic(stateBoard, posX-1, posY, directions.right);
 			else if(from == directions.left)
-				return 1 + boardGradeLogic(stateBoard, posX, posY-1, directions.down);
-			else return 0;
+				return boardGradeLogic(stateBoard, posX, posY-1, directions.down);
+			else Math.abs(Point.distance(posX, posY, goalIndex.x, goalIndex.y));
 		}
 		
-		return 0;
+		return Double.MAX_VALUE;
 	}
-	
+
 	public List<State<Board>> getAllPossibleStates(State<Board> state) {
 		// TODO Auto-generated method stub
 		char[][] state2D = state.getState().getBoard();  // original board
@@ -156,77 +155,13 @@ public class PipeGameBoard {
 		return stateList;
 	}
 	
-	
-	public void getAllPossibleStatesLogic(char[][] stateBoard, int posX, int posY, directions from, HashSet<Point> stepList) {
-		//check bounds
-		if (posX < 0 || posX >= boardX)
-			return;
-		if (posY < 0 || posY >= boardY)
-			return;
-		// start
-		if (from == directions.start) {
-			getAllPossibleStatesLogic(stateBoard, posX+1, posY, directions.left, stepList);
-			getAllPossibleStatesLogic(stateBoard, posX-1, posY, directions.right, stepList);
-			getAllPossibleStatesLogic(stateBoard, posX, posY+1, directions.up, stepList);
-			getAllPossibleStatesLogic(stateBoard, posX, posY-1, directions.down, stepList);
-			return;
-		}
-		switch (stateBoard[posY][posX]) {
-		case 'g':
-			return;
-		case '-':
-			stepList.add(new Point(posX,posY));
-			if(from == directions.left)
-				getAllPossibleStatesLogic(stateBoard, posX+1, posY, directions.left, stepList);
-			else if(from == directions.right)
-				getAllPossibleStatesLogic(stateBoard, posX-1, posY, directions.right, stepList);
-			else return;
-		case '|':
-			stepList.add(new Point(posX,posY));
-			if(from == directions.up)
-				 getAllPossibleStatesLogic(stateBoard, posX, posY+1, directions.up, stepList);
-			else if(from == directions.down)
-				 getAllPossibleStatesLogic(stateBoard, posX, posY-1, directions.down, stepList);
-			else return;
-		case 'L':
-			stepList.add(new Point(posX,posY));
-			if(from == directions.up)
-				getAllPossibleStatesLogic(stateBoard, posX+1, posY, directions.left, stepList);
-			else if(from == directions.right)
-				getAllPossibleStatesLogic(stateBoard, posX, posY-1, directions.down, stepList);
-			else return;
-		case 'F':
-			stepList.add(new Point(posX,posY));
-			if(from == directions.right)
-				getAllPossibleStatesLogic(stateBoard, posX, posY+1, directions.up, stepList);
-			else if(from == directions.down)
-				getAllPossibleStatesLogic(stateBoard, posX+1, posY, directions.left, stepList);
-			else return;
-		case '7':
-			stepList.add(new Point(posX,posY));
-			if(from == directions.left)
-				getAllPossibleStatesLogic(stateBoard, posX, posY+1, directions.up, stepList);
-			else if(from == directions.down)
-				getAllPossibleStatesLogic(stateBoard, posX-1, posY, directions.right, stepList);
-			else return;
-		case 'J':
-			stepList.add(new Point(posX,posY));
-			if(from == directions.up)
-				getAllPossibleStatesLogic(stateBoard, posX-1, posY, directions.right, stepList);
-			else if(from == directions.left)
-				getAllPossibleStatesLogic(stateBoard, posX, posY-1, directions.down, stepList);
-			else return;
-		}
-		return;
-	}
-	
 	public State<Board> getInitialState() {
 		// TODO Auto-generated method stub
 		return initialState;
 	}
 	
 	public double heuristicGrade(State<Board> state) {
-		return (boardX*boardY)-boardGradeLogic(state.getState().getBoard(), startIndex.x, startIndex.y, directions.start);
+		return boardGradeLogic(state.getState().getBoard(), startIndex.x, startIndex.y, directions.start);
 	}
 	
 	public boolean isGoalState(State<Board> state) {

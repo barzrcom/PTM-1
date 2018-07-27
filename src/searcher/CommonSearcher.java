@@ -32,9 +32,7 @@ public abstract class CommonSearcher implements Searcher {
 	}
 	
 	public boolean openListContains(State<?> state) {
-		if (openSet.contains(state)) {
-			return true;
-		} else return false;
+		return openSet.contains(state);
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -47,7 +45,6 @@ public abstract class CommonSearcher implements Searcher {
 	
 	public void reset() {
 		if (openList != null) {
-			System.out.println(openList.size());
 			openList.clear();
 			openSet.clear();
 		}
