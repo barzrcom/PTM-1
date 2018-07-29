@@ -18,7 +18,9 @@ public class AStarSearcher extends CommonSearcher {
 
 	@Override
 	public <T> Solution algoSearch(Searchable<T> s) {
-		addToOpenList(s.getInitialState());
+		State<T> state = s.getInitialState();
+		state.setGrade(s.grade(state));
+		addToOpenList(state);
 		Set<State<T>> closedSet = new HashSet<State<T>>();
 		
 		while (!openList.isEmpty()) {
@@ -28,7 +30,7 @@ public class AStarSearcher extends CommonSearcher {
 				return new Solution(s.getInitialState(), n);
 			}
 			
-			n.setGrade(s.grade(n));
+			
 			closedSet.add(n);
 
 			List<State<T>> neighbors = s.getAllPossibleStates(n);
@@ -37,8 +39,7 @@ public class AStarSearcher extends CommonSearcher {
 				if (!closedSet.contains(neighbor)) {
 					neighbor.setCameFrom(n);
 					neighbor.setGrade(s.grade(neighbor));
-					// remove old heuristic grade & add 1 step & add new heuristic
-					neighbor.setCost(n.getCost() - n.getGrade() + 1 + neighbor.getGrade()); 
+					neighbor.setCost(n.getCost() + 1); 
 					if (!openListContains(neighbor)) {
 						addToOpenList(neighbor);
 					} 

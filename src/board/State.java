@@ -11,7 +11,7 @@ public class State<T> implements Comparable<State<T>>, Serializable {
 	private static final long serialVersionUID = 42L;
 	private State<?> cameFrom;
 	private double cost = 0;
-	private double grade = Double.MAX_VALUE;
+	private double grade = 0;
 	private int hash;
 	public LinkedHashSet<Point> neighborsPointList = new LinkedHashSet<Point>();
 	final private T state;
@@ -32,7 +32,11 @@ public class State<T> implements Comparable<State<T>>, Serializable {
 	@Override
 	public int compareTo(State<T> o) {
 		// TODO Auto-generated method stub
-		return Double.compare(this.cost, o.cost);
+	    if(this.cost+this.grade<o.cost+o.grade)
+	          return -1;
+	    else if(this.cost+this.grade<o.cost+o.grade)
+	          return 1;
+	    return 0;
 	}
 	
 	@Override

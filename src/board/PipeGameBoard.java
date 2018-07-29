@@ -55,10 +55,10 @@ public class PipeGameBoard {
 		for (int i=0; i < board.length; i++) {
 			for (int j=0; j < board[i].length; j++) {
 				if (board[i][j] == 's'){
-					startIndex = new Point(i,j);
+					startIndex = new Point(j,i);
 				}
 				else if (board[i][j] == 'g'){
-					goalIndex = new Point(i,j);
+					goalIndex = new Point(j,i);
 				} 
 			}
 		}
@@ -83,49 +83,49 @@ public class PipeGameBoard {
 				return boardGradeLogic(stateBoard, posX+1, posY, directions.left);
 			else if(from == directions.right)
 				return boardGradeLogic(stateBoard, posX-1, posY, directions.right);
-			else Math.abs(Point.distance(posX, posY, goalIndex.x, goalIndex.y));
+			else return Math.abs(Point.distance(posX, posY, goalIndex.x, goalIndex.y));
 		}
 		if (stateBoard[posY][posX] == '|') {
 			if(from == directions.up)
 				return boardGradeLogic(stateBoard, posX, posY+1, directions.up);
 			else if(from == directions.down)
 				return boardGradeLogic(stateBoard, posX, posY-1, directions.down);
-			else Math.abs(Point.distance(posX, posY, goalIndex.x, goalIndex.y));
+			else return Math.abs(Point.distance(posX, posY, goalIndex.x, goalIndex.y));
 		}
 		if (stateBoard[posY][posX] == '|') {
 			if(from == directions.up)
 				return boardGradeLogic(stateBoard, posX, posY+1, directions.up);
 			else if(from == directions.down)
 				return boardGradeLogic(stateBoard, posX, posY-1, directions.down);
-			else Math.abs(Point.distance(posX, posY, goalIndex.x, goalIndex.y));
+			else return Math.abs(Point.distance(posX, posY, goalIndex.x, goalIndex.y));
 		}
 		if (stateBoard[posY][posX] == 'L') {
 			if(from == directions.up)
 				return boardGradeLogic(stateBoard, posX+1, posY, directions.left);
 			else if(from == directions.right)
 				return boardGradeLogic(stateBoard, posX, posY-1, directions.down);
-			else Math.abs(Point.distance(posX, posY, goalIndex.x, goalIndex.y));
+			else return Math.abs(Point.distance(posX, posY, goalIndex.x, goalIndex.y));
 		}
 		if (stateBoard[posY][posX] == 'F') {
 			if(from == directions.right)
 				return boardGradeLogic(stateBoard, posX, posY+1, directions.up);
 			else if(from == directions.down)
 				return boardGradeLogic(stateBoard, posX+1, posY, directions.left);
-			else Math.abs(Point.distance(posX, posY, goalIndex.x, goalIndex.y));
+			else return Math.abs(Point.distance(posX, posY, goalIndex.x, goalIndex.y));
 		}
 		if (stateBoard[posY][posX] == '7') {
 			if(from == directions.left)
 				return boardGradeLogic(stateBoard, posX, posY+1, directions.up);
 			else if(from == directions.down)
 				return boardGradeLogic(stateBoard, posX-1, posY, directions.right);
-			else Math.abs(Point.distance(posX, posY, goalIndex.x, goalIndex.y));
+			else return Math.abs(Point.distance(posX, posY, goalIndex.x, goalIndex.y));
 		}
 		if (stateBoard[posY][posX] == 'J') {
 			if(from == directions.up)
 				return boardGradeLogic(stateBoard, posX-1, posY, directions.right);
 			else if(from == directions.left)
 				return boardGradeLogic(stateBoard, posX, posY-1, directions.down);
-			else Math.abs(Point.distance(posX, posY, goalIndex.x, goalIndex.y));
+			else return Math.abs(Point.distance(posX, posY, goalIndex.x, goalIndex.y));
 		}
 		
 		return Double.MAX_VALUE;

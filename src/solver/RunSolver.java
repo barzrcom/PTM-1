@@ -6,6 +6,7 @@ import board.Solution;
 import board.State;
 import searcher.AStarSearcher;
 import searcher.BFSSearcher;
+import searcher.BestFirstSearchSearcher;
 import searcher.HillClimbingSearcher;
 
 public class RunSolver {
@@ -136,8 +137,6 @@ public class RunSolver {
         		{'7','7','7','7','7','7','7','7','7','7'},
         		{'7','7','7','7','7','7','7','7','7','7'},
         		{'7','7','7','7','7','7','7','7','7','7'},
-        		{'7','7','7','7','7','7','7','7','7','7'},
-//        		{'7','7','7','7','7','7','7','7','7','7'},
         		{'7','7','7','7','7','7','7','7','7','g'}
     	};
 
