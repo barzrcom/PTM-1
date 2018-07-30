@@ -10,13 +10,15 @@ public class PipeStep extends Step {
 	public int x;
 	public int y;
 	
-	public PipeStep(int x, int y) {
+	public PipeStep(int x, int y, int cost) {
 		this.x = x;
 		this.y = y;
+		this.setCost(cost);
 	}
-	public PipeStep(Point pt) {
+	public PipeStep(Point pt, int cost) {
 		this.x = pt.x;
 		this.y = pt.y;
+		this.setCost(cost);
 	}
 
 	@Override

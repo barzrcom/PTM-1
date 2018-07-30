@@ -39,7 +39,7 @@ public class AStarSearcher extends CommonSearcher {
 				if (!closedSet.contains(neighbor)) {
 					neighbor.setCameFrom(n);
 					neighbor.setGrade(s.grade(neighbor));
-					neighbor.setCost(n.getCost() + 1); 
+					neighbor.setCost(n.getCost() + neighbor.getStep().getCost()); 
 					if (!openListContains(neighbor)) {
 						addToOpenList(neighbor);
 					} 
