@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Set;
 
+import board.Board;
 import board.Solution;
 import board.State;
 
@@ -25,11 +26,10 @@ public class AStarSearcher extends CommonSearcher {
 		
 		while (!openList.isEmpty()) {
 			State<T> n = popOpenList(); 
-
+			//System.out.println(n.getGrade());
 			if (s.isGoalState(n)) {
 				return new Solution(s.getInitialState(), n);
 			}
-			
 			
 			closedSet.add(n);
 

@@ -9,29 +9,42 @@ import java.util.List;
 
 public class PipeGameBoard {
 	public enum directions {down, goal, left, right, start, up}
-	public static char changePipe(char currentPipe) {
-		switch (currentPipe) {
-		case 'L':
-			return 'F';
-		case 'F':
-			return '7';
-		case '7':
-			return 'J';
-		case 'J':
-			return 'L';
-		case '-':
-			return '|';
-		case '|':
-			return '-';
-		case 's':
-			return 's';
-		case 'g':
-			return 'g';
-		case ' ':
-			return ' ';
-		default:
-			return ' ';
+	public static char changePipe(char currentPipe, int clicks) {
+		while(clicks-- != 0) {
+			switch (currentPipe) {
+			case 'L':
+				currentPipe =  'F';
+				break;
+			case 'F':
+				currentPipe = '7';
+				break;
+			case '7':
+				currentPipe = 'J';
+				break;
+			case 'J':
+				currentPipe = 'L';
+				break;
+			case '-':
+				currentPipe = '|';
+				break;
+			case '|':
+				currentPipe = '-';
+				break;
+			case 's':
+				currentPipe = 's';
+				break;
+			case 'g':
+				currentPipe = 'g';
+				break;
+			case ' ':
+				currentPipe = ' ';
+				break;
+			default:
+				currentPipe = ' ';
+				break;
+			}
 		}
+		return currentPipe;
 	}
 	public static double max(Double... vals) {
 	    return Collections.max(Arrays.asList(vals)); 
@@ -146,9 +159,9 @@ public class PipeGameBoard {
 
 		List<State<Board>> stateList = new ArrayList<State<Board>>();
 		int i = 0;
-		for (Point step : state.neighborsPointList) {
-			tempClonedStateList.get(i)[step.y][step.x] = changePipe(state2D[step.y][step.x]);
-			stateList.add(new State<Board>(new Board(tempClonedStateList.get(i)), new PipeStep(step, 1)));
+		for (PipeStep step : state.neighborsPointList) {
+			tempClonedStateList.get(i)[step.y][step.x] = changePipe(state2D[step.y][step.x], step.getCost());
+			stateList.add(new State<Board>(new Board(tempClonedStateList.get(i)), step));
 			i++;
 		}
 
@@ -183,53 +196,74 @@ public class PipeGameBoard {
 					isGoalStateLogic(stateBoard, posX, posY+1, directions.up) ||
 					isGoalStateLogic(stateBoard, posX, posY-1, directions.down));
 		}
+		stateBoard.neighborsPointList.add(new PipeStep(posX,posY,1));
 		switch (stateBoard.getState().getBoard()[posY][posX]) {
 		case 'g':
 			return true;
 		case '-':
-			stateBoard.neighborsPointList.add(new Point(posX,posY));
 			if(from == directions.left)
 				return isGoalStateLogic(stateBoard, posX+1, posY, directions.left);
 			else if(from == directions.right)
 				return isGoalStateLogic(stateBoard, posX-1, posY, directions.right);
-			else return false;
+			else {
+				stateBoard.neighborsPointList.add(new PipeStep(posX,posY,1));
+				return false;
+			}
 		case '|':
-			stateBoard.neighborsPointList.add(new Point(posX,posY));
 			if(from == directions.up)
 				return isGoalStateLogic(stateBoard, posX, posY+1, directions.up);
 			else if(from == directions.down)
 				return isGoalStateLogic(stateBoard, posX, posY-1, directions.down);
-			else return false;
+			else {
+				stateBoard.neighborsPointList.add(new PipeStep(posX,posY,1));
+				return false;
+			}
 		case 'L':
-			stateBoard.neighborsPointList.add(new Point(posX,posY));
 			if(from == directions.up)
 				return isGoalStateLogic(stateBoard, posX+1, posY, directions.left);
 			else if(from == directions.right)
 				return isGoalStateLogic(stateBoard, posX, posY-1, directions.down);
-			else return false;
+			else {
+				stateBoard.neighborsPointList.add(new PipeStep(posX,posY,1));
+				stateBoard.neighborsPointList.add(new PipeStep(posX,posY,2));
+				stateBoard.neighborsPointList.add(new PipeStep(posX,posY,3));
+				return false;
+			}
 		case 'F':
-			stateBoard.neighborsPointList.add(new Point(posX,posY));
 			if(from == directions.right)
 				return isGoalStateLogic(stateBoard, posX, posY+1, directions.up);
 			else if(from == directions.down)
 				return isGoalStateLogic(stateBoard, posX+1, posY, directions.left);
-			else return false;
+			else {
+				stateBoard.neighborsPointList.add(new PipeStep(posX,posY,1));
+				stateBoard.neighborsPointList.add(new PipeStep(posX,posY,2));
+				stateBoard.neighborsPointList.add(new PipeStep(posX,posY,3));
+				return false;
+			}
 		case '7':
-			stateBoard.neighborsPointList.add(new Point(posX,posY));
 			if(from == directions.left)
 				return isGoalStateLogic(stateBoard, posX, posY+1, directions.up);
 			else if(from == directions.down)
 				return isGoalStateLogic(stateBoard, posX-1, posY, directions.right);
-			else return false;
+			else {
+				stateBoard.neighborsPointList.add(new PipeStep(posX,posY,1));
+				stateBoard.neighborsPointList.add(new PipeStep(posX,posY,2));
+				stateBoard.neighborsPointList.add(new PipeStep(posX,posY,3));
+				return false;
+			}
 		case 'J':
-			stateBoard.neighborsPointList.add(new Point(posX,posY));
 			if(from == directions.up)
 				return isGoalStateLogic(stateBoard, posX-1, posY, directions.right);
 			else if(from == directions.left)
 				return isGoalStateLogic(stateBoard, posX, posY-1, directions.down);
-			else return false;
+			else {
+				stateBoard.neighborsPointList.add(new PipeStep(posX,posY,1));
+				stateBoard.neighborsPointList.add(new PipeStep(posX,posY,2));
+				stateBoard.neighborsPointList.add(new PipeStep(posX,posY,3));
+				return false;
+			}
 		}
-		
+		stateBoard.neighborsPointList.add(new PipeStep(posX,posY,1));
 		return false;
 	}
 	

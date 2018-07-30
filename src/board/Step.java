@@ -7,7 +7,7 @@ public abstract class Step implements Serializable{
     /**
 	 * 
 	 */
-	private int cost;
+	protected int cost;
 	private static final long serialVersionUID = 43L;
 	@Override
     public String toString()

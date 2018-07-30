@@ -1,6 +1,5 @@
 package board;
 
-import java.awt.Point;
 import java.io.Serializable;
 import java.util.LinkedHashSet;
 
@@ -13,7 +12,7 @@ public class State<T> implements Comparable<State<T>>, Serializable {
 	private double cost = 0;
 	private double grade = 0;
 	private int hash;
-	public LinkedHashSet<Point> neighborsPointList = new LinkedHashSet<Point>();
+	public LinkedHashSet<PipeStep> neighborsPointList = new LinkedHashSet<PipeStep>();
 	final private T state;
 	private Step step;
 	
@@ -34,7 +33,7 @@ public class State<T> implements Comparable<State<T>>, Serializable {
 		// TODO Auto-generated method stub
 	    if(this.cost+this.grade<o.cost+o.grade)
 	          return -1;
-	    else if(this.cost+this.grade<o.cost+o.grade)
+	    else if(this.cost+this.grade>o.cost+o.grade)
 	          return 1;
 	    return 0;
 	}
