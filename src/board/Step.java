@@ -7,6 +7,7 @@ public abstract class Step implements Serializable{
     /**
 	 * 
 	 */
+	private int cost;
 	private static final long serialVersionUID = 43L;
 	@Override
     public String toString()
@@ -14,4 +15,10 @@ public abstract class Step implements Serializable{
         return ToString();
     }
     public abstract String ToString();
+	public int getCost() {
+		return cost;
+	}
+	public void setCost(int cost) {
+		this.cost = cost;
+	}
 }

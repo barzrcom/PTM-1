@@ -148,7 +148,7 @@ public class PipeGameBoard {
 		int i = 0;
 		for (Point step : state.neighborsPointList) {
 			tempClonedStateList.get(i)[step.y][step.x] = changePipe(state2D[step.y][step.x]);
-			stateList.add(new State<Board>(new Board(tempClonedStateList.get(i)), new PipeStep(step)));
+			stateList.add(new State<Board>(new Board(tempClonedStateList.get(i)), new PipeStep(step, 1)));
 			i++;
 		}
 
