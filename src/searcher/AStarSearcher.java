@@ -52,6 +52,4 @@ public class AStarSearcher extends CommonSearcher {
 		}
 		return null;
 	}
-
-
 }

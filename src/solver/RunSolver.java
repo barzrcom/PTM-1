@@ -82,7 +82,7 @@ public class RunSolver {
     	};
 
 
-        PipeGameBoard gameBoard = new PipeGameBoard(new Board(board7));
+        PipeGameBoard gameBoard = new PipeGameBoard(new Board(board4));
         
         //Solver solver = new PipeSolver(new BestFirstSearchSearcher());
         //Solver solver = new PipeSolver(new BFSSearcher());

@@ -1,69 +1,55 @@
 package searcher;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.PriorityQueue;
+import java.util.Random;
+import java.util.Set;
+
+import board.Board;
 import board.Solution;
 import board.State;
 
 
 public class HillClimbingSearcher extends CommonSearcher {
+
 	public HillClimbingSearcher() {
-		super(null);
+		super(new PriorityQueue<State<?>>());
 		// TODO Auto-generated constructor stub
 	}
 
 	@Override
 	public <T> Solution algoSearch(Searchable<T> s) {
-		// System.out.println("Using HillClimbing Searcher: ");
 		State<T> currentState = s.getInitialState();
-		State<T> bestNeighborState = null;
+		currentState.setGrade(s.grade(currentState));
 
 		while (true) {
-
-			List<State<T>> neighbors = new ArrayList<State<T>>(s.getAllPossibleStates(currentState));
-			for(State<T> neighbor : neighbors) {
+			incEvaluatedNodes();
+			//System.out.println(n.getGrade());
+			if (s.isGoalState(currentState)) {
+				return new Solution(s.getInitialState(), currentState);
+			}
+			
+			List<State<T>> neighbors = s.getAllPossibleStates(currentState);
+			for (State<T> neighbor : neighbors) {
 				neighbor.setCameFrom(currentState);
 			}
-			double grade = Double.MAX_VALUE;
-			if (Math.random() < 0.7) {
-				for(State<T> neighbor : neighbors) {
-					incEvaluatedNodes();
-					double g = s.grade(neighbor);
-					if (g < grade) {
-						bestNeighborState = neighbor;
-						grade = g;
-					}
-				}
-				
-				if (bestNeighborState == null)
-					bestNeighborState = currentState;
-				
-				if (s.isGoalState(bestNeighborState)) {
-					return new Solution(s.getInitialState(), bestNeighborState);
-				}
-				
-				if (s.grade(currentState) > s.grade(bestNeighborState)) 
-				{
-					currentState = bestNeighborState;
-				}
-				else 
-				{
-
-				}
-
-			}
-
-			else {
-				if(neighbors.isEmpty())
-				{
-					break;
-				}
+			
+			if (Math.random() > 0.7) {
 				Random r = new Random();
 				int randomIndex = r.nextInt(neighbors.size());
 				currentState = neighbors.get(randomIndex);
+				continue;
+			}
+
+			double grade = Double.MAX_VALUE;
+			for (State<T> neighbor : neighbors) {	
+				neighbor.setGrade(s.grade(neighbor));
+				if (neighbor.getGrade() < grade) {
+					grade = neighbor.getGrade();
+					currentState = neighbor;
+				}
 			}
 		}
-		return null;
 	}
 }

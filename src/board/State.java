@@ -11,19 +11,17 @@ public class State<T> implements Comparable<State<T>>, Serializable {
 	private State<?> cameFrom;
 	private double cost = 0;
 	private double grade = 0;
-	private int hash;
+	private int hash = 0;
 	public LinkedHashSet<PipeStep> neighborsPointList = new LinkedHashSet<PipeStep>();
 	final private T state;
 	private Step step;
 	
 	
 	public State(T state) {
-		hash = state.hashCode();
 		this.state = state;
 	}
 
 	public State(T state, Step step) {
-		hash = state.hashCode();
 		this.state = state;
 		this.step = step;
 	}
@@ -65,6 +63,7 @@ public class State<T> implements Comparable<State<T>>, Serializable {
 	
 	@Override
 	public int hashCode() {
+		if(hash == 0) hash = state.hashCode();
 		return hash;
 	}
 	

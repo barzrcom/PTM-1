@@ -197,6 +197,7 @@ public class PipeGameBoard {
 					isGoalStateLogic(stateBoard, posX, posY-1, directions.down));
 		}
 		stateBoard.neighborsPointList.add(new PipeStep(posX,posY,1));
+		
 		switch (stateBoard.getState().getBoard()[posY][posX]) {
 		case 'g':
 			return true;
@@ -263,7 +264,6 @@ public class PipeGameBoard {
 				return false;
 			}
 		}
-		stateBoard.neighborsPointList.add(new PipeStep(posX,posY,1));
 		return false;
 	}
 	
