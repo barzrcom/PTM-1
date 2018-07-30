@@ -23,7 +23,7 @@ public class PipeStep extends Step {
 
 	@Override
 	public String ToString() {
-		return this.y + "," + this.x + "," + 1;
+		return this.y + "," + this.x + "," + this.getCost();
 	}
 
 }

@@ -147,8 +147,21 @@ public class PipeGameBoard {
 		List<State<Board>> stateList = new ArrayList<State<Board>>();
 		int i = 0;
 		for (Point step : state.neighborsPointList) {
-			tempClonedStateList.get(i)[step.y][step.x] = changePipe(state2D[step.y][step.x]);
-			stateList.add(new State<Board>(new Board(tempClonedStateList.get(i)), new PipeStep(step, 1)));
+			char lastChar = tempClonedStateList.get(i)[step.y][step.x];
+			int numOfChanges = 1;
+
+			if (lastChar == 'F' || lastChar == 'L' || lastChar == 'J' || lastChar == '7') {
+				numOfChanges = 3;
+			} else if (lastChar == ' ') {
+			    // skip that char
+				numOfChanges = 0;
+			}
+
+			for (int k = 1; k < numOfChanges + 1; k++) {
+				lastChar = changePipe(lastChar);
+				tempClonedStateList.get(i)[step.y][step.x] = lastChar;
+				stateList.add(new State<Board>(new Board(tempClonedStateList.get(i)), new PipeStep(step, k)));
+			}
 			i++;
 		}
 
