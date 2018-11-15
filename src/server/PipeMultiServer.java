@@ -8,8 +8,11 @@ import java.util.ArrayDeque;
 import java.util.Comparator;
 import java.util.Queue;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.concurrent.PriorityBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 import board.State;
 
@@ -17,22 +20,23 @@ public class PipeMultiServer extends MultiServer {
     private int port;
     private ServerSocket serverSocket;
     volatile private boolean stop = false;
-    volatile private BlockingQueue<Socket> clientSocketQueue;
+    ThreadPoolExecutor tpe;
     
     public PipeMultiServer(int port, int numberOfThreads) {
-    	super(Executors.newFixedThreadPool(numberOfThreads));
-        this.clientSocketQueue = new PriorityBlockingQueue<Socket>(5,
-        		//Socket Comparator (available is amount of data ready on socket)
-        		(Socket o1, Socket o2)->{
-					try {
-						return o1.getInputStream().available() - o2.getInputStream().available();
-					} catch (IOException e) {
-						return 0;
-					}
-				});
+    	BlockingQueue<Runnable> pq = new PriorityBlockingQueue<Runnable>(5, new ComparePriority());
+    	this.tpe = new ThreadPoolExecutor(1, numberOfThreads, 10, TimeUnit.SECONDS, pq);
     	this.port = port;
     }
 
+    private static class ComparePriority<T extends PriorityRunnable> implements Comparator<T> {
+
+        @Override
+        public int compare(T o1, T o2) {
+        	System.out.println(o1.getPriority() + ":" + o2.getPriority());
+            return o1.getPriority() - o2.getPriority();
+        }
+    }
+    
     @Override
     public void start(ClientHandler clientHandler) {
         new Thread(() -> {
@@ -49,41 +53,43 @@ public class PipeMultiServer extends MultiServer {
         serverSocket.setSoTimeout(5000);
         System.out.println("Server started - waiting");
 
-		new Thread(() -> {
-			while (!stop) {
-				try {
-					// Waiting for a client
-					Socket aClient = serverSocket.accept();
-					System.out.println("client connected");
-					clientSocketQueue.add(aClient);
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
 
-		}}).start();
-        
-		// handle any socket
-        while (!stop || !clientSocketQueue.isEmpty()) {
-        	if(!clientSocketQueue.isEmpty()) {
-        		Socket aClient = clientSocketQueue.poll();
-        		es.submit(()-> {
-					try {
-		                System.out.println("handle client");
-		                clientHandler.handleClient(aClient.getInputStream(), aClient.getOutputStream());
-		                aClient.close();
-		                System.out.println("client disconnected");
-		            } catch (SocketTimeoutException e) {
-		            	e.printStackTrace();
-		            } catch (IOException e) {
-						e.printStackTrace();
+		while (!stop) {
+			try {
+				// Waiting for a client
+				Socket aClient = serverSocket.accept();
+				System.out.println("client connected");
+				tpe.execute(new PriorityRunnable(aClient.getInputStream().available()) {
+					@Override
+					public void run() {
+						try {
+			                System.out.println("handle client");
+			                clientHandler.handleClient(aClient.getInputStream(), aClient.getOutputStream());
+			                aClient.close();
+			                System.out.println("client disconnected");
+			            } catch (SocketTimeoutException e) {
+			            	e.printStackTrace();
+			            } catch (IOException e) {
+							e.printStackTrace();
+						}
 					}
 				});
-        	}
-        }
-        
+			} catch (IOException e) {
+
+			}
+		}
+
         serverSocket.close();
         System.out.println("Finish handling last clients");
-        es.shutdown();
+        tpe.shutdown();
+        try {
+			while(!tpe.awaitTermination(5, TimeUnit.SECONDS)) {
+			
+			}
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
         System.out.println("Done");
     }
 
