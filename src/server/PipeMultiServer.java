@@ -23,18 +23,9 @@ public class PipeMultiServer extends MultiServer {
     ThreadPoolExecutor tpe;
     
     public PipeMultiServer(int port, int numberOfThreads) {
-    	BlockingQueue<Runnable> pq = new PriorityBlockingQueue<Runnable>(5, new ComparePriority());
+    	BlockingQueue<Runnable> pq = new PriorityBlockingQueue<Runnable>(5, new PriorityComparator());
     	this.tpe = new ThreadPoolExecutor(1, numberOfThreads, 10, TimeUnit.SECONDS, pq);
     	this.port = port;
-    }
-
-    private static class ComparePriority<T extends PriorityRunnable> implements Comparator<T> {
-
-        @Override
-        public int compare(T o1, T o2) {
-        	System.out.println(o1.getPriority() + ":" + o2.getPriority());
-            return o1.getPriority() - o2.getPriority();
-        }
     }
     
     @Override
