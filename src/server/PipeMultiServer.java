@@ -23,9 +23,9 @@ public class PipeMultiServer extends MultiServer {
     ThreadPoolExecutor tpe;
     
     public PipeMultiServer(int port, int numberOfThreads) {
-    	BlockingQueue<Runnable> pq = new PriorityBlockingQueue<Runnable>(5, new PriorityComparator());
-    	this.tpe = new ThreadPoolExecutor(1, numberOfThreads, 10, TimeUnit.SECONDS, pq);
     	this.port = port;
+    	this.tpe = new ThreadPoolExecutor(1, numberOfThreads, 10, TimeUnit.SECONDS,
+    			new PriorityBlockingQueue<Runnable>());
     }
     
     @Override
@@ -73,14 +73,13 @@ public class PipeMultiServer extends MultiServer {
         serverSocket.close();
         System.out.println("Finish handling last clients");
         tpe.shutdown();
+  
         try {
-			while(!tpe.awaitTermination(5, TimeUnit.SECONDS)) {
-			
-			}
+			tpe.awaitTermination(Long.MAX_VALUE, TimeUnit.SECONDS);
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+
         System.out.println("Done");
     }
 

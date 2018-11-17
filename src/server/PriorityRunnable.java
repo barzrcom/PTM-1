@@ -1,12 +1,12 @@
 package server;
 
-import java.util.Comparator;
 
-public abstract class PriorityRunnable implements Runnable {
+public abstract class PriorityRunnable implements Comparable<PriorityRunnable>, Runnable {
 	int priority;
 	
-	public int getPriority() {
-		return priority;
+	@Override
+	public int compareTo(PriorityRunnable o) {
+		return this.priority - o.priority;
 	}
 
 	public PriorityRunnable(int priority){

@@ -42,6 +42,7 @@ public class PipeClientHandler implements ClientHandler {
  
             // build State from message.
             char[][] charArray = inputFromClient.toArray(new char[inputFromClient.size()][]);
+            System.out.println("Board size: " + charArray.length + "X" + charArray[0].length);
             Board board = new Board(charArray);
 			PipeGameBoard gameBoard = new PipeGameBoard(board);
 
