@@ -50,7 +50,13 @@ public class PipeMultiServer extends MultiServer {
 				// Waiting for a client
 				Socket aClient = serverSocket.accept();
 				System.out.println("client connected");
-				tpe.execute(new PriorityRunnable(aClient.getInputStream().available()) {
+				int priority = 0;
+				do {
+					priority = aClient.getInputStream().available();
+				} while (priority == 0);
+
+				System.out.println("Client priority: " + priority);
+				tpe.execute(new PriorityRunnable(priority) {
 					@Override
 					public void run() {
 						try {
