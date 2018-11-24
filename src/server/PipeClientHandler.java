@@ -25,56 +25,58 @@ import solver.Solver;
 public class PipeClientHandler implements ClientHandler {
 	
 	private CacheManager cacheManager = new FileCacheManager();
-	private Solver solver = new PipeSolver(new AStarSearcher());
-
-
-    @Override
-    public void handleClient(InputStream inFromClient, OutputStream outToClient) {
-        
+	
+	@Override
+	public Board inClient(InputStream inFromClient) {
+        BufferedReader inFClient = new BufferedReader(new InputStreamReader(inFromClient));
+    	List<char[]> inputFromClient = new ArrayList<char[]>();
+        String line;
         try {
-        	PrintWriter outTC = new PrintWriter(outToClient);
-            BufferedReader inFClient = new BufferedReader(new InputStreamReader(inFromClient));
-        	List<char[]> inputFromClient = new ArrayList<char[]>();
-            String line;
-            while (!(line = inFClient.readLine()).equals("done")) {
-            	inputFromClient.add(line.toCharArray());
-            }
- 
-            // build State from message.
-            char[][] charArray = inputFromClient.toArray(new char[inputFromClient.size()][]);
-            System.out.println("Board size: " + charArray.length + "X" + charArray[0].length);
-            Board board = new Board(charArray);
-			PipeGameBoard gameBoard = new PipeGameBoard(board);
+			while (!(line = inFClient.readLine()).equals("done")) {
+				inputFromClient.add(line.toCharArray());
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+        // build State from message.
+        char[][] charArray = inputFromClient.toArray(new char[inputFromClient.size()][]);
+        Board board = new Board(charArray);
+        System.out.println("Board size: " + board.getBoardX() + "X" + board.getBoardY());
+		return board;
+	}
 
 
-			// Check if state-solve exists in cache manager
-			Solution solution;
-            if (cacheManager.isSolutionExist(gameBoard.getInitialState())) {
-            	// load solution from cache manager
-            	solution = this.cacheManager.load(gameBoard.getInitialState());
-            } else {
-            	// send it to solver and save it in cache manager
-            	solution = solver.solve(gameBoard);
-            	cacheManager.save(gameBoard.getInitialState(), solution);
-            }
-            if(solution == null) {
-            	System.out.println("no route could be found");
-            } else {
+	@Override
+	public void outClient(OutputStream outToClient, Board board) {
+		// Solver has to be local!
+		Solver solver = new PipeSolver(new AStarSearcher());
+		
+		PipeGameBoard gameBoard = new PipeGameBoard(board);
+		PrintWriter outTC = new PrintWriter(outToClient);
+		// Check if state-solve exists in cache manager
+		Solution solution;
+		if (cacheManager.isSolutionExist(gameBoard.getInitialState())) {
+			// load solution from cache manager
+			solution = this.cacheManager.load(gameBoard.getInitialState());
+		} else {
+			// send it to solver and save it in cache manager
+			solution = solver.solve(gameBoard);
+			cacheManager.save(gameBoard.getInitialState(), solution);
+		}
+		if (solution == null) {
+			System.out.println("no route could be found");
+		} else {
+			for (Step step : solution.getStepList()) {
+				outTC.println(step.toString());
+			}
+		}
 
-            	for (Step step : solution.getStepList()) {
-            		outTC.println(step.toString());
-            	}
-            }
-
-        	outTC.println("done");
-        	outTC.flush();
-        	//System.out.println("problem solved");
-
-            // close the connection
-            inFClient.close();
-            outTC.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+		outTC.println("done");
+		outTC.flush();
+		// close the connection
+		outTC.close();
+		
+	}
 }

@@ -1,9 +1,13 @@
 package server;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
+
+import board.Board;
 
 public class PipeServer implements Server {
     private int port;
@@ -32,10 +36,16 @@ public class PipeServer implements Server {
 
         while (!stop) {
             try {
-                Socket aClient = serverSocket.accept();
+                Socket clientSocket = serverSocket.accept();
                 System.out.println("client connected");
-                clientHandler.handleClient(aClient.getInputStream(), aClient.getOutputStream());
-                aClient.close();
+                InputStream clientInputStream = clientSocket.getInputStream();
+                Board board = clientHandler.inClient(clientInputStream);
+                OutputStream clientOutputStream = clientSocket.getOutputStream();
+                clientHandler.outClient(clientOutputStream, board);
+                // InputStream.close() close the socket!
+                clientInputStream.close();
+                clientOutputStream.close();
+                clientSocket.close();
                 System.out.println("client disconnected");
             } catch (SocketTimeoutException e) {
                 

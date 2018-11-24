@@ -15,6 +15,13 @@ public class Board implements Serializable{
 	public char[][] getBoard() {
 		return board;
 	}
+	public int getBoardX() {
+		return board[0].length;
+	}
+	public int getBoardY() {
+		return board.length;
+	}
+	
 	@Override
 	public int hashCode() {
 		return java.util.Arrays.deepHashCode(board);
