@@ -2,6 +2,7 @@ package test;
 
 
 import java.awt.Point;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,7 +30,12 @@ public class TestSetter {
 	
 	public static void runServer(int port){
 		s=new PipeServer(port);
-		s.start(new PipeClientHandler());
+		try {
+			s.start(new PipeClientHandler());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	public static void setClasses(DesignTest dt){
 		
