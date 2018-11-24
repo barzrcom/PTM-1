@@ -1,6 +1,8 @@
 package server;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
@@ -14,6 +16,7 @@ import java.util.concurrent.PriorityBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import board.Board;
 import board.State;
 
 public class PipeMultiServer extends MultiServer {
@@ -24,7 +27,7 @@ public class PipeMultiServer extends MultiServer {
     
     public PipeMultiServer(int port, int numberOfThreads) {
     	this.port = port;
-    	this.tpe = new ThreadPoolExecutor(1, numberOfThreads, 10, TimeUnit.SECONDS,
+    	this.tpe = new ThreadPoolExecutor(numberOfThreads, numberOfThreads, 5, TimeUnit.SECONDS,
     			new PriorityBlockingQueue<Runnable>());
     }
     
@@ -42,27 +45,27 @@ public class PipeMultiServer extends MultiServer {
     private void startServer(ClientHandler clientHandler) throws IOException {
         serverSocket = new ServerSocket(port);
         serverSocket.setSoTimeout(5000);
-        System.out.println("Server started - waiting");
-
-
+        System.out.println("Multi server started - waiting");
 		while (!stop) {
 			try {
 				// Waiting for a client
-				Socket aClient = serverSocket.accept();
+				Socket clientSocket = serverSocket.accept();
 				System.out.println("client connected");
-				int priority = 0;
-				do {
-					priority = aClient.getInputStream().available();
-				} while (priority == 0);
-
+				InputStream clientInputStream = clientSocket.getInputStream();
+                Board board = clientHandler.inClient(clientInputStream);
+                int priority = board.getBoardX() * board.getBoardY();
 				System.out.println("Client priority: " + priority);
 				tpe.execute(new PriorityRunnable(priority) {
 					@Override
 					public void run() {
 						try {
 			                System.out.println("handle client");
-			                clientHandler.handleClient(aClient.getInputStream(), aClient.getOutputStream());
-			                aClient.close();
+			                OutputStream clientOutputStream = clientSocket.getOutputStream();
+			                clientHandler.outClient(clientOutputStream, board);
+			                // InputStream.close() close the socket! close it only at the end
+			                clientInputStream.close();
+			                clientOutputStream.close();
+			                clientSocket.close();
 			                System.out.println("client disconnected");
 			            } catch (SocketTimeoutException e) {
 			            	e.printStackTrace();

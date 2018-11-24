@@ -3,6 +3,9 @@ package server;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import board.Board;
+
 public interface ClientHandler {
-    void handleClient(InputStream inFromClient, OutputStream outToClient);
+    Board inClient(InputStream inFromClient);
+    void outClient(OutputStream outToClient, Board board);
 }
