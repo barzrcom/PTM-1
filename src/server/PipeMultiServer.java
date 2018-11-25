@@ -6,18 +6,11 @@ import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
-import java.util.ArrayDeque;
-import java.util.Comparator;
-import java.util.Queue;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
 import java.util.concurrent.PriorityBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import board.Board;
-import board.State;
 
 public class PipeMultiServer extends MultiServer {
     private int port;
@@ -52,6 +45,7 @@ public class PipeMultiServer extends MultiServer {
 				Socket clientSocket = serverSocket.accept();
 				System.out.println("client connected");
 				InputStream clientInputStream = clientSocket.getInputStream();
+				// Base assumption -> Client input is VALID (defined by course's lecturer)
                 Board board = clientHandler.inClient(clientInputStream);
                 int priority = board.getBoardX() * board.getBoardY();
 				System.out.println("Client priority: " + priority);
