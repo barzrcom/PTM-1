@@ -7,13 +7,15 @@
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import view.PipeDisplayer?>
 
-
-<BorderPane prefHeight="216.0" prefWidth="366.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/10.0.1" fx:controller="view.MainWindowController">
+<BorderPane prefHeight="216.0" prefWidth="366.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.MainWindowController">
    <top>
       <MenuBar BorderPane.alignment="CENTER">
         <menus>
@@ -62,6 +64,18 @@
       </HBox>
    </bottom>
    <center>
-      <PipeDisplayer fx:id="pipeDisplayer" height="300.0" width="300.0" BorderPane.alignment="CENTER" wallFileName="./resources/wall.jpeg" />
+     <StackPane prefHeight="150.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+        <children>
+           <ImageView fitHeight="300.0" fitWidth="500.0" pickOnBounds="true" preserveRatio="true">
+              <image>
+                 <Image url="@../../resources/mario/mario_background.png" />
+              </image>
+           </ImageView>
+      <PipeDisplayer fx:id="pipeDisplayer" height="300.0" width="300.0" BorderPane.alignment="CENTER" pipe1FileName="./resources/mario/pipe_1.png" pipe2FileName="./resources/mario/pipe_2.png"
+      pipe3FileName="./resources/mario/pipe_3.png" pipe4FileName="./resources/mario/pipe_4.png" pipe5FileName="./resources/mario/pipe_5.png" pipe6FileName="./resources/mario/pipe_6.png"
+      goalFileName="./resources/mario/goal.png" startFileName="./resources/mario/start.png"/>
+        </children>
+     </StackPane>
    </center>
+
 </BorderPane>
