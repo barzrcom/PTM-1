@@ -36,12 +36,7 @@
   <center>
     <StackPane prefHeight="150.0" prefWidth="200.0" BorderPane.alignment="CENTER">
       <children>
-        <ImageView fitHeight="300.0" fitWidth="500.0" pickOnBounds="true" preserveRatio="true">
-          <image>
-            <Image url="@../../resources/mario/mario_background.png" />
-          </image>
-        </ImageView>
-        <PipeDisplayer fx:id="pipeDisplayer" anglePipeFileName="./resources/mario/pipe_angle.png" goalFileName="./resources/mario/goal.png" height="300.0" startFileName="./resources/mario/start.png" verticalPipeFileName="./resources/mario/pipe_vertical.png" width="300.0" />
+        <PipeDisplayer fx:id="pipeDisplayer" backgroundFileName="./resources/mario/mario_background.png" anglePipeFileName="./resources/mario/pipe_angle.png" goalFileName="./resources/mario/goal.png" height="300.0" startFileName="./resources/mario/start.png" verticalPipeFileName="./resources/mario/pipe_vertical.png" width="300.0" />
       </children>
     </StackPane>
   </center>
