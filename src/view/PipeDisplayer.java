@@ -15,26 +15,34 @@ import javafx.scene.paint.Color;
 public class PipeDisplayer extends Canvas {
 
 	char [][] pipeData;
+	private StringProperty backgroundFileName;
 	private StringProperty startFileName;
 	private StringProperty goalFileName;
 	private StringProperty anglePipeFileName;
 	private StringProperty verticalPipeFileName;
 	
+	
+	private Image background;
+	private Image startImage;
+	private Image goalImage;
+	private Image pipeVImage;
+	private Image pipeAImage;
+	
 	public PipeDisplayer() {
+		this.backgroundFileName = new SimpleStringProperty();
 		this.startFileName = new SimpleStringProperty();
 		this.goalFileName = new SimpleStringProperty();
 		this.anglePipeFileName = new SimpleStringProperty();
 		this.verticalPipeFileName = new SimpleStringProperty();
-		
-		//this.widthProperty().addListener(observable -> redraw());
-		//this.heightProperty().addListener(observable -> redraw());
 	}
-	
-	public boolean isResizable()
-	{
-		return true;
+	public String getBackgroundFileName() {
+		return backgroundFileName.getValue();
 	}
 
+	public void setBackgroundFileName(String backgroundFileName) {
+		this.backgroundFileName.setValue(backgroundFileName);
+	}
+	
 	public String getStartFileName() {
 		return startFileName.getValue();
 	}
@@ -48,7 +56,7 @@ public class PipeDisplayer extends Canvas {
 	}
 
 	public void setGoalFileName(String goalFileName) {
-		this.goalFileName.setValue(goalFileName);;
+		this.goalFileName.setValue(goalFileName);
 	}
 
 	public String getAnglePipeFileName() {
@@ -56,7 +64,7 @@ public class PipeDisplayer extends Canvas {
 	}
 
 	public void setAnglePipeFileName(String anglePipeFileName) {
-		this.anglePipeFileName.setValue(anglePipeFileName);;
+		this.anglePipeFileName.setValue(anglePipeFileName);
 	}
 
 	public String getVerticalPipeFileName() {
@@ -64,67 +72,121 @@ public class PipeDisplayer extends Canvas {
 	}
 
 	public void setVerticalPipeFileName(String verticalPipeFileName) {
-		this.verticalPipeFileName.setValue(verticalPipeFileName);;
+		this.verticalPipeFileName.setValue(verticalPipeFileName);
 	}
 
 	public void setPipeData(char [][] pipeData) {
 		this.pipeData = pipeData;
-		this.cleanGame();
 		this.redraw();
 	}
+	@Override
+	public boolean isResizable() {
+	    return true;
+	}
 
+    @Override
+    public double minHeight(double width)
+    {
+        return 64;
+    }
+
+    @Override
+    public double maxHeight(double width)
+    {
+        return 1000;
+    }
+
+    @Override
+    public double prefHeight(double width)
+    {
+        return minHeight(width);
+    }
+
+    @Override
+    public double minWidth(double height)
+    {
+        return 0;
+    }
+
+    @Override
+    public double maxWidth(double height)
+    {
+        return 10000;
+    }
+	
+    @Override
+    public void resize(double width, double height)
+    {
+        super.setWidth(width);
+        super.setHeight(height);
+        this.redraw();
+    }
 	public void cleanGame() {
 		GraphicsContext gc = getGraphicsContext2D();
 		gc.clearRect(0, 0, getWidth(), getHeight());
 	}
-
+	public void loadImages() {
+		try {
+			background = new Image(new FileInputStream(backgroundFileName.get()));
+			startImage = new Image(new FileInputStream(startFileName.get()));
+			goalImage = new Image(new FileInputStream(goalFileName.get()));
+			pipeVImage = new Image(new FileInputStream(verticalPipeFileName.get()));
+			pipeAImage = new Image(new FileInputStream(anglePipeFileName.get()));
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 	public void redraw() {
 		if (pipeData != null) {
+			cleanGame();
 			double W = getWidth();
 			double H = getHeight();
 			double w = W / pipeData[0].length;
 			double h = H / pipeData.length;
 			
 			GraphicsContext gc = getGraphicsContext2D();
+			gc.drawImage(background, 0, 0, getWidth(), getHeight());
+			
 			int rotate = 0;
 			SnapshotParameters params = new SnapshotParameters();
 			params.setFill(Color.TRANSPARENT);
 			
 			for (int i = 0; i < pipeData.length; i++) {
 				for (int j = 0; j < pipeData[i].length; j++) {
-					String fileName;
+					Image fileName;
 					switch (pipeData[i][j]) {
 					case 'L':
 						rotate = 0;
-						fileName = anglePipeFileName.get();
+						fileName = pipeAImage;
 						break;
 					case 'F':
 						rotate = 90;
-						fileName = anglePipeFileName.get();
+						fileName = pipeAImage;
 						break;
 					case '7':
 						rotate = 180;
-						fileName = anglePipeFileName.get();
+						fileName = pipeAImage;
 						break;
 					case 'J':
 						rotate = 270;
-						fileName = anglePipeFileName.get();
+						fileName = pipeAImage;
 						break;
 					case '-':
 						rotate = 90;
-						fileName = verticalPipeFileName.get();
+						fileName = pipeVImage;
 						break;
 					case '|':
 						rotate = 0;
-						fileName = verticalPipeFileName.get();
+						fileName = pipeVImage;
 						break;
 					case 's':
 						rotate = 0;
-						fileName = startFileName.get();
+						fileName = startImage;
 						break;
 					case 'g':
 						rotate = 0;
-						fileName = goalFileName.get();
+						fileName = goalImage;
 						break;
 					case ' ':
 						fileName = null;
@@ -135,15 +197,10 @@ public class PipeDisplayer extends Canvas {
 					}
 
 					if (fileName != null) {
-						try {
-							ImageView iv = new ImageView(new Image(new FileInputStream(fileName)));
-							iv.setRotate(rotate);
-							Image rotatedImage = iv.snapshot(params, null);
-							gc.drawImage(rotatedImage, j*w, i*h, w, h);
-						} catch (FileNotFoundException e) {
-							gc.fillRect(j*w, i*h, w, h);
-						}
-						
+						ImageView iv = new ImageView(fileName);
+						iv.setRotate(rotate);
+						Image rotatedImage = iv.snapshot(params, null);
+						gc.drawImage(rotatedImage, j*w, i*h, w, h);
 					}
 				}
 			}

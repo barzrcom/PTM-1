@@ -31,6 +31,7 @@ public class MainWindowController implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		pipeDisplayer.setPipeData(pipeData);
+		pipeDisplayer.loadImages();
 	}
 	
 	public void start() {
