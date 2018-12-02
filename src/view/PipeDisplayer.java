@@ -3,13 +3,16 @@ package view;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
+import board.PipeGameBoard;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.event.EventHandler;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 
 public class PipeDisplayer extends Canvas {
@@ -38,6 +41,22 @@ public class PipeDisplayer extends Canvas {
 		this.goalFileName = new SimpleStringProperty();
 		this.anglePipeFileName = new SimpleStringProperty();
 		this.verticalPipeFileName = new SimpleStringProperty();
+		// click event
+		addEventHandler(MouseEvent.MOUSE_CLICKED, 
+	        new EventHandler<MouseEvent>() {
+	            @Override
+	            public void handle(MouseEvent t) {  
+	    			double W = getWidth();
+	    			double H = getHeight();
+	    			double w = W / pipeData[0].length;
+	    			double h = H / pipeData.length;
+	    			int x = (int)(t.getX() / w);
+	    			int y = (int)(t.getY() /h);
+	                System.out.println((int)(t.getX() / w) + "," + (int)(t.getY() /h));
+	                pipeData[y][x] = PipeGameBoard.changePipe(pipeData[y][x], 1);
+	                redraw();
+	            }
+	        });
 	}
 	public String getBackgroundFileName() {
 		return backgroundFileName.getValue();
@@ -146,9 +165,9 @@ public class PipeDisplayer extends Canvas {
 			iv = new ImageView(pipeAngle0Image);
 			iv.setRotate(90);
 			pipeAngle90Image = iv.snapshot(params, null);
-			iv.setRotate(90);
+			iv.setRotate(180);
 			pipeAngle180Image = iv.snapshot(params, null);
-			iv.setRotate(90);
+			iv.setRotate(270);
 			pipeAngle270Image = iv.snapshot(params, null);
 			
 			
