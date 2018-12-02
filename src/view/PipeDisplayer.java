@@ -25,8 +25,12 @@ public class PipeDisplayer extends Canvas {
 	private Image background;
 	private Image startImage;
 	private Image goalImage;
-	private Image pipeVImage;
-	private Image pipeAImage;
+	private Image pipeVerticalImage;
+	private Image pipeHorizontalImage;
+	private Image pipeAngle0Image;
+	private Image pipeAngle90Image;
+	private Image pipeAngle180Image;
+	private Image pipeAngle270Image;
 	
 	public PipeDisplayer() {
 		this.backgroundFileName = new SimpleStringProperty();
@@ -127,11 +131,27 @@ public class PipeDisplayer extends Canvas {
 	}
 	public void loadImages() {
 		try {
+			SnapshotParameters params = new SnapshotParameters();
+			params.setFill(Color.TRANSPARENT);
 			background = new Image(new FileInputStream(backgroundFileName.get()));
 			startImage = new Image(new FileInputStream(startFileName.get()));
 			goalImage = new Image(new FileInputStream(goalFileName.get()));
-			pipeVImage = new Image(new FileInputStream(verticalPipeFileName.get()));
-			pipeAImage = new Image(new FileInputStream(anglePipeFileName.get()));
+			pipeVerticalImage = new Image(new FileInputStream(verticalPipeFileName.get()));
+			
+			ImageView iv = new ImageView(pipeVerticalImage);
+			iv.setRotate(90);
+			pipeHorizontalImage = iv.snapshot(params, null);
+			
+			pipeAngle0Image = new Image(new FileInputStream(anglePipeFileName.get()));
+			iv = new ImageView(pipeVerticalImage);
+			iv.setRotate(90);
+			pipeAngle90Image = iv.snapshot(params, null);
+			iv.setRotate(90);
+			pipeAngle180Image = iv.snapshot(params, null);
+			iv.setRotate(90);
+			pipeAngle270Image = iv.snapshot(params, null);
+			
+			
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -147,60 +167,45 @@ public class PipeDisplayer extends Canvas {
 			
 			GraphicsContext gc = getGraphicsContext2D();
 			gc.drawImage(background, 0, 0, getWidth(), getHeight());
-			
-			int rotate = 0;
-			SnapshotParameters params = new SnapshotParameters();
-			params.setFill(Color.TRANSPARENT);
-			
+
 			for (int i = 0; i < pipeData.length; i++) {
 				for (int j = 0; j < pipeData[i].length; j++) {
-					Image fileName;
+					Image pipeImage;
 					switch (pipeData[i][j]) {
 					case 'L':
-						rotate = 0;
-						fileName = pipeAImage;
+						pipeImage = pipeAngle0Image;
 						break;
 					case 'F':
-						rotate = 90;
-						fileName = pipeAImage;
+						pipeImage = pipeAngle90Image;
 						break;
 					case '7':
-						rotate = 180;
-						fileName = pipeAImage;
+						pipeImage = pipeAngle180Image;
 						break;
 					case 'J':
-						rotate = 270;
-						fileName = pipeAImage;
+						pipeImage = pipeAngle270Image;
 						break;
 					case '-':
-						rotate = 90;
-						fileName = pipeVImage;
+						pipeImage = pipeHorizontalImage;
 						break;
 					case '|':
-						rotate = 0;
-						fileName = pipeVImage;
+						pipeImage = pipeVerticalImage;
 						break;
 					case 's':
-						rotate = 0;
-						fileName = startImage;
+						pipeImage = startImage;
 						break;
 					case 'g':
-						rotate = 0;
-						fileName = goalImage;
+						pipeImage = goalImage;
 						break;
 					case ' ':
-						fileName = null;
+						pipeImage = null;
 						break;
 					default:
-						fileName = null;
+						pipeImage = null;
 						break;
 					}
 
-					if (fileName != null) {
-						ImageView iv = new ImageView(fileName);
-						iv.setRotate(rotate);
-						Image rotatedImage = iv.snapshot(params, null);
-						gc.drawImage(rotatedImage, j*w, i*h, w, h);
+					if (pipeImage != null) {
+						gc.drawImage(pipeImage, j*w, i*h, w, h);
 					}
 				}
 			}
