@@ -15,7 +15,7 @@ import javafx.stage.FileChooser;
 public class MainWindowController implements Initializable {
 	
 	char [][] pipeData = {
-			{'s', '-', '-', '-', '7', '7', '7', '7' , '7'},
+			{'s', '-', '-', '-', '7', 'J', 'L', 'F' , '7'},
 			{'7', '7', '7', '7', '7', '7', '7', '7' , '7'},
 			{'7', '7', '7', ' ', ' ', ' ', '7', '7' , '7'},
 			{'7', '7', '7', '7', '|', '7', '7', '7' , '7'},
