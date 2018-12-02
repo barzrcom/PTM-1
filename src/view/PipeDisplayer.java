@@ -143,7 +143,7 @@ public class PipeDisplayer extends Canvas {
 			pipeHorizontalImage = iv.snapshot(params, null);
 			
 			pipeAngle0Image = new Image(new FileInputStream(anglePipeFileName.get()));
-			iv = new ImageView(pipeVerticalImage);
+			iv = new ImageView(pipeAngle0Image);
 			iv.setRotate(90);
 			pipeAngle90Image = iv.snapshot(params, null);
 			iv.setRotate(90);
