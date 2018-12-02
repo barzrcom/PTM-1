@@ -1,15 +1,30 @@
 package view;
 
+import java.awt.Point;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.LinkedHashSet;
 
+import board.Board;
 import board.PipeGameBoard;
+import board.PipeStep;
+import board.State;
+import board.PipeGameBoard.directions;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.event.EventHandler;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.effect.BlendMode;
+import javafx.scene.effect.Bloom;
+import javafx.scene.effect.BlurType;
+import javafx.scene.effect.BoxBlur;
+import javafx.scene.effect.DropShadow;
+import javafx.scene.effect.Glow;
+import javafx.scene.effect.InnerShadow;
+import javafx.scene.effect.Light.Distant;
+import javafx.scene.effect.Lighting;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -35,6 +50,9 @@ public class PipeDisplayer extends Canvas {
 	private Image pipeAngle180Image;
 	private Image pipeAngle270Image;
 	
+	private Point startIndex;
+	private LinkedHashSet<Point> flowPointList = new LinkedHashSet<Point>();
+	
 	public PipeDisplayer() {
 		this.backgroundFileName = new SimpleStringProperty();
 		this.startFileName = new SimpleStringProperty();
@@ -46,13 +64,11 @@ public class PipeDisplayer extends Canvas {
 	        new EventHandler<MouseEvent>() {
 	            @Override
 	            public void handle(MouseEvent t) {  
-	    			double W = getWidth();
-	    			double H = getHeight();
-	    			double w = W / pipeData[0].length;
-	    			double h = H / pipeData.length;
+	    			double w = getWidth() / pipeData[0].length;
+	    			double h = getHeight() / pipeData.length;
 	    			int x = (int)(t.getX() / w);
-	    			int y = (int)(t.getY() /h);
-	                System.out.println((int)(t.getX() / w) + "," + (int)(t.getY() /h));
+	    			int y = (int)(t.getY() / h);
+	                //System.out.println((int)(t.getX() / w) + "," + (int)(t.getY() /h));
 	                pipeData[y][x] = PipeGameBoard.changePipe(pipeData[y][x], 1);
 	                redraw();
 	            }
@@ -100,6 +116,14 @@ public class PipeDisplayer extends Canvas {
 
 	public void setPipeData(char [][] pipeData) {
 		this.pipeData = pipeData;
+		for (int i=0; i < pipeData.length; i++) {
+			for (int j=0; j < pipeData[i].length; j++) {
+				if (pipeData[i][j] == 's'){
+					startIndex = new Point(j,i);
+					break;
+				}
+			}
+		}
 		this.redraw();
 	}
 	@Override
@@ -145,6 +169,7 @@ public class PipeDisplayer extends Canvas {
         this.redraw();
     }
 	public void cleanGame() {
+		flowPointList.clear();
 		GraphicsContext gc = getGraphicsContext2D();
 		gc.clearRect(0, 0, getWidth(), getHeight());
 	}
@@ -179,6 +204,7 @@ public class PipeDisplayer extends Canvas {
 	public void redraw() {
 		if (pipeData != null) {
 			cleanGame();
+			isGoalStateLogic(startIndex.x, startIndex.y, directions.start);
 			double W = getWidth();
 			double H = getHeight();
 			double w = W / pipeData[0].length;
@@ -224,10 +250,113 @@ public class PipeDisplayer extends Canvas {
 					}
 
 					if (pipeImage != null) {
-						gc.drawImage(pipeImage, j*w, i*h, w, h);
+						if(flowPointList.contains(new Point(j,i))) { 
+							gc.save();
+							Bloom bloom = new Bloom(); 
+							bloom.setThreshold(0.5);
+							gc.setEffect(bloom);
+							gc.drawImage(pipeImage, j*w, i*h, w, h);
+							gc.restore();	
+						} else {
+							gc.drawImage(pipeImage, j*w, i*h, w, h);
+						}
 					}
 				}
 			}
 		}
+	}
+	private boolean isGoalStateLogic(int posX, int posY, directions from) {
+		//check bounds
+		if (posX < 0 || posX >= pipeData[0].length)
+			return false;
+		if (posY < 0 || posY >= pipeData.length)
+			return false;
+		// start
+		if (from == directions.start) {
+			return (isGoalStateLogic(posX+1, posY, directions.left) || 
+					isGoalStateLogic(posX-1, posY, directions.right) ||
+					isGoalStateLogic(posX, posY+1, directions.up) ||
+					isGoalStateLogic(posX, posY-1, directions.down));
+		}
+
+		switch (pipeData[posY][posX]) {
+		case 'g':
+			flowPointList.add(new Point(posX,posY));
+			return true;
+		case '-':
+			if(from == directions.left) {
+				flowPointList.add(new Point(posX,posY));
+				return isGoalStateLogic(posX+1, posY, directions.left);
+			}
+
+			else if(from == directions.right) {
+				flowPointList.add(new Point(posX,posY));
+				return isGoalStateLogic(posX-1, posY, directions.right);
+			}
+			else {
+				return false;
+			}
+		case '|':
+			if(from == directions.up) {
+				flowPointList.add(new Point(posX,posY));
+				return isGoalStateLogic(posX, posY+1, directions.up);
+			}
+			else if(from == directions.down) {
+				flowPointList.add(new Point(posX,posY));
+				return isGoalStateLogic(posX, posY-1, directions.down);
+			}
+			else {
+				return false;
+			}
+		case 'L':
+			if(from == directions.up) {
+				flowPointList.add(new Point(posX,posY));
+				return isGoalStateLogic(posX+1, posY, directions.left);
+			}
+			else if(from == directions.right) {
+				flowPointList.add(new Point(posX,posY));
+				return isGoalStateLogic(posX, posY-1, directions.down);
+			}
+			else {
+				return false;
+			}
+		case 'F':
+			if(from == directions.right) {
+				flowPointList.add(new Point(posX,posY));
+				return isGoalStateLogic(posX, posY+1, directions.up);
+			}
+			else if(from == directions.down) {
+				flowPointList.add(new Point(posX,posY));
+				return isGoalStateLogic(posX+1, posY, directions.left);
+			}
+			else {
+				return false;
+			}
+		case '7':
+			if(from == directions.left) {
+				flowPointList.add(new Point(posX,posY));
+				return isGoalStateLogic(posX, posY+1, directions.up);
+			}
+			else if(from == directions.down) {
+				flowPointList.add(new Point(posX,posY));
+				return isGoalStateLogic(posX-1, posY, directions.right);
+			}
+			else {
+				return false;
+			}
+		case 'J':
+			if(from == directions.up) {
+				flowPointList.add(new Point(posX,posY));
+				return isGoalStateLogic(posX-1, posY, directions.right);
+			}
+			else if(from == directions.left) {
+				flowPointList.add(new Point(posX,posY));
+				return isGoalStateLogic(posX, posY-1, directions.down);
+			}
+			else {
+				return false;
+			}
+		}
+		return false;
 	}
 }
