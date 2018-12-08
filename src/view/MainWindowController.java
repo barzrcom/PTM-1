@@ -1,8 +1,10 @@
 package view;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -79,5 +81,38 @@ public class MainWindowController implements Initializable {
 			char[][] charArray = lines.toArray(new char[lines.size()][]);
 			pipeDisplayer.setPipeData(charArray);
 		}
+	}
+
+	public void saveFile() {
+		System.out.println("Saving into File.");
+		FileChooser fc = new FileChooser();
+		fc.setTitle("Choose location To Save File");
+		FileChooser.ExtensionFilter txtExtensionFilter = new FileChooser.ExtensionFilter("Text Files", "*.txt");
+	    fc.getExtensionFilters().add(txtExtensionFilter);
+	    fc.setSelectedExtensionFilter(txtExtensionFilter);
+
+		File selectedFile = null;
+		selectedFile = fc.showSaveDialog(null);
+
+		if (selectedFile == null) {
+			return;
+		}
+
+	    PrintWriter outFile = null;
+	    try {
+	        outFile = new PrintWriter(selectedFile);
+	    } catch (FileNotFoundException e) {
+	        // TODO Auto-generated catch block
+	        e.printStackTrace();
+	    }
+
+	    for (int i = 0; i < pipeData.length; i++) {
+	    	for (int j=0; j < pipeData[i].length; j++) {
+	    		outFile.print(pipeData[i][j]);
+	    	}
+	    	outFile.println();
+	    }
+
+	    outFile.close();
 	}
 }

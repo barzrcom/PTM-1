@@ -54,6 +54,7 @@
             <Menu mnemonicParsing="false" text="File">
               <items>
                 <MenuItem mnemonicParsing="false" onAction="#openFile" text="Open File" />
+                <MenuItem mnemonicParsing="false" onAction="#saveFile" text="Save as..." />
                 <MenuItem mnemonicParsing="false" onAction="#exit" text="Exit" />
               </items>
             </Menu>
