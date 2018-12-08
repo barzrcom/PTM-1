@@ -2,6 +2,9 @@ package client;
 	
 import javafx.application.Application;
 import javafx.stage.Stage;
+import model.PipeGameModel;
+import view.MainWindowController;
+import viewModel.PipeGameViewModel;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.fxml.FXMLLoader;
@@ -11,7 +14,20 @@ public class UiClient extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		try {
-			BorderPane root = (BorderPane)FXMLLoader.load(getClass().getResource("../view/MainWindow.fxml"));
+			
+			PipeGameModel m = new PipeGameModel(); // The Model
+			
+			PipeGameViewModel vm = new PipeGameViewModel(m);  // The View-Model
+			m.addObserver(vm);	
+
+			FXMLLoader fxl=new FXMLLoader();
+
+			BorderPane root = fxl.load(getClass().getResource("../view/MainWindow.fxml").openStream());
+			
+			MainWindowController mwc = fxl.getController();
+			mwc.setViewModel(vm);
+			vm.addObserver(mwc);
+					
 			Scene scene = new Scene(root);
 			scene.getStylesheets().add(getClass().getResource("../view/application.css").toExternalForm());
 			primaryStage.setScene(scene);

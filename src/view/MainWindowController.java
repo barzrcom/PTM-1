@@ -8,13 +8,18 @@ import java.io.PrintWriter;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.ResourceBundle;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.stage.FileChooser;
+import viewModel.PipeGameViewModel;
 
-public class MainWindowController implements Initializable {
+public class MainWindowController implements Initializable, Observer {
+	
+	PipeGameViewModel vm;
 	
 	char [][] pipeData = {
 			{'s', '-', '-', '-', '7', 'J', 'L', 'F' , '7'},
@@ -29,6 +34,14 @@ public class MainWindowController implements Initializable {
 	
 	@FXML
 	PipeDisplayer pipeDisplayer;
+	
+	public void setViewModel(PipeGameViewModel vm) {
+		this.vm=vm;
+		return;
+//		vm.x.bind(varX.textProperty()); 
+//		vm.y.bind(varY.textProperty()); 
+//		resultLabel.textProperty().bind(vm.result.asString());
+	}
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -114,5 +127,11 @@ public class MainWindowController implements Initializable {
 	    }
 
 	    outFile.close();
+	}
+
+	@Override
+	public void update(Observable observable, Object obj) {
+		// TODO Auto-generated method stub
+		
 	}
 }
