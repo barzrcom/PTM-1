@@ -1,7 +1,5 @@
 package view;
 
-import board.PipeGameBoard;
-import board.PipeGameBoard.directions;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.event.EventHandler;
@@ -18,6 +16,9 @@ import java.awt.*;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.LinkedHashSet;
+
+import static board.PipeGameBoard.changePipe;
+import static board.PipeGameBoard.directions;
 
 public class PipeDisplayer extends Canvas {
 
@@ -58,7 +59,7 @@ public class PipeDisplayer extends Canvas {
 						int x = (int) (t.getX() / w);
 						int y = (int) (t.getY() / h);
 						//System.out.println((int)(t.getX() / w) + "," + (int)(t.getY() /h));
-						pipeData[y][x] = PipeGameBoard.changePipe(pipeData[y][x], 1);
+						pipeData[y][x] = changePipe(pipeData[y][x], 1);
 						redraw();
 					}
 				});
@@ -336,4 +337,40 @@ public class PipeDisplayer extends Canvas {
 		}
 		return false;
 	}
+
+//	private static char changePipe(char currentPipe) {
+//		switch (currentPipe) {
+//			case 'L':
+//				currentPipe = 'F';
+//				break;
+//			case 'F':
+//				currentPipe = '7';
+//				break;
+//			case '7':
+//				currentPipe = 'J';
+//				break;
+//			case 'J':
+//				currentPipe = 'L';
+//				break;
+//			case '-':
+//				currentPipe = '|';
+//				break;
+//			case '|':
+//				currentPipe = '-';
+//				break;
+//			case 's':
+//				currentPipe = 's';
+//				break;
+//			case 'g':
+//				currentPipe = 'g';
+//				break;
+//			case ' ':
+//				currentPipe = ' ';
+//				break;
+//			default:
+//				currentPipe = ' ';
+//				break;
+//		}
+//		return currentPipe;
+//	}
 }
