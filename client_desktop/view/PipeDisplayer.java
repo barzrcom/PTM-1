@@ -337,40 +337,4 @@ public class PipeDisplayer extends Canvas {
 		}
 		return false;
 	}
-
-//	private static char changePipe(char currentPipe) {
-//		switch (currentPipe) {
-//			case 'L':
-//				currentPipe = 'F';
-//				break;
-//			case 'F':
-//				currentPipe = '7';
-//				break;
-//			case '7':
-//				currentPipe = 'J';
-//				break;
-//			case 'J':
-//				currentPipe = 'L';
-//				break;
-//			case '-':
-//				currentPipe = '|';
-//				break;
-//			case '|':
-//				currentPipe = '-';
-//				break;
-//			case 's':
-//				currentPipe = 's';
-//				break;
-//			case 'g':
-//				currentPipe = 'g';
-//				break;
-//			case ' ':
-//				currentPipe = ' ';
-//				break;
-//			default:
-//				currentPipe = ' ';
-//				break;
-//		}
-//		return currentPipe;
-//	}
 }
