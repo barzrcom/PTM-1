@@ -49,20 +49,6 @@ public class PipeDisplayer extends Canvas {
 		this.goalFileName = new SimpleStringProperty();
 		this.anglePipeFileName = new SimpleStringProperty();
 		this.verticalPipeFileName = new SimpleStringProperty();
-		// click event
-		addEventHandler(MouseEvent.MOUSE_CLICKED,
-				new EventHandler<MouseEvent>() {
-					@Override
-					public void handle(MouseEvent t) {
-						double w = getWidth() / pipeData[0].length;
-						double h = getHeight() / pipeData.length;
-						int x = (int) (t.getX() / w);
-						int y = (int) (t.getY() / h);
-						//System.out.println((int)(t.getX() / w) + "," + (int)(t.getY() /h));
-						pipeData[y][x] = changePipe(pipeData[y][x], 1);
-						redraw();
-					}
-				});
 	}
 
 	public String getBackgroundFileName() {
@@ -107,16 +93,19 @@ public class PipeDisplayer extends Canvas {
 	}
 
 	public void setPipeData(char[][] pipeData) {
-		this.pipeData = pipeData;
-		for (int i = 0; i < pipeData.length; i++) {
-			for (int j = 0; j < pipeData[i].length; j++) {
-				if (pipeData[i][j] == 's') {
-					startIndex = new Point(j, i);
-					break;
+		if (pipeData != null) {
+			this.pipeData = pipeData;
+			for (int i = 0; i < pipeData.length; i++) {
+				for (int j = 0; j < pipeData[i].length; j++) {
+					if (pipeData[i][j] == 's') {
+						startIndex = new Point(j, i);
+						break;
+					}
 				}
 			}
+
+			this.redraw();
 		}
-		this.redraw();
 	}
 
 	@Override

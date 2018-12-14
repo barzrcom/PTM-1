@@ -1,21 +1,33 @@
 package viewModel;
 
-import java.util.Observable;
-import java.util.Observer;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+import model.PipeGameModel;
 
-import model.GameModel;
+import java.io.File;
 
 
-public class PipeGameViewModel extends Observable implements Observer {
-	
-	GameModel m;
-	
-	public PipeGameViewModel(GameModel m) {
+public class PipeGameViewModel {
+
+	PipeGameModel m;
+
+	public StringProperty board;
+
+	public PipeGameViewModel(PipeGameModel m) {
 		this.m = m;
+		this.board = new SimpleStringProperty();
+		this.board.bindBidirectional(this.m.board);
 	}
 
-	@Override
-	public void update(Observable observable, Object obj) {
-		// TODO Auto-generated method stub
+	public void changePipe(int x, int y) {
+		this.m.changePipe(x, y);
+	}
+
+	public void loadGame(String fileName) {
+		this.m.loadGame(fileName);
+	}
+
+	public void saveGame(File file) {
+		this.m.saveGame(file);
 	}
 }

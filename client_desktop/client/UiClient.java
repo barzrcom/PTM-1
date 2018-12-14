@@ -11,23 +11,25 @@ import javafx.fxml.FXMLLoader;
 
 
 public class UiClient extends Application {
+
 	@Override
 	public void start(Stage primaryStage) {
 		try {
 			
 			PipeGameModel m = new PipeGameModel(); // The Model
-			
+
 			PipeGameViewModel vm = new PipeGameViewModel(m);  // The View-Model
-			m.addObserver(vm);	
 
 			FXMLLoader fxl=new FXMLLoader();
 
 			BorderPane root = fxl.load(getClass().getResource("../view/MainWindow.fxml").openStream());
-			
+
 			MainWindowController mwc = fxl.getController();
 			mwc.setViewModel(vm);
-			vm.addObserver(mwc);
-					
+
+			// must be placed after M-V-VM are bind together
+			m.setInitializedBoard();
+
 			Scene scene = new Scene(root);
 			scene.getStylesheets().add(getClass().getResource("../view/application.css").toExternalForm());
 			primaryStage.setScene(scene);

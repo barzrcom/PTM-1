@@ -1,38 +1,59 @@
 package view;
 
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.FileChooser;
 import viewModel.PipeGameViewModel;
 
-import java.io.*;
+import java.io.File;
 import java.net.URL;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.ResourceBundle;
 
-public class MainWindowController implements Initializable, Observer {
+public class MainWindowController implements Initializable {
 
 	PipeGameViewModel vm;
 
-	char[][] pipeData = {
-			{'s', '-', '-', '-', '7', 'J', 'L', 'F', '7'},
-			{'7', '7', '7', '7', '7', '7', '7', '7', '7'},
-			{'7', '7', '7', ' ', ' ', ' ', '7', '7', '7'},
-			{'7', '7', '7', '7', '|', '7', '7', '7', '7'},
-			{'7', '7', '7', '7', 'L', '7', '7', '7', '7'},
-			{'7', '7', '7', '7', '7', '7', '7', '7', '7'},
-			{'7', '7', '7', '7', '|', '7', '7', '7', '7'},
-			{'7', '7', '-', '-', '-', '-', '-', '-', 'g'},
-	};
+	StringProperty board;
+
+	char[][] pipeData;
 
 	@FXML
 	PipeDisplayer pipeDisplayer;
 
 	public void setViewModel(PipeGameViewModel vm) {
 		this.vm = vm;
-		return;
-//		vm.x.bind(varX.textProperty()); 
-//		vm.y.bind(varY.textProperty()); 
-//		resultLabel.textProperty().bind(vm.result.asString());
+		this.board = new SimpleStringProperty();
+		vm.board.bindBidirectional(this.board);
+
+		this.board.addListener((observableValue, s, t1) -> {
+
+			// build char[][] from StringProperty
+			ArrayList<char[]> inputFromClient = new ArrayList<>();
+			String[] rows = this.board.get().split("\n");
+
+			for (String row : rows) {
+				inputFromClient.add(row.toCharArray());
+			}
+			pipeData = inputFromClient.toArray(new char[inputFromClient.size()][]);
+
+			pipeDisplayer.setPipeData(pipeData);
+		});
+
+		// click event
+		pipeDisplayer.addEventHandler(MouseEvent.MOUSE_CLICKED,
+				(MouseEvent t) -> {
+					double w = pipeDisplayer.getWidth() / pipeData[0].length;
+					double h = pipeDisplayer.getHeight() / pipeData.length;
+					int x = (int) (t.getX() / w);
+					int y = (int) (t.getY() / h);
+					vm.changePipe(x, y);
+				}
+		);
+
 	}
 
 	@Override
@@ -67,24 +88,7 @@ public class MainWindowController implements Initializable, Observer {
 
 		if (choosen != null) {
 			System.out.println(choosen.getName());
-
-			List<char[]> lines = new ArrayList<char[]>();
-			BufferedReader reader;
-			try {
-				reader = new BufferedReader(new FileReader(choosen));
-
-				String line;
-				while ((line = reader.readLine()) != null) {
-					lines.add(line.toCharArray());
-				}
-				reader.close();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
-			char[][] charArray = lines.toArray(new char[lines.size()][]);
-			pipeDisplayer.setPipeData(charArray);
+			vm.loadGame(choosen.getAbsolutePath());
 		}
 	}
 
@@ -96,34 +100,11 @@ public class MainWindowController implements Initializable, Observer {
 		fc.getExtensionFilters().add(txtExtensionFilter);
 		fc.setSelectedExtensionFilter(txtExtensionFilter);
 
-		File selectedFile = null;
-		selectedFile = fc.showSaveDialog(null);
+		File selectedFile = fc.showSaveDialog(null);
 
 		if (selectedFile == null) {
 			return;
 		}
-
-		PrintWriter outFile = null;
-		try {
-			outFile = new PrintWriter(selectedFile);
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		for (int i = 0; i < pipeData.length; i++) {
-			for (int j = 0; j < pipeData[i].length; j++) {
-				outFile.print(pipeData[i][j]);
-			}
-			outFile.println();
-		}
-
-		outFile.close();
-	}
-
-	@Override
-	public void update(Observable observable, Object obj) {
-		// TODO Auto-generated method stub
-
+		vm.saveGame(selectedFile);
 	}
 }
