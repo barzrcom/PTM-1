@@ -1,10 +1,7 @@
 package model;
 
 import board.PipeGameBoard.directions;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.ListProperty;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleListProperty;
+import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 
 import java.awt.*;
@@ -18,7 +15,8 @@ public class PipeGameModel implements GameModel {
 
 	public ListProperty<char[]> board;
 	public BooleanProperty isGoal;
-	public SimpleListProperty<Point> flowPoints;
+	public ListProperty<Point> flowPoints;
+	public IntegerProperty numOfSteps;
 
 	public PipeGameModel() {
 		this.board = new SimpleListProperty<>(FXCollections.observableArrayList(new ArrayList<>()));
@@ -41,7 +39,8 @@ public class PipeGameModel implements GameModel {
 			}
 		});
 		this.isGoal = new SimpleBooleanProperty();
-		this.flowPoints = new SimpleListProperty<Point>(FXCollections.observableArrayList(new LinkedHashSet<Point>()));
+		this.flowPoints = new SimpleListProperty<>(FXCollections.observableArrayList(new LinkedHashSet<Point>()));
+		this.numOfSteps = new SimpleIntegerProperty(0);
 	}
 
 	public void setInitializedBoard() {
@@ -68,21 +67,27 @@ public class PipeGameModel implements GameModel {
 		switch (this.board.get(y)[x]) {
 			case 'L':
 				this.board.get(y)[x] = 'F';
+				numOfSteps.set(numOfSteps.get() + 1);
 				break;
 			case 'F':
 				this.board.get(y)[x] = '7';
+				numOfSteps.set(numOfSteps.get() + 1);
 				break;
 			case '7':
 				this.board.get(y)[x] = 'J';
+				numOfSteps.set(numOfSteps.get() + 1);
 				break;
 			case 'J':
 				this.board.get(y)[x] = 'L';
+				numOfSteps.set(numOfSteps.get() + 1);
 				break;
 			case '-':
 				this.board.get(y)[x] = '|';
+				numOfSteps.set(numOfSteps.get() + 1);
 				break;
 			case '|':
 				this.board.get(y)[x] = '-';
+				numOfSteps.set(numOfSteps.get() + 1);
 				break;
 			case 's':
 				this.board.get(y)[x] = 's';

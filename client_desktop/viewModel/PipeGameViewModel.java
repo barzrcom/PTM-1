@@ -1,9 +1,6 @@
 package viewModel;
 
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.ListProperty;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleListProperty;
+import javafx.beans.property.*;
 import model.PipeGameModel;
 
 import java.awt.*;
@@ -14,16 +11,21 @@ public class PipeGameViewModel {
 	public ListProperty<char[]> board;
 	public BooleanProperty isGoal;
 	public ListProperty<Point> flowPoints;
+	public IntegerProperty numOfSteps;
 	PipeGameModel m;
 
 	public PipeGameViewModel(PipeGameModel m) {
 		this.m = m;
 		this.board = new SimpleListProperty<>();
-		this.board.bindBidirectional(this.m.board);
+		this.board.bind(this.m.board);
 		this.isGoal = new SimpleBooleanProperty();
-		this.isGoal.bindBidirectional(this.m.isGoal);
+		this.isGoal.bind(this.m.isGoal);
 		this.flowPoints = new SimpleListProperty<>();
-		this.flowPoints.bindBidirectional(this.m.flowPoints);
+		this.flowPoints.bind(this.m.flowPoints);
+		this.flowPoints = new SimpleListProperty<>();
+		this.flowPoints.bind(this.m.flowPoints);
+		this.numOfSteps = new SimpleIntegerProperty();
+		this.numOfSteps.bind(this.m.numOfSteps);
 	}
 
 	public void changePipe(int x, int y) {
