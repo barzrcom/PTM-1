@@ -1,19 +1,25 @@
 package view;
 
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ListProperty;
+import javafx.beans.property.SetProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleListProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
-import javafx.collections.FXCollections;
+import javafx.beans.property.SimpleSetProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import viewModel.PipeGameViewModel;
 
+import java.awt.Point;
 import java.io.File;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 public class MainWindowController implements Initializable {
@@ -21,16 +27,37 @@ public class MainWindowController implements Initializable {
 	PipeGameViewModel vm;
 
 	ListProperty<char[]> board;
+	BooleanProperty isGoal;
+	ListProperty<Point> flowPoints;
 
 	@FXML
 	PipeDisplayer pipeDisplayer;
 
 	public void setViewModel(PipeGameViewModel vm) {
 		this.vm = vm;
-		
+		this.board = new SimpleListProperty<char[]>();
 		this.board.bindBidirectional(vm.board);
 		this.board.addListener((observableValue, s, t1) -> {
 			pipeDisplayer.setPipeData(this.board.toArray(new char[this.board.size()][]));
+		});
+		this.isGoal = new SimpleBooleanProperty();
+		this.isGoal.bindBidirectional(this.vm.isGoal);
+		this.isGoal.addListener((observableValue, s, t1) -> {
+			if (isGoal.get() == true) {
+				System.out.println("Win");
+				final Stage dialog = new Stage();
+		        dialog.initModality(Modality.APPLICATION_MODAL);
+		        VBox dialogVbox = new VBox(20);
+		        dialogVbox.getChildren().add(new Text("You Win!"));
+		        Scene dialogScene = new Scene(dialogVbox, 50, 50);
+		        dialog.setScene(dialogScene);
+		        dialog.show();
+			}
+		});
+		this.flowPoints = new SimpleListProperty<Point>();
+		this.flowPoints.bindBidirectional(this.vm.flowPoints);
+		this.flowPoints.addListener((observableValue, s, t1) -> {
+			pipeDisplayer.setFlowPoints(this.flowPoints);
 		});
 
 		// click event
