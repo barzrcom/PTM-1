@@ -1,10 +1,7 @@
 package view;
 
 
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.ListProperty;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleListProperty;
+import javafx.beans.property.*;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
@@ -29,6 +26,7 @@ public class MainWindowController implements Initializable {
 	ListProperty<char[]> board;
 	BooleanProperty isGoal;
 	ListProperty<Point> flowPoints;
+	IntegerProperty numOfSteps;
 
 	@FXML
 	PipeDisplayer pipeDisplayer;
@@ -37,28 +35,29 @@ public class MainWindowController implements Initializable {
 
 	public void setViewModel(PipeGameViewModel vm) {
 		this.vm = vm;
-		stepsText.setText("0");
 		this.board = new SimpleListProperty<>();
-		this.board.bindBidirectional(this.vm.board);
+		this.board.bind(this.vm.board);
 		this.board.addListener((observableValue, s, t1) -> {
 			pipeDisplayer.setPipeData(this.board.toArray(new char[this.board.size()][]));
 		});
 		this.isGoal = new SimpleBooleanProperty();
-		this.isGoal.bindBidirectional(this.vm.isGoal);
+		this.isGoal.bind(this.vm.isGoal);
 		this.isGoal.addListener((observableValue, s, t1) -> {
 			if (isGoal.get() == true) {
-				System.out.println("Win");
 				final Stage dialog = new Stage();
 				dialog.initModality(Modality.APPLICATION_MODAL);
 				VBox dialogVbox = new VBox(20);
-				dialogVbox.getChildren().add(new Text("You Win!"));
-				Scene dialogScene = new Scene(dialogVbox, 50, 50);
+				dialogVbox.getChildren().add(new Text("You Won!"));
+				dialogVbox.getChildren().add(new Text("Number of steps: " + numOfSteps.get()));
+				Scene dialogScene = new Scene(dialogVbox, 150, 60);
 				dialog.setScene(dialogScene);
+				dialog.setAlwaysOnTop(true);
+				dialog.setResizable(false);
 				dialog.show();
 			}
 		});
 		this.flowPoints = new SimpleListProperty<Point>();
-		this.flowPoints.bindBidirectional(this.vm.flowPoints);
+		this.flowPoints.bind(this.vm.flowPoints);
 		this.flowPoints.addListener((observableValue, s, t1) -> {
 			pipeDisplayer.setFlowPoints(this.flowPoints);
 		});
@@ -71,10 +70,14 @@ public class MainWindowController implements Initializable {
 					int x = (int) (t.getX() / w);
 					int y = (int) (t.getY() / h);
 					vm.changePipe(x, y);
-					stepsText.setText(Integer.toString(Integer.parseInt(stepsText.getText()) + 1));
 				}
 		);
 
+		this.numOfSteps = new SimpleIntegerProperty();
+		this.numOfSteps.bind(this.vm.numOfSteps);
+		this.numOfSteps.addListener((observableValue, s, t1) -> {
+			this.stepsText.setText(Integer.toString(numOfSteps.get()));
+		});
 	}
 
 	@Override
