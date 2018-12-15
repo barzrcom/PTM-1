@@ -82,12 +82,12 @@ public class MainWindowController implements Initializable {
 		pipeDisplayer.loadImages();
 	}
 
-	public void start() {
-		System.out.println("Start.");
+	public void connect() {
+		System.out.println("Connecting to server");
 	}
 
-	public void stop() {
-		System.out.println("Stop.");
+	public void solve() {
+		System.out.println("Solving.");
 	}
 
 	public void exit() {
