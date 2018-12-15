@@ -6,25 +6,23 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleListProperty;
 import model.PipeGameModel;
 
-import java.awt.Point;
+import java.awt.*;
 import java.io.File;
 
-
 public class PipeGameViewModel {
-
-	PipeGameModel m;
 
 	public ListProperty<char[]> board;
 	public BooleanProperty isGoal;
 	public ListProperty<Point> flowPoints;
-	
+	PipeGameModel m;
+
 	public PipeGameViewModel(PipeGameModel m) {
 		this.m = m;
-		this.board = new SimpleListProperty<char[]>();
+		this.board = new SimpleListProperty<>();
 		this.board.bindBidirectional(this.m.board);
 		this.isGoal = new SimpleBooleanProperty();
 		this.isGoal.bindBidirectional(this.m.isGoal);
-		this.flowPoints = new SimpleListProperty<Point>();
+		this.flowPoints = new SimpleListProperty<>();
 		this.flowPoints.bindBidirectional(this.m.flowPoints);
 	}
 

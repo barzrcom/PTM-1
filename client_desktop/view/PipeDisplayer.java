@@ -1,7 +1,6 @@
 package view;
 
 import javafx.beans.property.ListProperty;
-import javafx.beans.property.SetProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.scene.SnapshotParameters;
@@ -15,7 +14,6 @@ import javafx.scene.paint.Color;
 import java.awt.*;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-
 
 public class PipeDisplayer extends Canvas {
 
@@ -37,8 +35,6 @@ public class PipeDisplayer extends Canvas {
 	private Image pipeAngle90Image;
 	private Image pipeAngle180Image;
 	private Image pipeAngle270Image;
-
-	//private LinkedHashSet<Point> flowPointList = new LinkedHashSet<Point>();
 
 	public PipeDisplayer() {
 		this.backgroundFileName = new SimpleStringProperty();
@@ -171,7 +167,7 @@ public class PipeDisplayer extends Canvas {
 	public void redraw() {
 		if (pipeData != null) {
 			cleanGame();
-			
+
 			double W = getWidth();
 			double H = getHeight();
 			double w = W / pipeData[0].length;

@@ -17,7 +17,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import viewModel.PipeGameViewModel;
 
-import java.awt.Point;
+import java.awt.*;
 import java.io.File;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -38,8 +38,8 @@ public class MainWindowController implements Initializable {
 	public void setViewModel(PipeGameViewModel vm) {
 		this.vm = vm;
 		stepsText.setText("0");
-		this.board = new SimpleListProperty<char[]>();
-		this.board.bindBidirectional(vm.board);
+		this.board = new SimpleListProperty<>();
+		this.board.bindBidirectional(this.vm.board);
 		this.board.addListener((observableValue, s, t1) -> {
 			pipeDisplayer.setPipeData(this.board.toArray(new char[this.board.size()][]));
 		});
@@ -49,12 +49,12 @@ public class MainWindowController implements Initializable {
 			if (isGoal.get() == true) {
 				System.out.println("Win");
 				final Stage dialog = new Stage();
-		        dialog.initModality(Modality.APPLICATION_MODAL);
-		        VBox dialogVbox = new VBox(20);
-		        dialogVbox.getChildren().add(new Text("You Win!"));
-		        Scene dialogScene = new Scene(dialogVbox, 50, 50);
-		        dialog.setScene(dialogScene);
-		        dialog.show();
+				dialog.initModality(Modality.APPLICATION_MODAL);
+				VBox dialogVbox = new VBox(20);
+				dialogVbox.getChildren().add(new Text("You Win!"));
+				Scene dialogScene = new Scene(dialogVbox, 50, 50);
+				dialog.setScene(dialogScene);
+				dialog.show();
 			}
 		});
 		this.flowPoints = new SimpleListProperty<Point>();
@@ -71,7 +71,7 @@ public class MainWindowController implements Initializable {
 					int x = (int) (t.getX() / w);
 					int y = (int) (t.getY() / h);
 					vm.changePipe(x, y);
-					stepsText.setText(Integer.toString(Integer.parseInt(stepsText.getText())+1));
+					stepsText.setText(Integer.toString(Integer.parseInt(stepsText.getText()) + 1));
 				}
 		);
 
@@ -82,12 +82,12 @@ public class MainWindowController implements Initializable {
 		pipeDisplayer.loadImages();
 	}
 
-	public void start() {
-		System.out.println("Start.");
+	public void connect() {
+		System.out.println("Connecting to server");
 	}
 
-	public void stop() {
-		System.out.println("Stop.");
+	public void solve() {
+		System.out.println("Solving.");
 	}
 
 	public void exit() {

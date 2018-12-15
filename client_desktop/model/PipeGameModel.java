@@ -1,18 +1,17 @@
 package model;
 
+import board.PipeGameBoard.directions;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.collections.FXCollections;
 
-import java.awt.Point;
+import java.awt.*;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
-
-import board.PipeGameBoard.directions;
 
 
 public class PipeGameModel implements GameModel {
@@ -22,8 +21,8 @@ public class PipeGameModel implements GameModel {
 	public SimpleListProperty<Point> flowPoints;
 
 	public PipeGameModel() {
-		this.board = new SimpleListProperty<char[]>(FXCollections.observableArrayList(new ArrayList<>()));
-		
+		this.board = new SimpleListProperty<>(FXCollections.observableArrayList(new ArrayList<>()));
+
 		this.board.addListener((observableValue, s, t1) -> {
 			char[][] pipes = this.board.toArray(new char[this.board.size()][]);
 			Point startIndex = null;
@@ -43,23 +42,23 @@ public class PipeGameModel implements GameModel {
 		});
 		this.isGoal = new SimpleBooleanProperty();
 		this.flowPoints = new SimpleListProperty<Point>(FXCollections.observableArrayList(new LinkedHashSet<Point>()));
-}
+	}
 
 	public void setInitializedBoard() {
-//		char[][] level = {
-//				{'s', '-', '-', '-', '7', 'J', 'L', 'F' , '7'},
-//				{'7', '7', '7', '7', '7', '7', '7', '7' , '7'},
-//				{'7', '7', '7', ' ', ' ', ' ', '7', '7' , '7'},
-//				{'7', '7', '7', '7', '|', '7', '7', '7' , '7'},
-//				{'7', '7', '7', '7', 'L', '7', '7', '7' , '7'},
-//				{'7', '7', '7', '7', '7', '7', '7', '7' , '7'},
-//				{'7', '7', '7', '7', '|', '7', '7', '7' , '7'},
-//				{'7', '7', '-', '-', '-', '-', '-', '-' , 'g'},
-//		};
+		//		char[][] level = {
+		//				{'s', '-', '-', '-', '7', 'J', 'L', 'F' , '7'},
+		//				{'7', '7', '7', '7', '7', '7', '7', '7' , '7'},
+		//				{'7', '7', '7', ' ', ' ', ' ', '7', '7' , '7'},
+		//				{'7', '7', '7', '7', '|', '7', '7', '7' , '7'},
+		//				{'7', '7', '7', '7', 'L', '7', '7', '7' , '7'},
+		//				{'7', '7', '7', '7', '7', '7', '7', '7' , '7'},
+		//				{'7', '7', '7', '7', '|', '7', '7', '7' , '7'},
+		//				{'7', '7', '-', '-', '-', '-', '-', '-' , 'g'},
+		//		};
 		char[][] level = {
-		{'s', '-', '|', '7'},
-		{'7', '-', '-', 'g'},
-};
+				{'s', '-', '|', '7'},
+				{'7', '-', '-', 'g'},
+		};
 		this.board.addAll(level);
 
 
@@ -68,34 +67,34 @@ public class PipeGameModel implements GameModel {
 	public void changePipe(int x, int y) {
 		switch (this.board.get(y)[x]) {
 			case 'L':
-				this.board.get(y)[x] =  'F';
+				this.board.get(y)[x] = 'F';
 				break;
 			case 'F':
-				this.board.get(y)[x] =  '7';
+				this.board.get(y)[x] = '7';
 				break;
 			case '7':
-				this.board.get(y)[x] =  'J';
+				this.board.get(y)[x] = 'J';
 				break;
 			case 'J':
-				this.board.get(y)[x] =  'L';
+				this.board.get(y)[x] = 'L';
 				break;
 			case '-':
-				this.board.get(y)[x] =  '|';
+				this.board.get(y)[x] = '|';
 				break;
 			case '|':
-				this.board.get(y)[x] =  '-';
+				this.board.get(y)[x] = '-';
 				break;
 			case 's':
-				this.board.get(y)[x] =  's';
+				this.board.get(y)[x] = 's';
 				break;
 			case 'g':
-				this.board.get(y)[x] =  'g';
+				this.board.get(y)[x] = 'g';
 				break;
 			case ' ':
-				this.board.get(y)[x] =  ' ';
+				this.board.get(y)[x] = ' ';
 				break;
 			default:
-				this.board.get(y)[x] =  ' ';
+				this.board.get(y)[x] = ' ';
 				break;
 		}
 		// have to use set and get to notify the bind
@@ -123,7 +122,7 @@ public class PipeGameModel implements GameModel {
 	public void saveGame(File file) {
 		try {
 			PrintWriter outFile = new PrintWriter(file);
-			for (int i=0; i< this.board.size(); i++) {
+			for (int i = 0; i < this.board.size(); i++) {
 				outFile.println(new String(this.board.get(i)));
 			}
 			outFile.close();
@@ -132,7 +131,7 @@ public class PipeGameModel implements GameModel {
 			e.printStackTrace();
 		}
 	}
-	
+
 	private boolean isGoalStateLogic(int posX, int posY, directions from) {
 		//check bounds
 		if (posX < 0 || posX >= board.get(0).length)
@@ -147,7 +146,7 @@ public class PipeGameModel implements GameModel {
 					isGoalStateLogic(posX, posY - 1, directions.down));
 		}
 
-		switch ( board.get(posY)[posX]) {
+		switch (board.get(posY)[posX]) {
 			case 'g':
 				flowPoints.add(new Point(posX, posY));
 				isGoal.set(true);
