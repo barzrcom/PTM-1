@@ -1,7 +1,10 @@
 package view;
 
+import javafx.beans.property.ListProperty;
+import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.input.MouseEvent;
@@ -18,36 +21,25 @@ public class MainWindowController implements Initializable {
 	PipeGameViewModel vm;
 
 	StringProperty board;
-
-	char[][] pipeData;
+	ListProperty<char[]> boardList;
 
 	@FXML
 	PipeDisplayer pipeDisplayer;
 
 	public void setViewModel(PipeGameViewModel vm) {
 		this.vm = vm;
-		this.board = new SimpleStringProperty();
-		vm.board.bindBidirectional(this.board);
-
-		this.board.addListener((observableValue, s, t1) -> {
-
-			// build char[][] from StringProperty
-			ArrayList<char[]> inputFromClient = new ArrayList<>();
-			String[] rows = this.board.get().split("\n");
-
-			for (String row : rows) {
-				inputFromClient.add(row.toCharArray());
-			}
-			pipeData = inputFromClient.toArray(new char[inputFromClient.size()][]);
-
-			pipeDisplayer.setPipeData(pipeData);
+		
+		this.boardList = new SimpleListProperty<char[]>();
+		this.boardList.bindBidirectional(vm.boardList);
+		this.boardList.addListener((observableValue, s, t1) -> {
+			pipeDisplayer.setPipeData(this.boardList.toArray(new char[this.boardList.size()][]));
 		});
 
 		// click event
 		pipeDisplayer.addEventHandler(MouseEvent.MOUSE_CLICKED,
 				(MouseEvent t) -> {
-					double w = pipeDisplayer.getWidth() / pipeData[0].length;
-					double h = pipeDisplayer.getHeight() / pipeData.length;
+					double w = pipeDisplayer.getWidth() / boardList.get(0).length;
+					double h = pipeDisplayer.getHeight() / boardList.size();
 					int x = (int) (t.getX() / w);
 					int y = (int) (t.getY() / h);
 					vm.changePipe(x, y);
@@ -58,7 +50,6 @@ public class MainWindowController implements Initializable {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		pipeDisplayer.setPipeData(pipeData);
 		pipeDisplayer.loadImages();
 	}
 

@@ -1,84 +1,87 @@
 package model;
 
+import javafx.beans.Observable;
+import javafx.beans.property.ListProperty;
+import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-
+import javafx.collections.FXCollections;
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class PipeGameModel implements GameModel {
 
-	public StringProperty board;
+	public ListProperty<char[]> boardList;
 
 	public PipeGameModel() {
-		this.board = new SimpleStringProperty();
+		this.boardList = new SimpleListProperty<char[]>(FXCollections.observableArrayList(new ArrayList<>()));
 	}
 
 	public void setInitializedBoard() {
-		this.board.set("s---7JLF7\n"
-				+ "777777777\n"
-				+ "777   777\n"
-				+ "7777|7777\n"
-				+ "7777L7777\n"
-				+ "777777777\n"
-				+ "7777|7777\n"
-				+ "77------g\n");
+		char[][] level = {
+				{'s', '-', '-', '-', '7', 'J', 'L', 'F' , '7'},
+				{'7', '7', '7', '7', '7', '7', '7', '7' , '7'},
+				{'7', '7', '7', ' ', ' ', ' ', '7', '7' , '7'},
+				{'7', '7', '7', '7', '|', '7', '7', '7' , '7'},
+				{'7', '7', '7', '7', 'L', '7', '7', '7' , '7'},
+				{'7', '7', '7', '7', '7', '7', '7', '7' , '7'},
+				{'7', '7', '7', '7', '|', '7', '7', '7' , '7'},
+				{'7', '7', '-', '-', '-', '-', '-', '-' , 'g'},
+		};
+		this.boardList.addAll(level);
+
 
 	}
 
 	public void changePipe(int x, int y) {
-		StringBuilder tmpBoard = new StringBuilder(this.board.get());
-
-		// calc index include line terminator
-		int firstLineSize = tmpBoard.indexOf("\n") + 1;
-		int idx = (y * firstLineSize) + x;
-
-		switch (tmpBoard.charAt(idx)) {
+		switch (this.boardList.get(y)[x]) {
 			case 'L':
-				tmpBoard.setCharAt(idx, 'F');
+				this.boardList.get(y)[x] =  'F';
 				break;
 			case 'F':
-				tmpBoard.setCharAt(idx, '7');
+				this.boardList.get(y)[x] =  '7';
 				break;
 			case '7':
-				tmpBoard.setCharAt(idx, 'J');
+				this.boardList.get(y)[x] =  'J';
 				break;
 			case 'J':
-				tmpBoard.setCharAt(idx, 'L');
+				this.boardList.get(y)[x] =  'L';
 				break;
 			case '-':
-				tmpBoard.setCharAt(idx, '|');
+				this.boardList.get(y)[x] =  '|';
 				break;
 			case '|':
-				tmpBoard.setCharAt(idx, '-');
+				this.boardList.get(y)[x] =  '-';
 				break;
 			case 's':
-				tmpBoard.setCharAt(idx, 's');
+				this.boardList.get(y)[x] =  's';
 				break;
 			case 'g':
-				tmpBoard.setCharAt(idx, 'g');
+				this.boardList.get(y)[x] =  'g';
 				break;
 			case ' ':
-				tmpBoard.setCharAt(idx, ' ');
+				this.boardList.get(y)[x] =  ' ';
 				break;
 			default:
-				tmpBoard.setCharAt(idx, ' ');
+				this.boardList.get(y)[x] =  ' ';
 				break;
 		}
-		this.board.set(tmpBoard.toString());
+		// have to use set and get to notify the bind
+		this.boardList.set(y, this.boardList.get(y));
 	}
 
 	public void loadGame(String fileName) {
-
-		StringBuilder stringBuilder = new StringBuilder();
+		List<char[]> mapBuilder = new ArrayList<char[]>();
 		BufferedReader reader;
 		try {
 			reader = new BufferedReader(new FileReader(fileName));
-
 			String line;
 			while ((line = reader.readLine()) != null) {
-				stringBuilder.append(line).append('\n');
+				mapBuilder.add(line.toCharArray());
 			}
-			this.board.set(stringBuilder.toString());
+			this.boardList.setAll(mapBuilder.toArray(new char[mapBuilder.size()][]));
 			reader.close();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -90,9 +93,9 @@ public class PipeGameModel implements GameModel {
 	public void saveGame(File file) {
 		try {
 			PrintWriter outFile = new PrintWriter(file);
-
-			outFile.print(this.board.get());
-
+			for (int i=0; i< this.boardList.size(); i++) {
+				outFile.println(new String(this.boardList.get(i)));
+			}
 			outFile.close();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
