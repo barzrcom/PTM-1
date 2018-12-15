@@ -20,8 +20,7 @@ public class MainWindowController implements Initializable {
 
 	PipeGameViewModel vm;
 
-	StringProperty board;
-	ListProperty<char[]> boardList;
+	ListProperty<char[]> board;
 
 	@FXML
 	PipeDisplayer pipeDisplayer;
@@ -29,17 +28,16 @@ public class MainWindowController implements Initializable {
 	public void setViewModel(PipeGameViewModel vm) {
 		this.vm = vm;
 		
-		this.boardList = new SimpleListProperty<char[]>();
-		this.boardList.bindBidirectional(vm.boardList);
-		this.boardList.addListener((observableValue, s, t1) -> {
-			pipeDisplayer.setPipeData(this.boardList.toArray(new char[this.boardList.size()][]));
+		this.board.bindBidirectional(vm.board);
+		this.board.addListener((observableValue, s, t1) -> {
+			pipeDisplayer.setPipeData(this.board.toArray(new char[this.board.size()][]));
 		});
 
 		// click event
 		pipeDisplayer.addEventHandler(MouseEvent.MOUSE_CLICKED,
 				(MouseEvent t) -> {
-					double w = pipeDisplayer.getWidth() / boardList.get(0).length;
-					double h = pipeDisplayer.getHeight() / boardList.size();
+					double w = pipeDisplayer.getWidth() / board.get(0).length;
+					double h = pipeDisplayer.getHeight() / board.size();
 					int x = (int) (t.getX() / w);
 					int y = (int) (t.getY() / h);
 					vm.changePipe(x, y);

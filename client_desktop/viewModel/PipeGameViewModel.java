@@ -13,11 +13,11 @@ public class PipeGameViewModel {
 
 	PipeGameModel m;
 
-	public ListProperty<char[]> boardList;
+	public ListProperty<char[]> board;
 	public PipeGameViewModel(PipeGameModel m) {
 		this.m = m;
-		this.boardList = new SimpleListProperty<char[]>();
-		this.boardList.bindBidirectional(this.m.boardList);
+		this.board = new SimpleListProperty<char[]>();
+		this.board.bindBidirectional(this.m.board);
 	}
 
 	public void changePipe(int x, int y) {

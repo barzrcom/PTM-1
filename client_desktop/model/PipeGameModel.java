@@ -13,10 +13,10 @@ import java.util.List;
 
 public class PipeGameModel implements GameModel {
 
-	public ListProperty<char[]> boardList;
+	public ListProperty<char[]> board;
 
 	public PipeGameModel() {
-		this.boardList = new SimpleListProperty<char[]>(FXCollections.observableArrayList(new ArrayList<>()));
+		this.board = new SimpleListProperty<char[]>(FXCollections.observableArrayList(new ArrayList<>()));
 	}
 
 	public void setInitializedBoard() {
@@ -30,46 +30,46 @@ public class PipeGameModel implements GameModel {
 				{'7', '7', '7', '7', '|', '7', '7', '7' , '7'},
 				{'7', '7', '-', '-', '-', '-', '-', '-' , 'g'},
 		};
-		this.boardList.addAll(level);
+		this.board.addAll(level);
 
 
 	}
 
 	public void changePipe(int x, int y) {
-		switch (this.boardList.get(y)[x]) {
+		switch (this.board.get(y)[x]) {
 			case 'L':
-				this.boardList.get(y)[x] =  'F';
+				this.board.get(y)[x] =  'F';
 				break;
 			case 'F':
-				this.boardList.get(y)[x] =  '7';
+				this.board.get(y)[x] =  '7';
 				break;
 			case '7':
-				this.boardList.get(y)[x] =  'J';
+				this.board.get(y)[x] =  'J';
 				break;
 			case 'J':
-				this.boardList.get(y)[x] =  'L';
+				this.board.get(y)[x] =  'L';
 				break;
 			case '-':
-				this.boardList.get(y)[x] =  '|';
+				this.board.get(y)[x] =  '|';
 				break;
 			case '|':
-				this.boardList.get(y)[x] =  '-';
+				this.board.get(y)[x] =  '-';
 				break;
 			case 's':
-				this.boardList.get(y)[x] =  's';
+				this.board.get(y)[x] =  's';
 				break;
 			case 'g':
-				this.boardList.get(y)[x] =  'g';
+				this.board.get(y)[x] =  'g';
 				break;
 			case ' ':
-				this.boardList.get(y)[x] =  ' ';
+				this.board.get(y)[x] =  ' ';
 				break;
 			default:
-				this.boardList.get(y)[x] =  ' ';
+				this.board.get(y)[x] =  ' ';
 				break;
 		}
 		// have to use set and get to notify the bind
-		this.boardList.set(y, this.boardList.get(y));
+		this.board.set(y, this.board.get(y));
 	}
 
 	public void loadGame(String fileName) {
@@ -81,7 +81,7 @@ public class PipeGameModel implements GameModel {
 			while ((line = reader.readLine()) != null) {
 				mapBuilder.add(line.toCharArray());
 			}
-			this.boardList.setAll(mapBuilder.toArray(new char[mapBuilder.size()][]));
+			this.board.setAll(mapBuilder.toArray(new char[mapBuilder.size()][]));
 			reader.close();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -93,8 +93,8 @@ public class PipeGameModel implements GameModel {
 	public void saveGame(File file) {
 		try {
 			PrintWriter outFile = new PrintWriter(file);
-			for (int i=0; i< this.boardList.size(); i++) {
-				outFile.println(new String(this.boardList.get(i)));
+			for (int i=0; i< this.board.size(); i++) {
+				outFile.println(new String(this.board.get(i)));
 			}
 			outFile.close();
 		} catch (IOException e) {
