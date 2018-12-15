@@ -9,6 +9,7 @@ import javafx.beans.property.SimpleSetProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
+import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
@@ -32,9 +33,12 @@ public class MainWindowController implements Initializable {
 
 	@FXML
 	PipeDisplayer pipeDisplayer;
+	@FXML
+	TextField stepsText;
 
 	public void setViewModel(PipeGameViewModel vm) {
 		this.vm = vm;
+		stepsText.setText("0");
 		this.board = new SimpleListProperty<char[]>();
 		this.board.bindBidirectional(vm.board);
 		this.board.addListener((observableValue, s, t1) -> {
@@ -68,6 +72,7 @@ public class MainWindowController implements Initializable {
 					int x = (int) (t.getX() / w);
 					int y = (int) (t.getY() / h);
 					vm.changePipe(x, y);
+					stepsText.setText(Integer.toString(Integer.parseInt(stepsText.getText())+1));
 				}
 		);
 
