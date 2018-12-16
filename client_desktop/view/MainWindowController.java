@@ -12,6 +12,9 @@ import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import view.dialogs.NakedObjectDisplayer;
+import view.dialogs.ServerConfiguration;
+import view.dialogs.ThemeConfiguration;
 import viewModel.PipeGameViewModel;
 
 import java.awt.*;
@@ -36,6 +39,7 @@ public class MainWindowController implements Initializable {
 	NakedObjectDisplayer nakedObjectDisplayer = new NakedObjectDisplayer();
 	// Configuration
 	ServerConfiguration serverConfiguration = new ServerConfiguration();
+	ThemeConfiguration themeConfiguration = new ThemeConfiguration();
 
 	public void setViewModel(PipeGameViewModel vm) {
 		this.vm = vm;
@@ -140,7 +144,7 @@ public class MainWindowController implements Initializable {
 		nakedObjectDisplayer.display(this.serverConfiguration);
 	}
 	public void themeConfig() {
-		System.out.println("Server Config Dialog");
-		nakedObjectDisplayer.display(this.serverConfiguration);
+		System.out.println("Theme Config Dialog");
+		nakedObjectDisplayer.display(this.themeConfiguration);
 	}
 }

@@ -1,5 +1,6 @@
-package view;
+package view.dialogs;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,20 +24,27 @@ public class NakedObjectDisplayer {
 		
 		final Stage dialog = new Stage();
 		dialog.initModality(Modality.APPLICATION_MODAL);
-		this.dialogVbox = new VBox(obj.getFieldNames().size() * 10);
+		Field[] fields = obj.getClass().getFields();
+		this.dialogVbox = new VBox(fields.length * 10);
 		dialogVbox.setPadding(new Insets(10, 10, 10, 10));
 		
 		List<StringProperty> textPropertyList = new ArrayList<>();
-		for (String fieldName: obj.getFieldNames()) {
-			String fieldValue = obj.getFieldValue(fieldName);
-			textPropertyList.add(createDisplayForField(fieldName, fieldValue));
+		for (Field field: fields) {
+			try {
+				textPropertyList.add(createDisplayForField(field.getName(), (String)field.get(obj)));
+			} catch (IllegalArgumentException | IllegalAccessException e) {
+
+			}
 		}
 	    Button saveButton = new Button();
 	    saveButton.setText("Apply");
 	    saveButton.setStyle("-fx-font: 16 arial;");
 	    saveButton.setOnAction(value ->  {
-	    	for (int i=0; i< obj.getFieldNames().size(); i++) {
-				obj.fieldChanged(obj.getFieldNames().get(i), textPropertyList.get(i).get());
+	    	for (int i=0; i< fields.length; i++) {
+	    		try {
+					fields[i].set(obj, textPropertyList.get(i).get());
+				} catch (IllegalArgumentException | IllegalAccessException e) {
+				}
 			}
 	    	dialog.close();
         });
