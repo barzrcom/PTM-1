@@ -59,7 +59,7 @@
                 <Insets />
               </HBox.margin>
             </Button>
-            <TextField fx:id="stepsText" alignment="CENTER" disable="true" prefWidth="36.0" text="0" />
+            <TextField fx:id="stepsText" alignment="CENTER" disable="true" opacity="1.0" prefWidth="36.0" text="0" />
             <Button alignment="CENTER_RIGHT" contentDisplay="CENTER" minWidth="52.0" mnemonicParsing="false" onAction="#solve" text="Solve">
               <HBox.margin>
                 <Insets right="10.0" />
