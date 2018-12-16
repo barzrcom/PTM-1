@@ -12,6 +12,7 @@ import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import view.dialogs.NakedMessage;
 import view.dialogs.NakedObjectDisplayer;
 import view.dialogs.ServerConfiguration;
 import view.dialogs.ThemeConfiguration;
@@ -37,7 +38,6 @@ public class MainWindowController implements Initializable {
 	TextField stepsText;
 	
 	NakedObjectDisplayer nakedObjectDisplayer = new NakedObjectDisplayer();
-	// Configuration
 	ServerConfiguration serverConfiguration = new ServerConfiguration();
 	ThemeConfiguration themeConfiguration = new ThemeConfiguration();
 
@@ -52,16 +52,9 @@ public class MainWindowController implements Initializable {
 		this.isGoal.bind(this.vm.isGoal);
 		this.isGoal.addListener((observableValue, s, t1) -> {
 			if (isGoal.get() == true) {
-				final Stage dialog = new Stage();
-				dialog.initModality(Modality.APPLICATION_MODAL);
-				VBox dialogVbox = new VBox(20);
-				dialogVbox.getChildren().add(new Text("You Won!"));
-				dialogVbox.getChildren().add(new Text("Number of steps: " + numOfSteps.get()));
-				Scene dialogScene = new Scene(dialogVbox, 150, 60);
-				dialog.setScene(dialogScene);
-				dialog.setAlwaysOnTop(true);
-				dialog.setResizable(false);
-				dialog.show();
+				NakedMessage nm = new NakedMessage("You Won!");
+				nm.addMessage("Number of steps: " + numOfSteps.get());
+				nakedObjectDisplayer.display(nm);
 			}
 		});
 		this.flowPoints = new SimpleListProperty<Point>();

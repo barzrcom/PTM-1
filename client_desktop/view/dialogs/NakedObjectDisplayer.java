@@ -24,6 +24,7 @@ public class NakedObjectDisplayer {
 		
 		final Stage dialog = new Stage();
 		dialog.initModality(Modality.APPLICATION_MODAL);
+
 		Field[] fields = obj.getClass().getFields();
 		this.dialogVbox = new VBox(fields.length * 10);
 		dialogVbox.setPadding(new Insets(10, 10, 10, 10));
@@ -57,8 +58,6 @@ public class NakedObjectDisplayer {
 		dialog.setAlwaysOnTop(true);
 		dialog.setResizable(false);
 		dialog.show();
-		
-		
 	}
 	
 	private StringProperty createDisplayForField(String fieldName, String fieldValue) {
@@ -71,5 +70,37 @@ public class NakedObjectDisplayer {
 		textBox.setStyle("-fx-font: 16 arial;");
 		this.dialogVbox.getChildren().add(textBox);
 		return textBox.textProperty();
+	}
+	
+	public void display(NakedMessage obj) {
+		
+		final Stage dialog = new Stage();
+		dialog.initModality(Modality.APPLICATION_MODAL);
+
+		this.dialogVbox = new VBox(obj.getMessageList().size() * 10);
+		dialogVbox.setPadding(new Insets(10, 10, 10, 10));
+		
+		for (String message : obj.getMessageList()) {
+			Text caption = new Text(message);
+			caption.setStyle("-fx-font: 16 arial;");
+			this.dialogVbox.getChildren().add(caption);
+		}
+
+	    Button saveButton = new Button();
+	    saveButton.setText("OK");
+	    saveButton.setStyle("-fx-font: 16 arial;");
+	    saveButton.setOnAction(value ->  {
+	    	dialog.close();
+        });
+
+	    this.dialogVbox.getChildren().add(saveButton);
+	    
+		Scene dialogScene = new Scene(dialogVbox);
+		dialog.setScene(dialogScene);
+		dialog.setAlwaysOnTop(true);
+		dialog.setResizable(false);
+		dialog.show();
+		
+		
 	}
 }
