@@ -32,6 +32,10 @@ public class MainWindowController implements Initializable {
 	PipeDisplayer pipeDisplayer;
 	@FXML
 	TextField stepsText;
+	
+	NakedObjectDisplayer nakedObjectDisplayer = new NakedObjectDisplayer();
+	// Configuration
+	ServerConfiguration serverConfiguration = new ServerConfiguration();
 
 	public void setViewModel(PipeGameViewModel vm) {
 		this.vm = vm;
@@ -129,5 +133,14 @@ public class MainWindowController implements Initializable {
 			return;
 		}
 		vm.saveGame(selectedFile);
+	}
+	
+	public void serverConfig() {
+		System.out.println("Server Config Dialog");
+		nakedObjectDisplayer.display(this.serverConfiguration);
+	}
+	public void themeConfig() {
+		System.out.println("Server Config Dialog");
+		nakedObjectDisplayer.display(this.serverConfiguration);
 	}
 }
