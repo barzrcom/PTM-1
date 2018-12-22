@@ -6,6 +6,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Label;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
@@ -17,8 +18,9 @@ import view.dialogs.ServerConfiguration;
 import view.dialogs.ThemeConfiguration;
 import viewModel.PipeGameViewModel;
 
-import java.awt.*;
+import java.awt.Point;
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -38,6 +40,8 @@ public class MainWindowController implements Initializable {
 	PipeDisplayer pipeDisplayer;
 	@FXML
 	TextField stepsText;
+	@FXML
+	Label connectionStatus;
 
 	NakedObjectDisplayer nakedObjectDisplayer = new NakedObjectDisplayer();
 	ServerConfiguration serverConfiguration = new ServerConfiguration();
@@ -84,6 +88,7 @@ public class MainWindowController implements Initializable {
 		this.numOfSteps.addListener((observableValue, s, t1) -> {
 			this.stepsText.setText(Integer.toString(numOfSteps.get()));
 		});
+		this.connectionStatus.setText("Server Status: Disconnected");
 	}
 
 	@Override
@@ -93,15 +98,29 @@ public class MainWindowController implements Initializable {
 	}
 
 	public void connect() {
-		System.out.println("Connecting to server");
+		System.out.println("Connecting to " + this.serverConfiguration.ServerIp + ":" + this.serverConfiguration.ServerPort);
+		try {
+			this.vm.connect(this.serverConfiguration.ServerIp, this.serverConfiguration.ServerPort);
+			this.connectionStatus.setText("Server Status: Connected");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void solve() {
 		System.out.println("Solving.");
+		try {
+			this.vm.solve();
+			this.vm.disconnect();
+			this.connectionStatus.setText("Server Status: Disconnected");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void exit() {
 		System.out.println("Exiting..");
+		this.vm.disconnect();
 		System.exit(0);
 	}
 

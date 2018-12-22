@@ -11,6 +11,6 @@ public class ServerConfiguration implements NakedObject {
 	
 	// Default values here
 	public String ServerIp = "localhost";
-	public String ServerPort = "5500";
+	public String ServerPort = "6400";
 	
 }

@@ -6,6 +6,7 @@ import javafx.collections.FXCollections;
 
 import java.awt.*;
 import java.io.*;
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -17,6 +18,8 @@ public class PipeGameModel implements GameModel {
 	public BooleanProperty isGoal;
 	public ListProperty<Point> flowPoints;
 	public IntegerProperty numOfSteps;
+
+	Socket serverSocket;
 
 	public PipeGameModel() {
 		this.board = new SimpleListProperty<>(FXCollections.observableArrayList(new ArrayList<>()));
@@ -218,5 +221,52 @@ public class PipeGameModel implements GameModel {
 				}
 		}
 		return false;
+	}
+
+	public void connect(String serverIp, String serverPort) throws IOException {
+		this.serverSocket = new Socket(serverIp, Integer.parseInt(serverPort));
+		System.out.println("Connected to server");
+
+	}
+
+	public void solve() throws IOException {
+		// verify the connection.
+		if (this.serverSocket != null) {
+			BufferedReader inFromServer = new BufferedReader(new InputStreamReader(this.serverSocket.getInputStream()));
+			PrintWriter outToServer = new PrintWriter(this.serverSocket.getOutputStream());
+
+			for (char[] line : this.board.get()) {
+				// send board to the server.
+				outToServer.println(line);
+				outToServer.flush();
+			}
+			outToServer.println("done");
+			outToServer.flush();
+
+			String line;
+			// receive the solution.
+			while (!(line = inFromServer.readLine()).equals("done")) {
+				// changePipe accordingly. (consider sleep)
+				String[] moves = line.split(",");
+				int y = Integer.parseInt(moves[0]);
+				int x = Integer.parseInt(moves[1]);
+				int move = Integer.parseInt(moves[2]);
+				// start counting from 1, to skip 0 moves
+				for (int i = 1; i <= move; i++) {
+					changePipe(x, y);
+				}
+			}
+		}
+	}
+
+	public void disconnect() {
+		// close the socket if exists.
+		if (this.serverSocket != null) {
+			try {
+				this.serverSocket.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 }

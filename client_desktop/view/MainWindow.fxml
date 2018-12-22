@@ -10,7 +10,7 @@
             xmlns="http://javafx.com/javafx/8.0.172-ea" fx:controller="view.MainWindowController">
     <bottom>
         <HBox BorderPane.alignment="CENTER">
-            <Label text="Status:"/>
+            <Label text="Status:" fx:id="connectionStatus"/>
             <BorderPane.margin>
                 <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
             </BorderPane.margin>
