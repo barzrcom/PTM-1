@@ -5,6 +5,7 @@ import model.PipeGameModel;
 
 import java.awt.*;
 import java.io.File;
+import java.io.IOException;
 
 public class PipeGameViewModel {
 
@@ -38,5 +39,17 @@ public class PipeGameViewModel {
 
 	public void saveGame(File file) {
 		this.m.saveGame(file);
+	}
+
+	public void connect(String serverIp, String serverPort) throws IOException {
+		this.m.connect(serverIp, serverPort);
+	}
+
+	public void solve() throws IOException {
+		this.m.solve();
+	}
+
+	public void disconnect() {
+		this.m.disconnect();
 	}
 }
