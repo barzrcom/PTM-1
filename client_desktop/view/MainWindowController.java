@@ -2,16 +2,15 @@ package view;
 
 
 import javafx.beans.property.*;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Scene;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
+import javafx.scene.media.AudioClip;
 import javafx.stage.FileChooser;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
 import view.dialogs.NakedMessage;
 import view.dialogs.NakedObjectDisplayer;
 import view.dialogs.ServerConfiguration;
@@ -22,6 +21,9 @@ import java.awt.*;
 import java.io.File;
 import java.net.URL;
 import java.util.ResourceBundle;
+
+import static javafx.scene.media.AudioClip.INDEFINITE;
+
 
 public class MainWindowController implements Initializable {
 
@@ -36,10 +38,13 @@ public class MainWindowController implements Initializable {
 	PipeDisplayer pipeDisplayer;
 	@FXML
 	TextField stepsText;
-	
+
 	NakedObjectDisplayer nakedObjectDisplayer = new NakedObjectDisplayer();
 	ServerConfiguration serverConfiguration = new ServerConfiguration();
 	ThemeConfiguration themeConfiguration = new ThemeConfiguration();
+
+	String currentTheme;
+	String backgroundMusic;
 
 	public void setViewModel(PipeGameViewModel vm) {
 		this.vm = vm;
@@ -83,6 +88,7 @@ public class MainWindowController implements Initializable {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		changeTheme("mario");
 		pipeDisplayer.loadImages();
 	}
 
@@ -131,13 +137,43 @@ public class MainWindowController implements Initializable {
 		}
 		vm.saveGame(selectedFile);
 	}
-	
+
 	public void serverConfig() {
 		System.out.println("Server Config Dialog");
 		nakedObjectDisplayer.display(this.serverConfiguration);
 	}
+
 	public void themeConfig() {
-		System.out.println("Theme Config Dialog");
-		nakedObjectDisplayer.display(this.themeConfiguration);
+		ComboBox<String> comboBox = nakedObjectDisplayer.display(this.themeConfiguration);
+		comboBox.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+			@Override
+			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+				changeTheme(newValue);
+			}
+		});
+	}
+
+	void changeTheme(String themeName) {
+		if (themeName.equals(this.currentTheme)) {
+			System.out.println("Same theme, not need to change.");
+			return;
+		}
+		System.out.println("Changing theme to: " + themeName);
+		pipeDisplayer.setBackgroundFileName("./resources/" + themeName + "/background.png");
+		pipeDisplayer.setStartFileName("./resources/" + themeName + "/start.png");
+		pipeDisplayer.setGoalFileName("./resources/" + themeName + "/goal.png");
+		pipeDisplayer.setAnglePipeFileName("./resources/" + themeName + "/pipe_angle.png");
+		pipeDisplayer.setVerticalPipeFileName("./resources/" + themeName + "/pipe_vertical.png");
+		this.currentTheme = themeName;
+		this.backgroundMusic = "./resources/" + themeName + "/music.mp3";
+		pipeDisplayer.loadImages();
+		pipeDisplayer.redraw();
+		this.playMusic();
+	}
+
+	void playMusic() {
+		AudioClip media = new AudioClip(new File(this.backgroundMusic).toURI().toString());
+		media.setCycleCount(INDEFINITE);
+		media.play();
 	}
 }
