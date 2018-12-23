@@ -1,9 +1,11 @@
 package view;
 
 
+import javafx.application.Platform;
 import javafx.beans.property.*;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
@@ -35,7 +37,9 @@ public class MainWindowController implements Initializable {
 	BooleanProperty isGoal;
 	ListProperty<Point> flowPoints;
 	IntegerProperty numOfSteps;
-
+	
+	AudioClip media;
+	
 	@FXML
 	PipeDisplayer pipeDisplayer;
 	@FXML
@@ -103,24 +107,36 @@ public class MainWindowController implements Initializable {
 			this.vm.connect(this.serverConfiguration.ServerIp, this.serverConfiguration.ServerPort);
 			this.connectionStatus.setText("Server Status: Connected");
 		} catch (IOException e) {
+			this.connectionStatus.setText("Server Status: Couldn't connect to the server");
 			e.printStackTrace();
 		}
 	}
 
 	public void solve() {
-		System.out.println("Solving.");
-		try {
-			this.vm.solve();
-			this.vm.disconnect();
-			this.connectionStatus.setText("Server Status: Disconnected");
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+        Task<Void> task = new Task<Void>() {
+            @Override
+            protected Void call() throws Exception {
+            	try {
+            		System.out.println("Solving.");
+            		Platform.runLater(()->connectionStatus.setText("Server Status: Connecting to " + serverConfiguration.ServerIp + ":" + serverConfiguration.ServerPort));
+            		vm.connect(serverConfiguration.ServerIp, serverConfiguration.ServerPort);
+        			vm.solve();
+        			vm.disconnect();
+        			// must to be run in the UI thread
+        			Platform.runLater(()->connectionStatus.setText("Server Status: Disconnected"));
+        		} catch (IOException e) {
+        			Platform.runLater(()->connectionStatus.setText("Server Status: Couldn't connect to the server"));
+        			e.printStackTrace();
+        		}
+				return null;
+            }
+        };
+        new Thread(task).start();
+		
 	}
 
 	public void exit() {
 		System.out.println("Exiting..");
-		this.vm.disconnect();
 		System.exit(0);
 	}
 
@@ -164,12 +180,9 @@ public class MainWindowController implements Initializable {
 
 	public void themeConfig() {
 		ComboBox<String> comboBox = nakedObjectDisplayer.display(this.themeConfiguration);
-		comboBox.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
-			@Override
-			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-				changeTheme(newValue);
-			}
-		});
+		comboBox.getSelectionModel().selectedItemProperty().addListener(
+				(ObservableValue<? extends String> observable,
+						String oldValue, String newValue) -> changeTheme(newValue));
 	}
 
 	void changeTheme(String themeName) {
@@ -191,7 +204,10 @@ public class MainWindowController implements Initializable {
 	}
 
 	void playMusic() {
-		AudioClip media = new AudioClip(new File(this.backgroundMusic).toURI().toString());
+		if (null != this.media) {
+			media.stop();
+		}
+		this.media = new AudioClip(new File(this.backgroundMusic).toURI().toString());
 		media.setCycleCount(INDEFINITE);
 		media.play();
 	}
