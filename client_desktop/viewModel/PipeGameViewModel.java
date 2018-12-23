@@ -45,7 +45,7 @@ public class PipeGameViewModel {
 		this.m.connect(serverIp, serverPort);
 	}
 
-	public void solve() throws IOException {
+	public void solve() throws IOException, InterruptedException {
 		this.m.solve();
 	}
 

@@ -1,6 +1,7 @@
 package model;
 
 import board.PipeGameBoard.directions;
+import javafx.application.Platform;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 
@@ -10,6 +11,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
+
 
 
 public class PipeGameModel implements GameModel {
@@ -47,20 +49,20 @@ public class PipeGameModel implements GameModel {
 	}
 
 	public void setInitializedBoard() {
-		//		char[][] level = {
-		//				{'s', '-', '-', '-', '7', 'J', 'L', 'F' , '7'},
-		//				{'7', '7', '7', '7', '7', '7', '7', '7' , '7'},
-		//				{'7', '7', '7', ' ', ' ', ' ', '7', '7' , '7'},
-		//				{'7', '7', '7', '7', '|', '7', '7', '7' , '7'},
-		//				{'7', '7', '7', '7', 'L', '7', '7', '7' , '7'},
-		//				{'7', '7', '7', '7', '7', '7', '7', '7' , '7'},
-		//				{'7', '7', '7', '7', '|', '7', '7', '7' , '7'},
-		//				{'7', '7', '-', '-', '-', '-', '-', '-' , 'g'},
-		//		};
 		char[][] level = {
-				{'s', '-', '|', '7'},
-				{'7', '-', '-', 'g'},
+				{'s', '-', '-', '-', '7', 'J', 'L', 'F' , '7'},
+				{'7', '7', '7', '7', '7', '7', '7', '7' , '7'},
+				{'7', '7', '7', ' ', ' ', ' ', '7', '7' , '7'},
+				{'7', '7', '7', '7', '|', '7', '7', '7' , '7'},
+				{'7', '7', '7', '7', 'L', '7', '7', '7' , '7'},
+				{'7', '7', '7', '7', '7', '7', '7', '7' , '7'},
+				{'7', '7', '7', '7', '|', '7', '7', '7' , '7'},
+				{'7', '7', '-', '-', '-', '-', '-', '-' , 'g'},
 		};
+//		char[][] level = {
+//				{'s', '-', '|', '7'},
+//				{'7', '-', '-', 'g'},
+//		};
 		this.board.addAll(level);
 
 
@@ -229,7 +231,7 @@ public class PipeGameModel implements GameModel {
 
 	}
 
-	public void solve() throws IOException {
+	public void solve() throws IOException, InterruptedException {
 		// verify the connection.
 		if (this.serverSocket != null) {
 			BufferedReader inFromServer = new BufferedReader(new InputStreamReader(this.serverSocket.getInputStream()));
@@ -253,7 +255,8 @@ public class PipeGameModel implements GameModel {
 				int move = Integer.parseInt(moves[2]);
 				// start counting from 1, to skip 0 moves
 				for (int i = 1; i <= move; i++) {
-					changePipe(x, y);
+					Platform.runLater(()-> changePipe(x, y));
+					Thread.sleep(100);
 				}
 			}
 		}
