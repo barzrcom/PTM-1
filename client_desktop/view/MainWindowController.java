@@ -67,6 +67,8 @@ public class MainWindowController implements Initializable {
 			if (isGoal.get() == true) {
 				NakedMessage nm = new NakedMessage("You Won!");
 				nm.addMessage("Number of steps: " + numOfSteps.get());
+				// Reset number of steps after solve
+				numOfSteps.set(0);
 				nakedObjectDisplayer.display(nm);
 			}
 		});
@@ -88,7 +90,7 @@ public class MainWindowController implements Initializable {
 		);
 
 		this.numOfSteps = new SimpleIntegerProperty();
-		this.numOfSteps.bind(this.vm.numOfSteps);
+		this.numOfSteps.bindBidirectional(this.vm.numOfSteps);
 		this.numOfSteps.addListener((observableValue, s, t1) -> {
 			this.stepsText.setText(Integer.toString(numOfSteps.get()));
 		});
