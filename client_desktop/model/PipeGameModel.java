@@ -8,10 +8,8 @@ import javafx.collections.FXCollections;
 import java.awt.*;
 import java.io.*;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.LinkedHashSet;
+import java.util.*;
 import java.util.List;
-
 
 
 public class PipeGameModel implements GameModel {
@@ -20,8 +18,16 @@ public class PipeGameModel implements GameModel {
 	public BooleanProperty isGoal;
 	public ListProperty<Point> flowPoints;
 	public IntegerProperty numOfSteps;
+	public IntegerProperty secondsElapsed;
 
 	Socket serverSocket;
+
+	Timer timer = new Timer();
+	TimerTask task = new TimerTask() {
+		public void run(){
+			secondsElapsed.set(secondsElapsed.get() + 1);
+		}
+	};
 
 	public PipeGameModel() {
 		this.board = new SimpleListProperty<>(FXCollections.observableArrayList(new ArrayList<>()));
@@ -46,6 +52,9 @@ public class PipeGameModel implements GameModel {
 		this.isGoal = new SimpleBooleanProperty();
 		this.flowPoints = new SimpleListProperty<>(FXCollections.observableArrayList(new LinkedHashSet<Point>()));
 		this.numOfSteps = new SimpleIntegerProperty(0);
+
+		this.secondsElapsed = new SimpleIntegerProperty(0);
+		timer.scheduleAtFixedRate(task, 1000, 1000);
 	}
 
 	public void setInitializedBoard() {
@@ -118,9 +127,21 @@ public class PipeGameModel implements GameModel {
 			reader = new BufferedReader(new FileReader(fileName));
 			String line;
 			while ((line = reader.readLine()) != null) {
-				mapBuilder.add(line.toCharArray());
+				if (line.startsWith("time:")) {
+					// load game time from file
+					int time = Integer.parseInt(line.split(":")[1]);
+					secondsElapsed.set(time);
+				} else if (line.startsWith("step:")) {
+					// load game steps from file
+					int step = Integer.parseInt(line.split(":")[1]);
+					numOfSteps.set(step);
+				} else {
+					mapBuilder.add(line.toCharArray());
+				}
 			}
 			this.board.setAll(mapBuilder.toArray(new char[mapBuilder.size()][]));
+
+
 			reader.close();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -135,6 +156,11 @@ public class PipeGameModel implements GameModel {
 			for (int i = 0; i < this.board.size(); i++) {
 				outFile.println(new String(this.board.get(i)));
 			}
+
+			// save game steps and time from file
+			outFile.println("time:" + secondsElapsed.get());
+			outFile.println("step:" + numOfSteps.get());
+
 			outFile.close();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -260,6 +286,13 @@ public class PipeGameModel implements GameModel {
 				}
 			}
 		}
+	}
+
+	public void exit() {
+		System.out.println("Exiting..");
+		timer.cancel();
+		this.disconnect();
+		System.exit(0);
 	}
 
 	public void disconnect() {

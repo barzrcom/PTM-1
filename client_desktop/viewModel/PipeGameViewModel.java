@@ -13,6 +13,7 @@ public class PipeGameViewModel {
 	public BooleanProperty isGoal;
 	public ListProperty<Point> flowPoints;
 	public IntegerProperty numOfSteps;
+	public IntegerProperty secondsElapsed;
 	PipeGameModel m;
 
 	public PipeGameViewModel(PipeGameModel m) {
@@ -27,6 +28,8 @@ public class PipeGameViewModel {
 		this.flowPoints.bind(this.m.flowPoints);
 		this.numOfSteps = new SimpleIntegerProperty();
 		this.numOfSteps.bindBidirectional(this.m.numOfSteps);
+		this.secondsElapsed = new SimpleIntegerProperty();
+		this.secondsElapsed.bind(this.m.secondsElapsed);
 	}
 
 	public void changePipe(int x, int y) {
@@ -43,6 +46,10 @@ public class PipeGameViewModel {
 
 	public void connect(String serverIp, String serverPort) throws IOException {
 		this.m.connect(serverIp, serverPort);
+	}
+
+	public void exit() {
+		this.m.exit();
 	}
 
 	public void solve() throws IOException, InterruptedException {
