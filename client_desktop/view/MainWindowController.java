@@ -37,6 +37,7 @@ public class MainWindowController implements Initializable {
 	BooleanProperty isGoal;
 	ListProperty<Point> flowPoints;
 	IntegerProperty numOfSteps;
+	IntegerProperty secondsElapsed;
 	
 	AudioClip media;
 	
@@ -44,6 +45,8 @@ public class MainWindowController implements Initializable {
 	PipeDisplayer pipeDisplayer;
 	@FXML
 	TextField stepsText;
+	@FXML
+	TextField secondsText;
 	@FXML
 	Label connectionStatus;
 
@@ -95,6 +98,12 @@ public class MainWindowController implements Initializable {
 			this.stepsText.setText(Integer.toString(numOfSteps.get()));
 		});
 		this.connectionStatus.setText("Server Status: Disconnected");
+
+		this.secondsElapsed = new SimpleIntegerProperty();
+		this.secondsElapsed.bind(this.vm.secondsElapsed);
+		this.secondsElapsed.addListener((observableValue, s, t1) -> {
+			this.secondsText.setText(Integer.toString(secondsElapsed.get()));
+		});
 	}
 
 	@Override
@@ -138,8 +147,7 @@ public class MainWindowController implements Initializable {
 	}
 
 	public void exit() {
-		System.out.println("Exiting..");
-		System.exit(0);
+		this.vm.exit();
 	}
 
 	public void openFile() {
