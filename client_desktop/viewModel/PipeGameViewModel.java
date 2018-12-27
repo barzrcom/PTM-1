@@ -26,7 +26,7 @@ public class PipeGameViewModel {
 		this.flowPoints = new SimpleListProperty<>();
 		this.flowPoints.bind(this.m.flowPoints);
 		this.numOfSteps = new SimpleIntegerProperty();
-		this.numOfSteps.bind(this.m.numOfSteps);
+		this.numOfSteps.bindBidirectional(this.m.numOfSteps);
 	}
 
 	public void changePipe(int x, int y) {
