@@ -14,6 +14,7 @@ import java.util.List;
 
 public class PipeGameModel implements GameModel {
 
+	public char[][] cleanBoard;
 	public ListProperty<char[]> board;
 	public BooleanProperty isGoal;
 	public ListProperty<Point> flowPoints;
@@ -23,15 +24,18 @@ public class PipeGameModel implements GameModel {
 	Socket serverSocket;
 
 	Timer timer = new Timer();
-	TimerTask task = new TimerTask() {
-		public void run(){
-			secondsElapsed.set(secondsElapsed.get() + 1);
-		}
-	};
 
+	// you have to supply new TimerTask for each new timer
+	public TimerTask getNewTimerTask() {
+		return new TimerTask() {
+			public void run(){
+				Platform.runLater(()-> secondsElapsed.set(secondsElapsed.get() + 1));
+			}
+		};
+	}
 	public PipeGameModel() {
 		this.board = new SimpleListProperty<>(FXCollections.observableArrayList(new ArrayList<>()));
-
+		
 		this.board.addListener((observableValue, s, t1) -> {
 			char[][] pipes = this.board.toArray(new char[this.board.size()][]);
 			Point startIndex = null;
@@ -50,13 +54,39 @@ public class PipeGameModel implements GameModel {
 			}
 		});
 		this.isGoal = new SimpleBooleanProperty();
+		this.isGoal.addListener((observableValue, s, t1) -> {
+			if (true == isGoal.get()) {
+				this.timer.cancel();
+				this.timer = null;
+			} else {
+				if (null == this.timer) {
+					this.timer = new Timer();
+					this.timer.scheduleAtFixedRate(getNewTimerTask(), 1000, 1000);
+				}
+			}
+		});
 		this.flowPoints = new SimpleListProperty<>(FXCollections.observableArrayList(new LinkedHashSet<Point>()));
 		this.numOfSteps = new SimpleIntegerProperty(0);
 
 		this.secondsElapsed = new SimpleIntegerProperty(0);
-		timer.scheduleAtFixedRate(task, 1000, 1000);
+		this.timer.scheduleAtFixedRate(getNewTimerTask(), 1000, 1000);
 	}
-
+	
+	public void setCleanBoard(char[][] board) {
+		this.cleanBoard = new char[board.length][board[0].length];
+		for (int k = 0; k < board.length; k++) {
+			System.arraycopy(board[k], 0, this.cleanBoard[k], 0, board[0].length);
+		}
+	}
+	
+	public char[][] getCleanBoard() {
+		char[][] cloneBoard = new char[this.cleanBoard.length][this.cleanBoard[0].length];
+		for (int k = 0; k < this.cleanBoard.length; k++) {
+			System.arraycopy(this.cleanBoard[k], 0, cloneBoard[k], 0, this.cleanBoard[0].length);
+		}
+		return cloneBoard;
+	}
+	
 	public void setInitializedBoard() {
 		char[][] level = {
 				{'s', '-', '-', '-', '7', 'J', 'L', 'F' , '7'},
@@ -68,13 +98,8 @@ public class PipeGameModel implements GameModel {
 				{'7', '7', '7', '7', '|', '7', '7', '7' , '7'},
 				{'7', '7', '-', '-', '-', '-', '-', '-' , 'g'},
 		};
-//		char[][] level = {
-//				{'s', '-', '|', '7'},
-//				{'7', '-', '-', 'g'},
-//		};
+		setCleanBoard(level);
 		this.board.addAll(level);
-
-
 	}
 
 	public void changePipe(int x, int y) {
@@ -139,6 +164,7 @@ public class PipeGameModel implements GameModel {
 					mapBuilder.add(line.toCharArray());
 				}
 			}
+			setCleanBoard(mapBuilder.toArray(new char[mapBuilder.size()][]));
 			this.board.setAll(mapBuilder.toArray(new char[mapBuilder.size()][]));
 
 
@@ -287,7 +313,13 @@ public class PipeGameModel implements GameModel {
 			}
 		}
 	}
-
+	
+	public void reset() {
+		secondsElapsed.set(0);
+		numOfSteps.set(0);
+		this.board.setAll(getCleanBoard());
+	}
+	
 	public void exit() {
 		System.out.println("Exiting..");
 		timer.cancel();
