@@ -147,6 +147,7 @@ public class MainWindowController implements Initializable {
 	}
 
 	public void exit() {
+		media.stop();
 		this.vm.exit();
 	}
 
