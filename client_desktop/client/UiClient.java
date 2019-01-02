@@ -1,6 +1,7 @@
 package client;
 	
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.stage.Stage;
 import model.PipeGameModel;
 import view.MainWindowController;
@@ -29,7 +30,10 @@ public class UiClient extends Application {
 
 			// must be placed after M-V-VM are bind together
 			m.setInitializedBoard();
-
+			// set close event
+			primaryStage.setOnCloseRequest((event) -> {
+				mwc.exit();
+			});
 			Scene scene = new Scene(root);
 			scene.getStylesheets().add(getClass().getResource("../view/application.css").toExternalForm());
 			primaryStage.setScene(scene);
