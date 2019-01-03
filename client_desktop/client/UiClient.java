@@ -23,7 +23,7 @@ public class UiClient extends Application {
 
 			FXMLLoader fxl=new FXMLLoader();
 
-			BorderPane root = fxl.load(getClass().getResource("../view/MainWindow.fxml").openStream());
+			BorderPane root = fxl.load(getClass().getResource("/view/MainWindow.fxml").openStream());
 
 			MainWindowController mwc = fxl.getController();
 			mwc.setViewModel(vm);
@@ -35,7 +35,7 @@ public class UiClient extends Application {
 				mwc.exit();
 			});
 			Scene scene = new Scene(root);
-			scene.getStylesheets().add(getClass().getResource("../view/application.css").toExternalForm());
+			scene.getStylesheets().add(getClass().getResource("/view/application.css").toExternalForm());
 			primaryStage.setScene(scene);
 			primaryStage.show();
 		} catch(Exception e) {
