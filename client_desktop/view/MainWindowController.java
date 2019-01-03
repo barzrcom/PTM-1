@@ -109,7 +109,12 @@ public class MainWindowController implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		changeTheme("mario");
-		pipeDisplayer.loadImages();
+		try {
+			pipeDisplayer.loadImages();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public void connect() {
@@ -206,14 +211,19 @@ public class MainWindowController implements Initializable {
 			return;
 		}
 		System.out.println("Changing theme to: " + themeName);
-		pipeDisplayer.setBackgroundFileName("./resources/" + themeName + "/background.png");
-		pipeDisplayer.setStartFileName("./resources/" + themeName + "/start.png");
-		pipeDisplayer.setGoalFileName("./resources/" + themeName + "/goal.png");
-		pipeDisplayer.setAnglePipeFileName("./resources/" + themeName + "/pipe_angle.png");
-		pipeDisplayer.setVerticalPipeFileName("./resources/" + themeName + "/pipe_vertical.png");
+		pipeDisplayer.setBackgroundFileName("/resources/" + themeName + "/background.png");
+		pipeDisplayer.setStartFileName("/resources/" + themeName + "/start.png");
+		pipeDisplayer.setGoalFileName("/resources/" + themeName + "/goal.png");
+		pipeDisplayer.setAnglePipeFileName("/resources/" + themeName + "/pipe_angle.png");
+		pipeDisplayer.setVerticalPipeFileName("/resources/" + themeName + "/pipe_vertical.png");
 		this.currentTheme = themeName;
-		this.backgroundMusic = "./resources/" + themeName + "/music.mp3";
-		pipeDisplayer.loadImages();
+		this.backgroundMusic = "/resources/" + themeName + "/music.mp3";
+		try {
+			pipeDisplayer.loadImages();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		pipeDisplayer.redraw();
 		this.playMusic();
 	}
@@ -222,7 +232,8 @@ public class MainWindowController implements Initializable {
 		if (null != this.media) {
 			media.stop();
 		}
-		this.media = new AudioClip(new File(this.backgroundMusic).toURI().toString());
+		
+		this.media = new AudioClip(getClass().getResource(this.backgroundMusic).toExternalForm());
 		media.setCycleCount(INDEFINITE);
 		media.play();
 	}

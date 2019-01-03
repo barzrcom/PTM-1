@@ -14,6 +14,7 @@ import javafx.scene.paint.Color;
 import java.awt.*;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 
 public class PipeDisplayer extends Canvas {
 
@@ -135,20 +136,20 @@ public class PipeDisplayer extends Canvas {
 		gc.clearRect(0, 0, getWidth(), getHeight());
 	}
 
-	public void loadImages() {
+	public void loadImages() throws IOException {
 		try {
 			SnapshotParameters params = new SnapshotParameters();
 			params.setFill(Color.TRANSPARENT);
-			background = new Image(new FileInputStream(backgroundFileName.get()));
-			startImage = new Image(new FileInputStream(startFileName.get()));
-			goalImage = new Image(new FileInputStream(goalFileName.get()));
-			pipeVerticalImage = new Image(new FileInputStream(verticalPipeFileName.get()));
+			background = new Image(getClass().getResource(backgroundFileName.get()).openStream());
+			startImage = new Image(getClass().getResource(startFileName.get()).openStream());
+			goalImage = new Image(getClass().getResource(goalFileName.get()).openStream());
+			pipeVerticalImage = new Image(getClass().getResource(verticalPipeFileName.get()).openStream());
 
 			ImageView iv = new ImageView(pipeVerticalImage);
 			iv.setRotate(90);
 			pipeHorizontalImage = iv.snapshot(params, null);
 
-			pipeAngle0Image = new Image(new FileInputStream(anglePipeFileName.get()));
+			pipeAngle0Image = new Image(getClass().getResource(anglePipeFileName.get()).openStream());
 			iv = new ImageView(pipeAngle0Image);
 			iv.setRotate(90);
 			pipeAngle90Image = iv.snapshot(params, null);
